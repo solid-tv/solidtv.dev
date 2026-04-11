@@ -7,6 +7,7 @@
   "sideEffects": false,
   "scripts": {
     "start": "npx live-server ./docs -o --no-css-inject & npm run watch",
+    "preview": "http-server ./docs",
     "build": "tailwindcss -i ./docs/input.css -o ./docs/output.css --minify",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npm run lint:prettier && npm run lint:eslint",
