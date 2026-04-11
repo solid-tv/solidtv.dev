@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'lightningtv': '#6F45E8',
-        'lightningtv-dark': '#1C64F2',
+        'solidtv': '#6F45E8',
+        'solidtv-dark': '#1C64F2',
       }
     },
   },
