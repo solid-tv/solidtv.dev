@@ -53,6 +53,88 @@
     }
   </style>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://solidtv.dev/#organization",
+        "name": "SolidTV",
+        "url": "https://solidtv.dev",
+        "logo": "https://solidtv.dev/images/logo-400.png",
+        "sameAs": [
+          "https://github.com/solid-tv/solid",
+          "https://github.com/solid-tv/renderer",
+          "https://www.youtube.com/@LightningTVSolidJS"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://solidtv.dev/#website",
+        "url": "https://solidtv.dev",
+        "name": "SolidTV",
+        "description": "SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminating layout jitter.",
+        "publisher": { "@id": "https://solidtv.dev/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "SolidTV",
+        "operatingSystem": "Samsung Tizen, LG WebOS, Android TV, Amazon Fire TV, Panasonic, Web (Chrome 38+)",
+        "applicationCategory": "DeveloperApplication",
+        "url": "https://solidtv.dev",
+        "downloadUrl": "https://github.com/solid-tv/solid",
+        "softwareVersion": "latest",
+        "author": { "@id": "https://solidtv.dev/#organization" },
+        "description": "Open-source TV app framework built on SolidJS and a WebGL renderer. ~12kb gzipped. Achieve 50% higher FPS than LightningJS with Atomic First Paint to eliminate layout jitter.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "license": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which TV platforms does SolidTV support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select set-top-boxes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does SolidTV compare to LightningJS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SolidTV delivers roughly 50% higher FPS than LightningJS on equivalent hardware, eliminates layout jitter via Atomic First Paint, and is approximately 12kb minified + gzipped."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is SolidTV open source?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. SolidTV and the SolidTV Renderer are released under the Apache 2.0 license and developed in the open on GitHub."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you offer TV app performance consulting?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. We offer performance audits, architecture reviews, memory optimization, rendering pipeline tuning, team training, and custom development for TV applications."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
   <script>
