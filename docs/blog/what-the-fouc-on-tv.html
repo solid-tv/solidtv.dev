@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What the FOUC? Fixing Layout Jitter on Smart TVs | SolidTV</title>
+  <meta name="description"
+    content="Why TV apps 'think out loud' between draw and measure — and how Atomic First Paint resolves layout before any WebGL draw call so the first frame is fully formed on Tizen, WebOS, and Fire TV.">
+  <meta name="keywords"
+    content="TV app layout jitter, FOUC TV, flash of unstyled content, Smart TV layout shift, Lightning 3 layout, Atomic First Paint, Solid Lightning flex, WebGL layout jitter">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/what-the-fouc-on-tv.html">
+  <meta property="og:title" content="What the FOUC? Fixing Layout Jitter on Smart TVs">
+  <meta property="og:description"
+    content="Why TV apps 'think out loud' between draw and measure — and how Atomic First Paint resolves layout before any WebGL draw call.">
+  <meta property="og:url" content="https://solidtv.dev/blog/what-the-fouc-on-tv.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://solidtv.dev/images/logo-400.png">
+  <meta property="article:published_time" content="2026-02-24T03:24:27Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What the FOUC? Fixing Layout Jitter on Smart TVs">
+  <meta name="twitter:description"
+    content="How Atomic First Paint eliminates draw/measure/correct jitter on large displays.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/logo-400.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap|Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "What the FOUC? Fixing Layout Jitter on Smart TVs",
+    "description": "Why TV apps 'think out loud' between draw and measure — and how Atomic First Paint resolves layout before any WebGL draw call so the first frame is fully formed.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2026-02-24",
+    "dateModified": "2026-05-16",
+    "mainEntityOfPage": "https://solidtv.dev/blog/what-the-fouc-on-tv.html",
+    "image": "https://solidtv.dev/images/logo-400.png",
+    "keywords": "TV layout jitter, FOUC, Smart TV rendering, Atomic First Paint, Lightning 3, SolidJS TV"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-1 flex justify-end gap-3 md:gap-8 p-2 md:p-6 text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/#consulting" class="md:text-xl hover:text-blue-600">Consulting</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>What the FOUC?</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Rendering</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          What the FOUC? Fixing Layout Jitter on Smart TVs
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Feb 24, 2026 &middot; 3 min read
+        </p>
+      </header>
+
+      <p>In the world of high-end UI, there's a ghost that haunts even the fastest applications. We call it <strong>FOUC:
+          Flash of Unstyled Content.</strong></p>
+
+      <p>On the web, you've seen it when a page loads: a split second of raw HTML before the CSS snaps into place. But
+        on TV, FOUC takes on a different, more jittery form. Nothing is missing; the UI is simply "thinking out loud."
+      </p>
+
+      <ul>
+        <li>A button renders at a default size, then adjusts to fit the text.</li>
+        <li>A list shifts down a few pixels as a header settles.</li>
+      </ul>
+
+      <p>On a 6-inch phone, you might miss it. On a <strong>65-inch 4K display</strong> in your living room, it's
+        impossible to ignore. It looks like a mistake, even when the code is technically correct.</p>
+
+      <h3>The "Visual Negotiation"</h3>
+
+      <p>Why does this happen? It's a side effect of how rendering engines traditionally resolve layout. When building
+        the <strong>Flex system for the Solid + Lightning 3 integration</strong>, the goal was to make layout
+        effortless, declarative, predictable, and intelligent.</p>
+
+      <p>But that intelligence often requires a "conversation" between the framework and the renderer:</p>
+
+      <ol>
+        <li><strong>Draw:</strong> The UI is painted.</li>
+        <li><strong>Measure:</strong> The Renderer calculates actual text dimensions.</li>
+        <li><strong>Correct:</strong> Layout shifts to accommodate those dimensions.</li>
+      </ol>
+
+      <p>That negotiation happens in front of the user's eyes. In the race for speed, certainty gets sacrificed. We
+        push frames quickly, even when the first one isn't truly ready.</p>
+
+      <h3>The Button Example</h3>
+
+      <p>Below we have a simple button using flex.</p>
+
+      <p>Below are the steps that happen to lay out the result on the right:</p>
+
+      <ol>
+        <li>Set default width = width of the parent, which may be up to 1920px wide.</li>
+        <li><code>createNode</code> and render &rarr; draws an "incorrect" frame.</li>
+        <li>Text information is reported back, layout is calculated.</li>
+        <li>New layout &rarr; Renderer draws a new frame.</li>
+      </ol>
+
+      <h3>Quality Isn't a Tradeoff</h3>
+
+      <p>There's a common trap in performance engineering: the assumption that hitting <strong>60 FPS</strong> means
+        you've won. But frame rate alone doesn't define quality.</p>
+
+      <blockquote>If the first frame feels unstable, the experience feels cheap.</blockquote>
+
+      <p>On a large screen, even tiny shifts break immersion. They erode trust. They make a polished product feel like
+        a prototype. The key insight? <strong>We don't actually have to choose between speed and stability.</strong></p>
+
+      <h3>Fixing It at the Root: Atomic Rendering</h3>
+
+      <p>In the Solid + Lightning 3 integration, the negotiation now happens entirely behind the curtain. By ensuring
+        text measurement and Flex recalculations resolve <strong>before</strong> any WebGL draw calls are issued, we
+        achieve what I call <strong>Atomic First Paint</strong>: a frame that appears fully resolved the moment it's
+        shown.</p>
+
+      <ul>
+        <li><strong>No</strong> layout-hiding hacks.</li>
+        <li><strong>No</strong> pixel nudging.</li>
+        <li><strong>No</strong> visual jitter.</li>
+      </ul>
+
+      <h3>Best-in-Class by Default</h3>
+
+      <p>The goal for SolidTV has always been simple: deliver the best possible experience for both the developer
+        writing the code and the person holding the remote. Flex made building UI modern and intuitive; <strong>Atomic
+          Rendering</strong> ensures that apps don't just run fast — they feel deliberate and polished.</p>
+
+      <h3>Let's Raise the Standard</h3>
+
+      <p>I want SolidTV to be the most reliable way to build for the big screen, but "best-in-class" is always moving.
+        To get there, we need to surface real-world friction together.</p>
+
+      <ul>
+        <li>Are you seeing other forms of visual jitter?</li>
+        <li>Where are you still writing workarounds to hide engine behavior?</li>
+        <li>What challenges are you still facing?</li>
+      </ul>
+
+      <p><strong>If you want your TV apps to feel better for users and simpler to build, get in touch. I'd love to
+          connect.</strong></p>
+
+      <ul>
+        <li><strong>Official Website</strong>: <a href="https://solidtv.dev/">solidtv.dev</a></li>
+        <li><strong>GitHub Repository</strong>: <a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+        <li><strong>Community Discord</strong>: <a href="https://discord.com/invite/solidjs">Discord</a></li>
+        <li><strong>Connect with Me</strong>: <a href="https://www.linkedin.com/in/chris-lorenzo/">Chris Lorenzo on
+            LinkedIn</a></li>
+      </ul>
+
+      <p class="text-sm text-zinc-500 mt-12 pt-6 border-t border-gray-200">
+        Originally published on <a href="https://javascript.plainenglish.io/what-the-fouc-68584947bab3" rel="noopener"
+          target="_blank">JavaScript in Plain English</a>.
+      </p>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">First-frame jitter killing your TV app polish?</h3>
+      <p class="mt-3 text-zinc-500">
+        We help teams diagnose and eliminate layout shift, FOUC, and animation hitches on Tizen, WebOS, Android TV, and
+        Fire TV. Get a free 30-minute consultation.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/#contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/blog/"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">More
+          Articles</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <p class="text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+</body>
+
+</html>

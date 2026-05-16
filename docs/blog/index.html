@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolidTV Blog — TV App Performance, Lightning, SolidJS</title>
+  <meta name="description"
+    content="Technical deep-dives on TV app performance: fixing layout jitter on Smart TVs, eliminating garbage collection stutter in LightningJS, and benchmarking SolidJS vs Blits.">
+  <meta name="keywords"
+    content="TV app performance, LightningJS performance, SolidJS TV, Blits, Tizen, WebOS, Fire TV, Android TV, layout jitter, FOUC, garbage collection, low-end TV hardware">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/">
+  <meta property="og:title" content="SolidTV Blog — TV App Performance, Lightning, SolidJS">
+  <meta property="og:description"
+    content="Technical deep-dives on TV app performance: layout jitter, garbage collection stutter, and framework benchmarks for Smart TV development.">
+  <meta property="og:url" content="https://solidtv.dev/blog/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://solidtv.dev/images/logo-400.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SolidTV Blog">
+  <meta name="twitter:description"
+    content="Technical deep-dives on TV app performance from the SolidTV team.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/logo-400.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap|Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "SolidTV Blog",
+    "url": "https://solidtv.dev/blog/",
+    "description": "Technical deep-dives on TV app performance, the LightningJS renderer, and SolidJS for Smart TV development.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": "https://solidtv.dev/images/logo-400.png"
+    }
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-1 flex justify-end gap-3 md:gap-8 p-2 md:p-6 text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/#consulting" class="md:text-xl hover:text-blue-600">Consulting</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-screen-xl mx-auto px-6 md:px-12 py-12">
+    <header class="mb-12">
+      <h1 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">SolidTV Blog</h1>
+      <h2 class="mt-4 text-4xl md:text-5xl font-semibold text-black">Technical Deep Dives on TV App Performance</h2>
+      <p class="mt-6 text-lg leading-7 text-zinc-500 max-w-3xl">
+        Hands-on articles about building fast TV apps: diagnosing layout jitter on Smart TVs, eliminating garbage
+        collection stutter in the LightningJS renderer, and honest framework comparisons for Tizen, WebOS, Android TV,
+        and Fire TV.
+      </p>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <a href="/blog/boosting-lightning-fps-by-50.html"
+        class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Performance</span>
+        <h3 class="text-2xl font-semibold text-neutral-800">Boosting LightningJS FPS by 50%</h3>
+        <p class="grow text-zinc-500">How fixing renderer bugs, eliminating garbage collection in hot paths, and
+          caching unchanged work pushed a Raspberry Pi 3 TV UI from 30 FPS to 45+ FPS.</p>
+        <span class="text-sm text-zinc-400">Jan 27, 2026 · 6 min read</span>
+        <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
+      </a>
+
+      <a href="/blog/what-the-fouc-on-tv.html"
+        class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Rendering</span>
+        <h3 class="text-2xl font-semibold text-neutral-800">What the FOUC? Fixing Layout Jitter on TV</h3>
+        <p class="grow text-zinc-500">Why TV apps "think out loud" between draw and measure — and how Atomic First
+          Paint resolves layout before any WebGL draw call so the first frame is fully formed.</p>
+        <span class="text-sm text-zinc-400">Feb 24, 2026 · 3 min read</span>
+        <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
+      </a>
+
+      <a href="/blog/solidtv-vs-blits.html"
+        class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Framework Comparison</span>
+        <h3 class="text-2xl font-semibold text-neutral-800">SolidJS vs Blits: Debunking the "Most Efficient
+          Framework" Claim</h3>
+        <p class="grow text-zinc-500">When you swap raw elements for real components, Blits gets 2× slower because
+          every component adds an extra parent node. SolidJS stays flat — with receipts.</p>
+        <span class="text-sm text-zinc-400">Jun 2, 2025 · 3 min read</span>
+        <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
+      </a>
+    </section>
+
+    <section class="mt-16 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Struggling with TV app performance?</h3>
+      <p class="mt-3 text-zinc-500 max-w-2xl">
+        We offer performance audits, rendering pipeline tuning, and memory optimization for teams shipping on Tizen,
+        WebOS, Android TV, and Fire TV. If scrolling stutters, animations hitch, or first paint feels unstable, we can
+        help.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/#consulting"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">View
+          Consulting Services</a>
+        <a href="/#contact"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">Get
+          a Free Consultation</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <p class="text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+</body>
+
+</html>
