@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Your Smart TV App Is Slow: Fixing FPS, Stutter, and Memory Leaks on Tizen, WebOS, and Fire TV | SolidTV</title>
+  <meta name="description"
+    content="A field guide to diagnosing slow scrolling on Tizen, low FPS on WebOS, JavaScript performance on Fire TV Stick, memory leaks on Samsung TVs, and garbage collection stutter in LightningJS apps.">
+  <meta name="keywords"
+    content="Tizen app slow scrolling, WebOS app low FPS, Fire TV Stick JavaScript performance, Samsung TV app memory leak, LightningJS garbage collection stutter, TV app performance, Smart TV debugging, low-end TV hardware">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/why-your-tv-app-is-slow.html">
+  <meta property="og:title" content="Why Your Smart TV App Is Slow: Fixing FPS, Stutter, and Memory Leaks">
+  <meta property="og:description"
+    content="A practical guide for devs debugging slow Tizen scrolling, WebOS frame drops, Fire TV Stick perf, Samsung TV leaks, and Lightning GC stutter.">
+  <meta property="og:url" content="https://solidtv.dev/blog/why-your-tv-app-is-slow.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://solidtv.dev/images/logo-400.png">
+  <meta property="article:published_time" content="2026-05-16T00:00:00Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why Your Smart TV App Is Slow">
+  <meta name="twitter:description"
+    content="Diagnosing TV app performance: scrolling, FPS, memory leaks, and garbage collection.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/logo-400.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap|Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+      scroll-margin-top: 8rem;
+    }
+
+    .article-prose h3 {
+      font-size: 1.375rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre,
+    .article-prose pre[class*="language-"] {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+      text-shadow: none;
+    }
+
+    .article-prose pre[class*="language-"] > code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+      text-shadow: none;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+
+    .toc {
+      background: #f8fafc;
+      border-left: 4px solid #1C64F2;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0 2.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .toc h2 {
+      margin: 0 0 0.5rem !important;
+      font-size: 1rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #1C64F2 !important;
+    }
+
+    .toc ol {
+      margin: 0 !important;
+      padding-left: 1.25rem !important;
+    }
+
+    .toc li {
+      margin-bottom: 0.25rem !important;
+    }
+
+    .symptom-box {
+      background: #fff7ed;
+      border-left: 4px solid #f97316;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      border-radius: 0.25rem;
+      color: #7c2d12;
+      font-size: 0.95rem;
+    }
+
+    .fix-box {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0 1.5rem;
+      border-radius: 0.25rem;
+      color: #064e3b;
+      font-size: 0.95rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Why Your Smart TV App Is Slow: Fixing FPS, Stutter, and Memory Leaks on Tizen, WebOS, and Fire TV",
+    "description": "A field guide to diagnosing slow scrolling on Tizen, low FPS on WebOS, JavaScript performance on Fire TV Stick, memory leaks on Samsung TVs, and garbage collection stutter in LightningJS apps.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2026-05-16",
+    "dateModified": "2026-05-18",
+    "mainEntityOfPage": "https://solidtv.dev/blog/why-your-tv-app-is-slow.html",
+    "image": "https://solidtv.dev/images/logo-400.png",
+    "keywords": "Tizen slow scrolling, WebOS FPS, Fire TV Stick performance, Samsung TV memory leak, LightningJS garbage collection, SolidTV"
+  }
+  </script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-1 flex justify-end gap-3 md:gap-8 p-2 md:p-6 text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/#consulting" class="md:text-xl hover:text-blue-600">Consulting</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>Why your TV app is slow</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Troubleshooting</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          Why Your Smart TV App Is Slow (and How to Fix It)
+        </h1>
+        <p class="mt-4 text-xl text-zinc-600 leading-snug">
+          Tizen scrolling that jerks. WebOS FPS that won't break 30. A Fire TV Stick that crawls. A Samsung TV that
+          runs out of memory after 10 minutes. Lightning animations that stutter. Notes for the engineer staring at
+          Chrome DevTools at 11pm.
+        </p>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published May 16, 2026 &middot; 12 min read
+        </p>
+      </header>
+
+      <p>Whether you're searching for <em>"Tizen app slow scrolling,"</em> <em>"WebOS app low FPS,"</em> <em>"Fire
+          TV Stick JavaScript performance,"</em> <em>"Samsung TV app memory leak,"</em> or <em>"LightningJS garbage
+          collection stutter,"</em> the platform name in your query is mostly irrelevant. The root causes are the
+        same across all of them.</p>
+
+      <p>TV hardware is uniformly underpowered. A Fire TV Stick has a low-power ARM CPU and around 1GB of RAM.
+        Tizen and WebOS run an aging Chromium on TV-class SoCs from five-year-old reference designs. Android TV
+        boxes vary wildly but skew slow. The same React or Lightning code that holds 60 FPS on a MacBook can drop
+        to 22 FPS on any of them, and you usually don't find out until you deploy to a test device.</p>
+
+      <p>Every TV performance problem I've debugged in the last three years falls into one of four root causes,
+        plus the framework choice that sits underneath all of them. This guide walks through each one: what
+        triggers it, how to spot it, and how to fix it. The patterns come from
+        <a href="https://solid-tv.github.io/solid/">SolidTV</a> and from forking the Lightning renderer for
+        <a href="/blog/boosting-lightning-fps-by-50.html">a 50% FPS improvement on low-end hardware</a>.</p>
+
+      <div class="toc">
+        <h2>What's in this guide</h2>
+        <ol>
+          <li><a href="#framework-foundation">Start at the foundation: the framework you chose</a></li>
+          <li><a href="#too-many-nodes">You're rendering too much, too early</a></li>
+          <li><a href="#keypress-blocking">You're doing too much work during the keypress</a></li>
+          <li><a href="#memory">Memory: GC stutter and slow leaks</a></li>
+        </ol>
+      </div>
+
+      <h2 id="framework-foundation">1. Start at the foundation: the framework you chose</h2>
+
+      <p>On a MacBook, framework overhead is invisible. Every modern framework looks "fast enough" because the
+        hardware does the work for you. On a Fire TV Stick with a 1.7GHz ARM core, that overhead <em>is</em> the
+        performance budget. The choice you made on day one is the single largest performance decision in the
+        project, and it's the hardest one to walk back later.</p>
+
+      <h3>What the benchmarks actually say</h3>
+
+      <p>The closest thing the JS ecosystem has to a neutral perf scoreboard is
+        <a href="https://krausest.github.io/js-framework-benchmark/current.html" rel="noopener">js-framework-benchmark</a>.
+        It scripts identical DOM-heavy workloads (create 1,000 rows, partial update, swap, clear) and measures
+        them against a hand-written vanilla JS baseline of 1.00. Year over year, the ranking barely moves:</p>
+
+      <ul>
+        <li><strong>SolidJS</strong> sits at roughly <strong>1.05 to 1.10</strong>, within 5 to 10% of hand-written
+          vanilla JavaScript. It has been the top-ranked mainstream framework on this benchmark for years.</li>
+        <li><strong>Svelte</strong> lands around <strong>1.10 to 1.15</strong>.</li>
+        <li><strong>Vue 3</strong> is around <strong>1.20 to 1.30</strong>.</li>
+        <li><strong>React (with hooks)</strong> sits around <strong>1.45 to 1.60</strong>. DOM-intensive operations
+          take roughly <strong>30 to 50% longer</strong> than they would in SolidJS for the same work.</li>
+      </ul>
+
+      <p>That gap isn't a rounding error. On a desktop you'll never notice it. On a TV it's the difference between
+        45 FPS scrolling and 28 FPS scrolling, and it's there <em>before</em> you've written a single line of
+        application code.</p>
+
+      <h3>Why SolidJS is faster (it's structural, not magic)</h3>
+
+      <p>The performance difference isn't a clever optimization React could "add later." It's a fundamentally
+        different execution model:</p>
+
+      <ul>
+        <li><strong>No Virtual DOM.</strong> React renders your component to a virtual tree, diffs it against the
+          previous tree, then patches the real DOM. SolidJS compiles JSX directly into precise DOM operations at
+          build time. There is no diff. There is no reconciliation step.</li>
+        <li><strong>Components run once.</strong> A React component re-executes its entire function body every
+          time a parent re-renders. A SolidJS component runs exactly once. Only the specific reactive expressions
+          inside it re-evaluate when their dependencies change.</li>
+        <li><strong>Fine-grained reactivity via signals.</strong> When a signal changes, SolidJS updates only the
+          DOM node bound to that signal. React's default is the opposite: re-render everything, then memoize the
+          parts you want to skip.</li>
+        <li><strong>No hook rules, no dependency arrays.</strong> Side effects are wired up once at component
+          creation, not re-evaluated every render. There's no <code>useMemo</code> or <code>useCallback</code> tax
+          to remember to apply.</li>
+      </ul>
+
+      <h3>Bundle size: the second tax</h3>
+
+      <p>Parsing and executing JavaScript is expensive on TV CPUs. Every kilobyte of framework code costs you
+        startup time before your app even renders. Current minified and gzipped baselines:</p>
+
+      <ul>
+        <li><strong>SolidJS</strong>: ~7 KB</li>
+        <li><strong>React + ReactDOM</strong>: ~44 KB combined</li>
+        <li><strong>SolidTV</strong> (SolidJS plus the Lightning integration layer): ~12 KB</li>
+        <li><strong>Blits</strong> (the framework from the Lightning team): ~90+ KB</li>
+      </ul>
+
+      <p>On a Fire TV Stick, the difference between parsing 12 KB and parsing 90 KB at boot is measured in
+        seconds, not milliseconds. We saw a <strong>30% faster first paint</strong> in
+        <a href="/blog/solidtv-vs-blits.html">our SolidTV vs Blits head-to-head</a>, mostly because of this. 2.5
+        seconds to first interactive vs 3.5 seconds, on the same hardware, same data, same TMDB workload.</p>
+
+      <h3>If you're already on React</h3>
+
+      <p>This isn't a "rewrite everything tomorrow" argument. But it should reframe how you think about
+        optimization. Every fix in the rest of this guide is fighting against a framework that defaults to "do
+        more work, then memoize it." A few specifics:</p>
+
+      <ul>
+        <li><strong>React Native for TV</strong> sits on top of React's reconciler and pays the bridge cost on top
+          of that. Teams shipping on it routinely settle for 30 FPS targets because they can't get higher without
+          rewriting perf-critical screens in native.</li>
+        <li><strong>React-on-Lightning</strong> wrappers exist and "work," but you're paying React's
+          reconciliation cost on top of Lightning's renderer cost. That's the worst of both worlds on a TV CPU.</li>
+        <li><strong>If a rewrite isn't on the table</strong>, the optimizations in the rest of this guide still
+          apply. They just have a lower ceiling on React than on SolidJS. You can claw back the application-level
+          waste, but you can't claw back the framework's per-update overhead.</li>
+      </ul>
+
+      <h3>The takeaway</h3>
+
+      <p>If you're starting a new TV app, this is the easiest performance win you'll ever get: pick a framework
+        that doesn't actively work against you. SolidJS is the fastest mainstream framework by a wide margin, and
+        <a href="https://solid-tv.github.io/solid/">SolidTV</a> is the integration that brings its model to
+        Lightning's WebGL renderer. Skip the 30%+ React tax and start the rest of this guide with margin to
+        spare.</p>
+
+      <h2 id="too-many-nodes">2. You're rendering too much, too early</h2>
+
+      <div class="symptom-box">
+        <strong>What it looks like:</strong> First paint is slow. Scrolling a horizontal row stutters and falls
+        behind the remote. Vertical row-to-row navigation stutters. Images come in one at a time.
+      </div>
+
+      <p>A "Browse" page with 8 rows × 30 tiles is 240 nodes. Add text inside each tile and you're past 480 render
+        nodes before the user has even seen the screen. The TV happily eats the cost on first paint and then chokes
+        when you try to translate one of those rows.</p>
+
+      <div class="fix-box">
+        <strong>Fix:</strong> render only what fits on screen, plus a small buffer. SolidTV ships two primitives
+        for this. Pick by list size.
+      </div>
+
+      <p><strong>LazyRow / LazyColumn</strong> render <code>upCount</code> items immediately and append one more
+        each time the user navigates toward the edge. Good for typical content rails (10 to 50 items):</p>
+
+      <pre><code class="language-jsx">import { LazyRow } from '@solidtv/solid/primitives';
+
+&lt;LazyRow upCount={6} delay={250} each={items}&gt;
+  {(item) =&gt; &lt;Thumbnail {...item} /&gt;}
+&lt;/LazyRow&gt;</code></pre>
+
+      <p>By rendering only what is needed on the screen, we keep the UI performant. As more nodes get added,
+        the Renderer is only ever drawing the elements that should be visible. We slowly create more nodes as the
+        user navigates, and the UI stays performant the whole time.</p>
+
+      <p>For lists in the thousands, <strong>VirtualRow / VirtualColumn</strong> goes further. It only ever has
+        <code>displaySize + 2 × bufferSize</code> children mounted, and reuses them as you scroll:</p>
+
+      <pre><code class="language-jsx">&lt;VirtualRow displaySize={5} bufferSize={2} each={items}&gt;
+  {(item) =&gt; &lt;Thumbnail item={item()} /&gt;}
+&lt;/VirtualRow&gt;</code></pre>
+
+      <p>See the full <a href="https://solid-tv.github.io/solid/#/primitives/lazy">LazyRow docs</a> and
+        <a href="https://solid-tv.github.io/solid/#/primitives/virtual">VirtualRow docs</a>.</p>
+
+      <h2 id="keypress-blocking">3. You're doing too much work during the keypress</h2>
+
+      <div class="symptom-box">
+        <strong>What it looks like:</strong> The remote feels laggy. You press right four times and the row catches
+        up a beat later. Animations stutter on every navigation, not just on long lists. Painful on every platform,
+        and the slower the device, the more obvious.
+      </div>
+
+      <p>Image prefetches, analytics events, telemetry pings, and state recalculations triggered inline on key
+        down all compete with the scroll animation for the same frame. The remote feels laggy because it literally
+        is.</p>
+
+      <div class="fix-box">
+        <strong>Fix:</strong> defer non-critical work with SolidTV's
+        <a href="https://solid-tv.github.io/solid/#/essentials/taskscheduler"><code>scheduleTask</code></a>. It
+        automatically pauses during keypresses and resumes when the renderer is idle:
+      </div>
+
+      <pre><code class="language-jsx">import { scheduleTask } from '@solidtv/solid';
+
+scheduleTask(() =&gt; warmImageCache(items), 'low');
+scheduleTask(() =&gt; trackImpression(item), 'low');</code></pre>
+
+      <p>Same behavior, but the animation stays smooth because the work happens in the gaps between key presses
+        instead of on top of them.</p>
+
+      <p>This is also why the Lazy primitives from <a href="#too-many-nodes">section 2</a> take a
+        <code>delay</code> option. After a keypress, the next node isn't created immediately; it waits for the
+        animation to finish first. Same principle: do the work before and after the animation, never during it.</p>
+
+      <h2 id="memory">4. Memory: GC stutter and slow leaks</h2>
+
+      <div class="symptom-box">
+        <strong>What it looks like:</strong> Two patterns. <strong>Sawtooth:</strong> animations are smooth, then
+        hitch for ~200ms, then smooth again, every few seconds during heavy scroll. That's the garbage collector
+        pausing the render loop to reclaim allocations. <strong>Slow climb:</strong> the app works fine for 10
+        minutes, slows after 30, and reloads itself or OOMs after an hour. People often call this a "Samsung TV
+        app memory leak," but every platform has the same failure mode. Samsung just enforces stricter per-app
+        limits, so it surfaces there first.
+      </div>
+
+      <p>SolidJS and the SolidTV Renderer have been heavily optimized to avoid GC. Objects are reused wherever
+        possible, especially inside the render loop, so most of the pressure in a SolidTV app doesn't come from
+        the framework.</p>
+
+      <p>The biggest source of garbage is almost always the API layer. When you get a response back from your
+        backend, don't convert it into other objects. Use the original response shape directly where you can, and
+        if the shape isn't workable, ask the API team to adjust the response rather than mapping it on the
+        client. A 200-item content rail that runs <code>response.items.map(item =&gt; ({ id: item.uuid, name:
+          item.title, ... }))</code> on every fetch generates a fresh object per item, with no reuse. That's the
+        kind of pattern that triggers a major GC mid-scroll on a TV CPU.</p>
+
+      <h3>How to verify it</h3>
+
+      <p>Both patterns show up in Chrome DevTools. The Chrome team has a thorough walkthrough at
+        <a href="https://developer.chrome.com/docs/devtools/memory-problems/" rel="noopener">Fix memory
+          problems</a>. The short version:</p>
+
+      <ol>
+        <li>Open Chrome DevTools &rarr; Performance and record during the bad interaction.</li>
+        <li>Watch the Memory graph. A rhythmic sawtooth is GC pressure. A line that climbs and never comes back
+          down is a leak.</li>
+        <li>For leaks, switch to the Memory panel and diff heap snapshots taken before and after the suspect flow
+          to see which objects survived.</li>
+      </ol>
+
+      <h3>Common leak sources</h3>
+
+      <p>A few patterns that come up in audits, in rough order of frequency:</p>
+
+      <ul>
+        <li><strong>Event listeners attached and never removed.</strong> Custom focus, keyboard, or
+          remote-control handlers attached to a page that's still referenced after navigation. Every navigation
+          adds another, and after ten navigations every key press fires ten handlers. Use
+          <code>onCleanup</code> to register teardown alongside the listener. <code>useFocusManager</code> handles
+          this for you; global <code>document.addEventListener</code> calls need it explicitly.</li>
+        <li><strong><code>KeepAliveRoute</code> caching everything forever.</strong> Cache too many pages and
+          you've replaced a slowdown with a leak. Use <code>shouldDispose</code> or call
+          <code>removeKeepAlive(id)</code> manually when a route isn't worth keeping.</li>
+        <li><strong>Effects on cached routes that never stop running.</strong> When a <code>KeepAliveRoute</code>
+          is hidden, its reactive context stays alive and effects keep firing. Gate with
+          <code>props.isAlive()</code> so background pages stop fetching and stop updating signals.</li>
+        <li><strong>Image textures that never release.</strong> Posters and hero images occupy GPU memory until
+          the node referencing them is destroyed. Size images for the screen (no 4K poster for a 220px tile), and
+          destroy cached pages with large image grids under memory pressure.</li>
+      </ul>
+
+      <p>If you've cleaned up the API layer and the sawtooth persists, the allocations are coming from the
+        renderer itself. See <a href="/blog/boosting-lightning-fps-by-50.html">Boosting LightningJS FPS by 50%</a>
+        for the renderer-level work that addresses it.</p>
+
+      <h2>Step 0: Get a Number Before You Start</h2>
+
+      <p>None of the fixes above matter if you can't measure the problem. "Feels slow on the box" doesn't get
+        fixed.</p>
+
+      <p>The fastest way to find out what your TV is actually capable of is to load the
+        <a href="https://solid-tv.github.io/solid-demo-app/#/benchmark" rel="noopener">SolidTV benchmark demo</a>
+        on the device itself. It's a standardized SolidTV scrolling and animation workload, so the FPS it
+        reports is a clean ceiling for the hardware: if even the benchmark can't hold 60 on your target TV,
+        that's the floor your own app is fighting against. If the benchmark hits 60 and your app sits at 28, the
+        problem is in your code, not the device.</p>
+
+      <p>Once you have that baseline, drop SolidTV's
+        <a href="https://solid-tv.github.io/solid/#/primitives/fpscounter"><code>&lt;FPSCounter&gt;</code></a>
+        into the corner of your own app for ongoing measurement:</p>
+
+      <pre><code class="language-jsx">import { FPSCounter, setupFPS } from '@solidtv/solid/primitives';
+import { renderer } from '@solidtv/solid';
+
+setupFPS({ renderer });
+
+&lt;FPSCounter mountX={1} x={1910} y={10} /&gt;</code></pre>
+
+      <p>Now you know whether idle FPS is 60, 45, or 28, and which interactions tank it. Then attach the Chromium
+        remote debugger (Tizen, WebOS, Fire TV, and Android TV all expose one) and capture a 5-second performance
+        recording during the bad interaction. You'll almost always see one of: long JavaScript tasks blocking the
+        render thread, the GC sawtooth from <a href="#memory">section 4</a>, or slow paint times from too many
+        shader switches or oversized textures.</p>
+
+      <h2>The Diagnostic Checklist</h2>
+
+      <p>When a TV app feels slow, regardless of which platform surfaced it, work through this in order:</p>
+
+      <ol>
+        <li><strong>Mount an FPS counter on the device.</strong> Get a number.</li>
+        <li><strong>Profile on the real hardware</strong>, not the simulator and not your laptop.</li>
+        <li><strong>Virtualize long lists</strong> with <code>LazyRow</code> or <code>VirtualRow</code>.</li>
+        <li><strong>Defer non-critical work</strong> with <code>scheduleTask</code>.</li>
+        <li><strong>Audit the API layer for allocations</strong>: avoid re-shaping every response into new objects;
+          use the original response where you can.</li>
+        <li><strong>Size images for the screen</strong>, not the source asset.</li>
+        <li><strong>If you've done all of the above and it's still slow</strong>, buy your customer a new TV.</li>
+      </ol>
+
+      <p>SolidTV bakes most of this in by default. It's the framework I wanted while I was debugging stuttery
+        Lightning apps in production. If you'd rather not assemble the toolkit yourself,
+        <a href="https://solid-tv.github.io/solid/">start here</a>.</p>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Struggling with TV performance?</h3>
+      <p class="mt-3 text-zinc-500">
+        Schedule a free performance audit and we'll diagnose your app on a real device.
+        No commitment, no slide deck.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/#contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Book
+          a Free Audit</a>
+        <a href="/blog/"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">More
+          Articles</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <p class="text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+</body>
+
+</html>
