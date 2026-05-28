@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcing SolidTV — A Renderer Built for the TVs You Actually Ship On | SolidTV</title>
+  <meta name="description"
+    content="Announcing SolidTV, a fork of the LightningJS renderer rebuilt for low-end TV hardware. 60+ FPS on a Raspberry Pi 3, new SDF text caching, RadialProgress and Blur shaders, allocation-light update loop, and more.">
+  <meta name="keywords"
+    content="SolidTV announcement, LightningJS fork, TV app renderer, WebGL TV renderer, SDF text caching, RadialProgress shader, blur shader, low-end TV hardware, Raspberry Pi 3 FPS, SolidJS TV, Solid 2.0">
+  <meta name="author" content="Chris Lorenzo" />
+  <link rel="canonical" href="https://solidtv.dev/blog/announcing-solidtv.html" />
+  <meta property="og:title" content="Announcing SolidTV — A Renderer Built for the TVs You Actually Ship On" />
+  <meta property="og:description"
+    content="A fork of the LightningJS renderer, rebuilt for 60fps TV apps on real low-end hardware. Doubled FPS on a Raspberry Pi 3, plus a long tail of text, shader, SVG, and correctness fixes." />
+  <meta property="og:url" content="https://solidtv.dev/blog/announcing-solidtv.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://solidtv.dev/images/logo-400.png" />
+  <meta property="article:published_time" content="2026-05-27T12:00:00Z" />
+  <meta property="article:author" content="Chris Lorenzo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Announcing SolidTV" />
+  <meta name="twitter:description"
+    content="A renderer built for the TVs you actually ship on. 60+ FPS on a Raspberry Pi 3, with a long tail of text, shader, and correctness improvements." />
+  <meta name="twitter:image" content="https://solidtv.dev/images/logo-400.png" />
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap|Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png" />
+  <link rel="manifest" href="/images/site.webmanifest" />
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose h4 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .stats div {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .stats .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .stats .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0.25rem 0 0;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "SolidTV: The Fastest TV App Framework",
+    "description": "Announcing SolidTV, a fork of the LightningJS renderer rebuilt for low-end TV hardware. 60+ FPS on a XumoTV, plus a long tail of text, shader, SVG, and new features.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2026-05-27",
+    "dateModified": "2026-05-27",
+    "mainEntityOfPage": "https://solidtv.dev/blog/announcing-solidtv.html",
+    "image": "https://solidtv.dev/images/logo-400.png",
+    "keywords": "SolidTV announcement, LightningJS fork, TV app renderer, WebGL, SDF text, Raspberry Pi 3, SolidJS"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-1 flex justify-end gap-3 md:gap-8 p-2 md:p-6 text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/#consulting" class="md:text-xl hover:text-blue-600">Consulting</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>Announcing SolidTV</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Announcement</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          SolidTV: The Fastest TV App Framework
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published May 27, 2026 &middot; 7 min read
+        </p>
+      </header>
+
+      <p>I'm excited to officially announce <strong>SolidTV</strong> — a fork of the well established and popular
+        LightningJS renderer, rebuilt for teams that need to ship 60fps TV apps on hardware that was never going to
+        be fast.</p>
+
+      <p>I've spent multiple years building TV apps at scale. SolidTV is the framework I wish I'd had when I started
+        with Lightning 2. What originally started as a SolidJS integration with LightningJS Renderer has become so
+        much more…</p>
+
+      <h3>Why fork?</h3>
+
+      <p>I love what LightningJS started. But over the last year, the gap between what the upstream team was shipping
+        and what my apps needed kept growing. I filed issues. I proposed patches. I watched them sit. At some point,
+        "keep waiting" stops being a strategy. With AI, changes can happen at a much faster pace.
+        Owning the renderer means I can ship code at the speed of a startup rather than a large corporation who ships
+        once a quarter.
+        I had a lot of changes that I wanted to see in the LightningJS renderer, but didn't want to wait. So I forked.
+      </p>
+
+      <h3>Doubled the FPS</h3>
+
+      <p>The headline result, measured on a XumoTV:</p>
+
+      <div class="stats">
+        <div>
+          <p class="label">Upstream LightningJS 3</p>
+          <p class="value">~30 FPS</p>
+        </div>
+        <div>
+          <p class="label">SolidTV</p>
+          <p class="value">60+ FPS</p>
+        </div>
+      </div>
+
+      <p>That's not a microbenchmark. That's the same app, the same hardware, swapped renderer.</p>
+
+      <p>How? Three things, applied relentlessly:</p>
+
+      <ol>
+        <li><strong>Killed the per-frame waste.</strong> The upstream update loop was doing real work every frame for
+          nodes that hadn't changed. I re-walked the tree, split the children update loop on actual update type, and
+          added translate-only and scale-only fast paths so static and lightly-animated subtrees cost almost nothing.
+        </li>
+        <li><strong>Cut the garbage.</strong> Render loops that allocate stutter due to GC. I made the animation
+          map lazy-init, slimmed <code>GlyphLayout</code>, made the texture upload queue allocation-light, and
+          stopped re-resolving defaults on cache hits.</li>
+        <li><strong>Cached aggressively.</strong> SDF text layout is now cached (with <code>wordBreak</code>,
+          <code>maxLines</code>, and <code>overflowSuffix</code> in the key). Image decode overlaps with GPU upload.
+          Transform <code>contain</code> results are memoized. The renderer stops recomputing things that didn't
+          change.
+        </li>
+      </ol>
+
+      <h3>That was just the beginning</h3>
+
+      <p>A quick tour through the commit log:</p>
+
+      <h4>Text rendering</h4>
+      <ul>
+        <li>SDF text layout cache and a slimmed glyph layout — a major win on text-heavy screens.</li>
+        <li>Cap-height centering and a new optical-center baseline mode, designed for mixed-case UI labels that
+          <em>look</em> centered, not just <em>measure</em> centered.
+        </li>
+        <li><code>verticalAlign</code> that works without <code>maxHeight</code> (flex-friendly), plus proper
+          baseline-anchored layout including <code>lineGap</code>.</li>
+        <li>Baked node color into canvas text textures so emoji keep their colors through tint.</li>
+      </ul>
+
+      <h4>Shaders &amp; visuals</h4>
+      <ul>
+        <li>New <strong>RadialProgress</strong> shader, self-animating via <code>duration</code> and a countdown —
+          no per-frame JS needed.</li>
+        <li>New single-pass <strong>Blur</strong> shader.</li>
+        <li>Border defaults to outside (centering with borders Just Works now).</li>
+        <li>Gradient parity between WebGL and Canvas; <code>roundedWithBorder</code> fixed on Canvas.</li>
+        <li>Bordered shader precision fixes for asymmetric borders.</li>
+        <li>Chrome shader varying-pack compatibility for older WebGL stacks.</li>
+      </ul>
+
+      <h4>SVG</h4>
+      <ul>
+        <li>DPR-aware rasterization, source-region crop, zero-copy upload.</li>
+        <li>Stage <code>pixelRatio &lt; 1</code> now correctly preserved through the texture-dimension contract.</li>
+      </ul>
+
+      <h4>Animations</h4>
+      <ul>
+        <li><code>adaptiveDuration</code> so animations stay correctly timed across variable frame rates.</li>
+        <li>Simple animation merge to reduce animation overhead.</li>
+      </ul>
+
+      <h4>Inspector &amp; DX</h4>
+      <ul>
+        <li><code>componentName</code> and <code>componentLocation</code> so custom element nodes show up properly in
+          the inspector.</li>
+        <li>Inspector allowed in non-dev environments.</li>
+        <li>Alpha-update no longer leaks into text node opacity.</li>
+        <li><code>x</code>, <code>y</code>, <code>w</code>, <code>h</code> mirrored on text nodes.</li>
+      </ul>
+
+      <h3>What's next?</h3>
+
+      <p><strong>Solid 2.0.</strong> SolidTV builds on SolidJS, and Solid 2.0 is around the corner. The new
+        reactivity model lines up almost spookily well with how a TV scene graph wants to update — fewer wasted
+        invalidations, tighter signal granularity, less framework overhead per node. I'll have more to say once it
+        lands, but if you're building TV apps and you haven't looked at Solid yet, now is a great moment.</p>
+
+      <h3>Try it</h3>
+
+      <p>If you've been fighting LightningJS performance on real hardware, give SolidTV a shot with the
+        <a href="https://solid-tv.github.io/solid-demo-app/#/benchmark">demo app benchmark</a>.
+      </p>
+
+      <ul>
+        <li><strong>Docs &amp; site</strong>: <a href="https://solidtv.dev/">solidtv.dev</a></li>
+        <li><strong>Renderer</strong>: <code>@solidtv/renderer</code></li>
+        <li><strong>Framework</strong>: <code>@solidtv/solid</code></li>
+        <li><strong>GitHub</strong>: <a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+      </ul>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Want this kind of performance in your TV app?</h3>
+      <p class="mt-3 text-zinc-500">
+        We do performance audits, renderer optimization, and architecture reviews for teams shipping on Tizen, WebOS,
+        Android TV, and Fire TV. If you're hitting an FPS wall on real devices, we can help you find the floor — and
+        raise it.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/#contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/blog/"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">More
+          Articles</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <p class="text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+</body>
+
+</html>
