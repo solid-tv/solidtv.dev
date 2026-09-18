@@ -8,7 +8,7 @@
   <meta name="description"
     content="SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminate layout jitter. Achieve ultimate TV app performance even on low-end devices.">
   <meta name="keywords"
-    content="Lightning, LightningJS, javascript, WebGL renderer, high performance, TV apps, low-end devices, SolidTV, SolidJS, React, open-source, front-end framework, Blits alternative, TV app performance consulting, Lightning 3 optimization, Zero FOUC">
+    content="Lightning, LightningJS, javascript, WebGL renderer, high performance, TV apps, low-end devices, SolidTV, SolidJS, React, Apple TV, tvOS, NativeScript, open-source, front-end framework, Blits alternative, TV app performance consulting, Lightning 3 optimization, Zero FOUC">
   <meta name="author" content="Chris Lorenzo">
   <link rel="canonical" href="https://solidtv.dev/">
   <meta property="og:title" content="SolidTV: The Fastest TV App Framework">
@@ -80,7 +80,7 @@
       {
         "@type": "SoftwareApplication",
         "name": "SolidTV",
-        "operatingSystem": "Samsung Tizen, LG WebOS, Android TV, Amazon Fire TV, Panasonic, Web (Chrome 38+)",
+        "operatingSystem": "Samsung Tizen, LG WebOS, Android TV, Amazon Fire TV, Apple TV (tvOS via NativeScript), Panasonic, Web (Chrome 38+)",
         "applicationCategory": "DeveloperApplication",
         "url": "https://solidtv.dev",
         "downloadUrl": "https://github.com/solid-tv/solid",
@@ -102,7 +102,7 @@
             "name": "Which TV platforms does SolidTV support?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select set-top-boxes."
+              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Apple TV (tvOS via NativeScript), Panasonic, and select set-top-boxes."
             }
           },
           {
@@ -340,10 +340,10 @@
       </h3>
       <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
         The framework performs well on the majority of Smart TVs, set-top-boxes, and really any other device that runs
-        a modern web browser (Chrome 38+). In terms of TV apps, you should roughly be able to support these types of
+        a modern web browser (Chrome 38+), with Apple TV support powered by NativeScript. In terms of TV apps, you should roughly be able to support these types of
         devices:
       </p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mt-10 w-full">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6 mt-10 w-full">
         <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
           <img src="https://cdn.simpleicons.org/samsung/1428A0" alt="Samsung Tizen logo"
             class="h-16 w-auto object-contain" loading="lazy" />
@@ -364,6 +364,12 @@
           <img src="images/amazon-fire-tv.svg" alt="Amazon Fire TV logo"
             class="h-12 w-auto object-contain" loading="lazy" />
           <span class="text-sm font-medium text-neutral-800 text-center">Amazon Fire TV</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
+          <img src="images/apple-tv.svg" alt="Apple TV logo"
+            class="h-12 w-auto object-contain" loading="lazy" />
+          <span class="text-sm font-medium text-neutral-800 text-center">Apple TV<br /><span
+              class="text-xs text-zinc-500 font-normal">via NativeScript</span></span>
         </div>
         <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
           <img src="https://cdn.simpleicons.org/panasonic/0F58AA" alt="Panasonic logo"
@@ -459,7 +465,7 @@
               </h4>
               <p class="mt-2 text-base leading-6 text-zinc-500 max-md:max-w-full">
                 Build rock-solid TV apps with SolidTV's well-established
-                foundation on mulitple platforms. Focus on creating your app knowing
+                foundation on multiple platforms. Focus on creating your app knowing
                 the framework won't be your weak link.
               </p>
             </div>
