@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "solidtv-site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "./docs", "-p", "8137", "-c-1"],
+      "port": 8137
+    },
+    {
+      "name": "solid-docs",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "../solid/docs", "-p", "8138", "-c-1"],
+      "port": 8138
+    }
+  ]
+}
