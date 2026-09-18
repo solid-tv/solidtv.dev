@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightningJS Alternative: SolidTV vs Lightning 3 &amp; Blits</title>
+  <meta name="description"
+    content="Looking for a LightningJS or Blits alternative? SolidTV&#x27;s renderer fork doubles FPS on real devices, removes layout jitter, and adds Apple TV support.">
+  <meta name="keywords"
+    content="LightningJS alternative, Lightning 3 alternative, Blits alternative, Lightning 2 migration, LightningJS performance, SolidJS TV framework, WebGL TV app framework">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/lightningjs-alternative/">
+  <meta property="og:title" content="A faster alternative to LightningJS and Blits">
+  <meta property="og:description"
+    content="SolidTV&#x27;s fork of the Lightning 3 renderer doubles FPS on real TV hardware, removes layout jitter and adds Apple TV support.">
+  <meta property="og:url" content="https://solidtv.dev/lightningjs-alternative/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://solidtv.dev/images/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A faster alternative to LightningJS and Blits">
+  <meta name="twitter:description"
+    content="SolidTV&#x27;s fork of the Lightning 3 renderer doubles FPS on real TV hardware, removes layout jitter and adds Apple TV support.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .hero {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(to right, #6f45e8, #1c64f2);
+    }
+
+    .hero-text {
+      background-image: linear-gradient(to bottom right, #f3a346, #f2ff5c);
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "LightningJS Alternative: SolidTV vs Lightning 3 and Blits",
+        "description": "How SolidTV compares to the upstream LightningJS renderer and Blits, with measured results on real TV hardware.",
+        "url": "https://solidtv.dev/lightningjs-alternative/",
+        "author": { "@type": "Person", "name": "Chris Lorenzo", "url": "https://www.chiefhacker.com/" },
+        "publisher": { "@type": "Organization", "name": "SolidTV", "url": "https://solidtv.dev", "logo": "https://solidtv.dev/images/logo-400.png" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "SolidTV", "item": "https://solidtv.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "LightningJS Alternative", "item": "https://solidtv.dev/lightningjs-alternative/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-screen-xl mx-auto">
+    <section class="hero w-full lg:rounded-3xl px-6 py-14 md:px-12 lg:px-20 lg:py-20">
+      <p class="text-sm font-bold uppercase tracking-[3.5px] text-white/80">LightningJS alternative</p>
+      <h1 class="mt-4 text-4xl sm:text-5xl font-bold text-white leading-tight max-w-4xl">A faster alternative to <span class="hero-text bg-clip-text text-transparent">LightningJS and Blits</span></h1>
+      <p class="mt-6 text-lg md:text-xl text-white/90 max-w-3xl">
+        LightningJS set the bar for TV UIs on constrained hardware, and SolidTV builds on that foundation. It began as the SolidJS integration for Lightning 3 and now ships its own renderer: a fork of Lightning 3 rebuilt for 60fps on the low-end hardware TV apps really run on.
+      </p>
+      <div class="flex flex-wrap gap-4 mt-10 text-base font-medium">
+        <a href="https://solid-tv.github.io/solid/" data-cta="alt_get_started" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get Started with SolidTV</a>
+        <a href="https://solid-tv.github.io/solid-demo-app/#/benchmark" data-cta="alt_benchmark" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Run the Benchmark Yourself</a>
+        <a href="/?topic=migration#contact" data-cta="alt_hero_contact" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Plan a Migration</a>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-white">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Measured, not claimed</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">The numbers, on real devices</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 w-full">
+        <a href="/blog/announcing-solidtv.html" class="flex flex-col rounded-xl bg-gray-100 p-6 hover:shadow-md transition">
+          <p class="text-4xl font-bold text-solidtv">30 &rarr; 60+ FPS</p>
+          <p class="mt-3 grow text-zinc-500">The same app on the same XumoTV, with the upstream Lightning 3 renderer
+            swapped for SolidTV's.</p>
+          <span class="mt-4 text-blue-600 font-medium">Read the announcement &rarr;</span>
+        </a>
+        <a href="/blog/boosting-lightning-fps-by-50.html" class="flex flex-col rounded-xl bg-gray-100 p-6 hover:shadow-md transition">
+          <p class="text-4xl font-bold text-solidtv">+50% FPS</p>
+          <p class="mt-3 grow text-zinc-500">A Raspberry Pi 3 TV UI pushed from 30 FPS to 45+ by removing garbage
+            collection from hot paths and caching unchanged work.</p>
+          <span class="mt-4 text-blue-600 font-medium">Read how &rarr;</span>
+        </a>
+        <a href="/blog/solidtv-vs-blits.html" class="flex flex-col rounded-xl bg-gray-100 p-6 hover:shadow-md transition">
+          <p class="text-4xl font-bold text-solidtv">2&times; faster</p>
+          <p class="mt-3 grow text-zinc-500">Than Blits when the benchmark renders 1,000 real components instead of
+            bare nodes.</p>
+          <span class="mt-4 text-blue-600 font-medium">See the benchmark &rarr;</span>
+        </a>
+        <a href="/blog/what-the-fouc-on-tv.html" class="flex flex-col rounded-xl bg-gray-100 p-6 hover:shadow-md transition">
+          <p class="text-4xl font-bold text-solidtv">Zero jitter</p>
+          <p class="mt-3 grow text-zinc-500">Atomic First Paint resolves layout before any WebGL draw call, so the
+            first frame is fully formed.</p>
+          <span class="mt-4 text-blue-600 font-medium">Read about Atomic First Paint &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-gray-100">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Side by side</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">SolidTV compared with upstream Lightning 3 and Blits</h2>
+      <div class="mt-8 w-full overflow-x-auto rounded-xl bg-white p-6 shadow-md">
+        <table class="w-full min-w-[640px] text-base">
+          <thead>
+            <tr class="text-left text-sm uppercase tracking-wider text-zinc-500">
+              <th scope="col" class="pb-4 pr-4 font-semibold w-1/4"></th>
+              <th scope="col" class="pb-4 pr-4 font-semibold w-[37%]">Upstream Lightning 3 / Blits</th>
+              <th scope="col" class="pb-4 font-semibold text-solidtv">SolidTV</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-gray-200 align-top">
+              <th scope="row" class="py-4 pr-4 text-left font-semibold text-neutral-800">Per-frame work</th>
+              <td class="py-4 pr-4 text-zinc-500">The update loop does real work every frame for nodes that haven't changed</td>
+              <td class="py-4 text-neutral-800">Static and lightly-animated subtrees cost almost nothing, with translate-only and scale-only fast paths</td>
+            </tr>
+            <tr class="border-t border-gray-200 align-top">
+              <th scope="row" class="py-4 pr-4 text-left font-semibold text-neutral-800">Garbage collection</th>
+              <td class="py-4 pr-4 text-zinc-500">Allocations inside the render loop cause GC stutter on low-end devices</td>
+              <td class="py-4 text-neutral-800">Allocation-light hot paths: lazy animation maps, a slim glyph layout and a lean texture upload queue</td>
+            </tr>
+            <tr class="border-t border-gray-200 align-top">
+              <th scope="row" class="py-4 pr-4 text-left font-semibold text-neutral-800">Components</th>
+              <td class="py-4 pr-4 text-zinc-500">Blits adds an extra parent node for every component, doubling the node count</td>
+              <td class="py-4 text-neutral-800">Components compile away, so a component costs the same as the nodes inside it</td>
+            </tr>
+            <tr class="border-t border-gray-200 align-top">
+              <th scope="row" class="py-4 pr-4 text-left font-semibold text-neutral-800">Size</th>
+              <td class="py-4 pr-4 text-zinc-500">Blits is about 80KB larger</td>
+              <td class="py-4 text-neutral-800">~12kb minified + gzipped for the framework</td>
+            </tr>
+            <tr class="border-t border-gray-200 align-top">
+              <th scope="row" class="py-4 pr-4 text-left font-semibold text-neutral-800">Apple TV</th>
+              <td class="py-4 pr-4 text-zinc-500">Needs a browser to run in</td>
+              <td class="py-4 text-neutral-800">Runs on tvOS through NativeScript. <a href="/apple-tv/" class="underline text-blue-600">See how</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 w-full">
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-xl font-semibold text-neutral-800">Atomic First Paint</h3>
+          <p class="mt-2 text-zinc-500">Text measurement and flex layout resolve before the first WebGL draw call, so
+            nothing shifts on a 65-inch screen.</p>
+        </div>
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-xl font-semibold text-neutral-800">The SolidJS ecosystem</h3>
+          <p class="mt-2 text-zinc-500">Signals, stores, JSX and TypeScript, with a large open-source community behind
+            them instead of a TV-only dialect.</p>
+        </div>
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-xl font-semibold text-neutral-800">Someone to call</h3>
+          <p class="mt-2 text-zinc-500">A community Discord, plus <a href="/#services"
+              class="underline text-blue-600">commercial support</a> from the engineer who wrote the framework.</p>
+        </div>
+      </div>
+      <p class="mt-6 text-sm text-zinc-500">Comparisons are drawn from the linked articles and the public
+        <a href="https://github.com/lightning-tv/benchmark" target="_blank" rel="noopener" class="underline">benchmark
+          repository</a>. Run them on your own hardware and tell us what you see.</p>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-white">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Inside the renderer</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">What changed in the fork</h2>
+      <p class="mt-6 text-lg leading-7 text-zinc-500">
+        Owning the renderer means fixes ship when your app needs them, not once a quarter. A short tour of what has
+        landed since the fork:
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 w-full">
+        <div class="rounded-xl bg-gray-100 p-6">
+          <h3 class="text-2xl font-semibold text-neutral-800">Text rendering</h3>
+          <p class="mt-2 text-zinc-500">A cached SDF text layout, cap-height centering for labels that look centered,
+            <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">verticalAlign</code> that works in flex layouts, and emoji that keep their colors.</p>
+        </div>
+        <div class="rounded-xl bg-gray-100 p-6">
+          <h3 class="text-2xl font-semibold text-neutral-800">Shaders &amp; visuals</h3>
+          <p class="mt-2 text-zinc-500">A self-animating RadialProgress shader, a single-pass Blur, borders that
+            default to outside, and gradient parity between WebGL and Canvas.</p>
+        </div>
+        <div class="rounded-xl bg-gray-100 p-6">
+          <h3 class="text-2xl font-semibold text-neutral-800">Images &amp; SVG</h3>
+          <p class="mt-2 text-zinc-500">DPR-aware SVG rasterization, source-region crops, zero-copy uploads, and image
+            decoding that overlaps with GPU upload.</p>
+        </div>
+        <div class="rounded-xl bg-gray-100 p-6">
+          <h3 class="text-2xl font-semibold text-neutral-800">Animation &amp; tooling</h3>
+          <p class="mt-2 text-zinc-500">Adaptive durations that stay correctly timed at variable frame rates, plus an
+            inspector that shows component names and source locations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-gray-100">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Migrating</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">Moving to SolidTV</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 w-full">
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-2xl font-semibold text-neutral-800">From the Lightning + SolidJS integration</h3>
+          <p class="mt-3 text-zinc-500">If your app was built on the earlier SolidJS integration for Lightning 3,
+            moving is mostly a package rename. The
+            <a href="https://github.com/solid-tv/solid#readme" target="_blank" rel="noopener"
+              class="underline text-blue-600">README</a> and the
+            <a href="https://solid-tv.github.io/solid/" class="underline text-blue-600">docs</a> cover the steps and
+            the renderer upgrade notes.</p>
+        </div>
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-2xl font-semibold text-neutral-800">From Lightning 2, Blits or React</h3>
+          <p class="mt-3 text-zinc-500">A rewrite of the view layer is a bigger decision. The Migration Assessment
+            gives you a plan and an estimate before you commit, from the engineer who wrote the framework.</p>
+        </div>
+      </div>
+      <p class="mt-12 text-center text-sm font-bold uppercase tracking-[3.5px] text-zinc-500 w-full">Used by companies
+        worldwide</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-x-14 gap-y-8 w-full">
+        <img src="/images/companies/angel-studios.png" alt="Angel Studios" width="600" height="147"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/bell-fibe-tv.png" alt="Bell Fibe TV" width="240" height="240"
+          class="h-16 w-auto" loading="lazy" />
+        <img src="/images/companies/watch-brasil.svg" alt="Watch Brasil" width="400" height="78"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/chek-news.png" alt="CHEK News" width="600" height="371"
+          class="h-12 w-auto" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="px-20 py-16 mb-16 w-full bg-white max-md:px-5">
+      <div class="hero rounded-2xl px-8 py-12 text-center">
+        <h2 class="text-3xl md:text-4xl font-semibold text-white">Stuck on a slow Lightning app?</h2>
+        <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">Send us the symptoms. A free consultation will tell you whether the fix is in your app, in the renderer, or in a migration.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 text-base font-medium">
+          <a href="/?topic=migration#contact" data-cta="alt_bottom_contact" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get a Free Consultation</a>
+          <a href="/#services" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">See All Support &amp; Services</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>

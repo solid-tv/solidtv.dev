@@ -4,29 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SolidTV: The Fastest TV App Framework</title>
+  <title>SolidTV: Fast TV App Framework for Smart TVs &amp; Apple TV</title>
   <meta name="description"
-    content="SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminate layout jitter. Achieve ultimate TV app performance even on low-end devices.">
+    content="SolidTV is the fastest open-source TV app framework. One SolidJS codebase for Samsung, LG, Android TV, Fire TV and Apple TV. Commercial support available.">
   <meta name="keywords"
-    content="Lightning, LightningJS, javascript, WebGL renderer, high performance, TV apps, low-end devices, SolidTV, SolidJS, React, Apple TV, tvOS, NativeScript, open-source, front-end framework, Blits alternative, TV app performance consulting, Lightning 3 optimization, Zero FOUC">
+    content="SolidTV, TV app framework, Smart TV app development, SolidJS, WebGL renderer, Lightning, LightningJS alternative, Blits alternative, Apple TV, tvOS, NativeScript, Samsung Tizen, LG webOS, Android TV, Fire TV, TV app performance consulting, commercial support, Lightning 3 optimization, low-end devices, open-source">
   <meta name="author" content="Chris Lorenzo">
   <link rel="canonical" href="https://solidtv.dev/">
-  <meta property="og:title" content="SolidTV: The Fastest TV App Framework">
+  <meta property="og:title" content="SolidTV: Build once. Ship to every TV.">
   <meta property="og:description"
-    content="SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminate layout jitter. Achieve ultimate TV app performance even on low-end devices.">
+    content="The fastest open-source TV app framework. One SolidJS codebase for Samsung, LG, Android TV, Fire TV and now Apple TV.">
   <meta property="og:url" content="https://solidtv.dev">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://solidtv.dev/images/logo-400.png">
+  <meta property="og:image" content="https://solidtv.dev/images/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SolidTV: The Fastest TV App Framework">
+  <meta name="twitter:title" content="SolidTV: Build once. Ship to every TV.">
   <meta name="twitter:description"
-    content="SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminate layout jitter. Achieve ultimate TV app performance even on low-end devices.">
-  <meta name="twitter:image" content="https://solidtv.dev/images/logo-400.png">
+    content="The fastest open-source TV app framework. One SolidJS codebase for Samsung, LG, Android TV, Fire TV and now Apple TV.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png">
   <link href="./output.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap|Inter:wght@100..900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
     rel="stylesheet" />
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
@@ -34,6 +36,11 @@
   <!-- Required for hCaptcha -->
   <script src="https://web3forms.com/client/script.js" async defer></script>
   <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 120px;
+    }
+
     body {
       font-family: "Montserrat", sans-serif;
       text-underline-offset: 3px;
@@ -51,6 +58,74 @@
     .hero-text {
       background-image: linear-gradient(to bottom right, #f3a346, #f2ff5c);
     }
+
+    /* Hero TV mock: the row scrolls under a fixed focus ring, like a remote moving right */
+    .tv-track {
+      animation: tv-scroll 12s ease-in-out infinite;
+    }
+
+    .tv-card {
+      flex: 0 0 22%;
+      margin-right: 3%;
+      aspect-ratio: 16 / 9;
+      border-radius: 6px;
+    }
+
+    .tv-focus {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 22%;
+      aspect-ratio: 16 / 9;
+      border-radius: 6px;
+      box-shadow: 0 0 0 3px #fff, 0 8px 24px rgba(0, 0, 0, 0.5);
+      transform: scale(1.08);
+    }
+
+    @keyframes tv-scroll {
+
+      0%,
+      18% {
+        transform: translateX(0);
+      }
+
+      25%,
+      43% {
+        transform: translateX(-25%);
+      }
+
+      50%,
+      68% {
+        transform: translateX(-50%);
+      }
+
+      75%,
+      93% {
+        transform: translateX(-75%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .tv-track {
+        animation: none;
+      }
+    }
+
+    details>summary {
+      list-style: none;
+    }
+
+    details>summary::-webkit-details-marker {
+      display: none;
+    }
   </style>
 
   <script type="application/ld+json">
@@ -63,10 +138,23 @@
         "name": "SolidTV",
         "url": "https://solidtv.dev",
         "logo": "https://solidtv.dev/images/logo-400.png",
+        "founder": { "@id": "https://solidtv.dev/#chris-lorenzo" },
         "sameAs": [
           "https://github.com/solid-tv/solid",
-          "https://github.com/solid-tv/renderer",
+          "https://www.npmjs.com/package/@solidtv/solid",
           "https://www.youtube.com/@LightningTVSolidJS"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://solidtv.dev/#chris-lorenzo",
+        "name": "Chris Lorenzo",
+        "jobTitle": "Creator of SolidTV",
+        "image": "https://solidtv.dev/images/chris-lorenzo.jpg",
+        "url": "https://www.chiefhacker.com/",
+        "sameAs": [
+          "https://www.linkedin.com/in/chris-lorenzo/",
+          "https://github.com/chiefcll"
         ]
       },
       {
@@ -74,7 +162,7 @@
         "@id": "https://solidtv.dev/#website",
         "url": "https://solidtv.dev",
         "name": "SolidTV",
-        "description": "SolidTV is the fastest TV app framework, delivering 50% more FPS and eliminating layout jitter.",
+        "description": "SolidTV is the fastest open-source TV app framework: one SolidJS codebase for Smart TVs, streaming devices and Apple TV.",
         "publisher": { "@id": "https://solidtv.dev/#organization" }
       },
       {
@@ -84,8 +172,7 @@
         "applicationCategory": "DeveloperApplication",
         "url": "https://solidtv.dev",
         "downloadUrl": "https://github.com/solid-tv/solid",
-        "softwareVersion": "latest",
-        "author": { "@id": "https://solidtv.dev/#organization" },
+        "author": { "@id": "https://solidtv.dev/#chris-lorenzo" },
         "description": "Open-source TV app framework built on SolidJS and a WebGL renderer. ~12kb gzipped. Achieve 50% higher FPS than LightningJS with Atomic First Paint to eliminate layout jitter.",
         "offers": {
           "@type": "Offer",
@@ -102,7 +189,15 @@
             "name": "Which TV platforms does SolidTV support?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Apple TV (tvOS via NativeScript), Panasonic, and select set-top-boxes."
+              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select set-top-boxes. Apple TV (tvOS) is supported through NativeScript."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does SolidTV run on Apple TV?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Through NativeScript, without a browser or WebView. NativeScript is the runtime, its canvas plugin provides the WebGL surface, and the @solidtv/nativescript package connects the renderer, the Siri Remote and the app lifecycle. Your app's web entry point is imported unchanged."
             }
           },
           {
@@ -118,15 +213,31 @@
             "name": "Is SolidTV open source?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. SolidTV and the SolidTV Renderer are released under the Apache 2.0 license and developed in the open on GitHub."
+              "text": "Yes. SolidTV is released under the Apache 2.0 license and developed in the open on GitHub. The SolidTV Renderer and the NativeScript host are published on npm under the same license."
             }
           },
           {
             "@type": "Question",
-            "name": "Do you offer TV app performance consulting?",
+            "name": "Do you offer commercial support for SolidTV?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. We offer performance audits, architecture reviews, memory optimization, rendering pipeline tuning, team training, and custom development for TV applications."
+              "text": "Yes. Support plans give your team priority answers, a private support channel, priority bug fixes and upgrade guidance. We also offer fixed-scope performance audits, migration assessments, Apple TV ports, custom development and team training."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you help if our TV app isn't built with SolidTV?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Performance audits and consulting cover any web-based TV app, including LightningJS, Blits, React and Vue apps running on Tizen, WebOS, Android TV and Fire TV."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who is behind SolidTV?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SolidTV is created and maintained by Chris Lorenzo, a former Distinguished Engineer on Comcast's Lightning team who has spent years shipping TV apps at scale."
             }
           }
         ]
@@ -151,18 +262,19 @@
     <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
       <div class="flex-1">
         <a class="logo-href" href="/">
-          <img src="images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
           <span class="relative md:top-1 md:text-2xl text-black">Solid<span
               class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
         </a>
       </div>
-      <nav class="flex-1 flex justify-end gap-3 md:gap-8 p-2 md:p-6 text-base font-medium text-gray-900">
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
         <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
         <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
-        <a href="#consulting" class="md:text-xl hover:text-blue-600">Consulting</a>
-        <a href="#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
         <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
-          aria-label="SolidTV on GitHub" class="flex items-center hover:text-blue-600">
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
           <span class="sr-only">GitHub</span>
           <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
             <path fill="currentColor"
@@ -174,53 +286,122 @@
   </header>
 
   <main class="flex flex-col mt-[130px] max-w-screen-xl mx-auto">
-    <section class="hero flex flex-col justify-center w-full bg-gray-100 max-md:max-w-full lg:rounded-3xl relative">
-      <img src="images/solid.png" width="160" height="160" alt="SolidTV Logo"
-        style="bottom: 50px; left: 5%; transform: rotate(6deg)" class="absolute" />
-      <div
-        class="flex overflow-hidden relative flex-col justify-center p-6 w-full min-h-[500px] max-md:px-5 max-md:max-w-full">
-        <h1 class="text-center text-6xl font-bold text-white bg-clip-text max-md:max-w-full">
-          <span class="hero-text block md:inline bg-clip-text text-transparent animate-fade-up">Supercharge</span>
-          your <span class="hero-tv-apps">TV Apps</span>
-        </h1>
-        <p class="self-stretch mt-8 text-xl text-center text-white max-md:max-w-4xl">
-          Use SolidTV to craft stunning TV Apps. <br />
-          Achieve 50% higher FPS than LightningJS and eliminate layout
-          jitter with Atomic First Paint.
-        </p>
-        <div class="flex gap-4 justify-center mt-16 text-base font-medium text-zinc-900 max-md:flex-wrap max-md:mt-10">
-          <a href="https://solid-tv.github.io/solid/"
-            class="justify-center px-5 py-3 bg-white hover:bg-gray-300 rounded-lg">Get Started with SolidTV</a>
-          <a href="#consulting"
-            class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Performance
-            Consulting</a>
+    <section class="hero w-full lg:rounded-3xl relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-6 py-14 md:px-12 lg:px-16 lg:py-20">
+        <div class="text-center lg:text-left">
+          <a href="/apple-tv/" data-cta="hero_apple_tv_pill"
+            class="inline-flex items-center gap-2 rounded-full bg-white/15 hover:bg-white/25 px-4 py-1.5 text-sm font-medium text-white ring-1 ring-white/30">
+            <span class="rounded-full bg-white text-solidtv px-2 py-0.5 text-xs font-bold uppercase">New</span>
+            SolidTV now runs on Apple TV <span aria-hidden="true">&rarr;</span>
+          </a>
+          <p class="mt-8 text-sm font-bold uppercase tracking-[3.5px] text-white/80">The fastest TV app framework</p>
+          <h1 class="mt-3 text-4xl sm:text-5xl xl:text-6xl font-bold text-white leading-tight">
+            Build once.<br />
+            Ship to <span class="hero-text bg-clip-text text-transparent">every TV.</span>
+          </h1>
+          <p class="mt-6 text-lg md:text-xl text-white/90">
+            SolidTV is the open-source framework for crafting stunning TV apps with SolidJS and WebGL. Ship the same
+            code to Samsung, LG, Android TV, Fire TV and now Apple TV, with
+            <a href="/blog/boosting-lightning-fps-by-50.html" class="underline font-medium text-white">50% higher FPS
+              than LightningJS</a>
+            and no layout jitter.
+          </p>
+          <div class="flex flex-wrap gap-4 justify-center lg:justify-start mt-10 text-base font-medium">
+            <a href="https://solid-tv.github.io/solid/" data-cta="hero_get_started"
+              class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get Started with
+              SolidTV</a>
+            <a href="https://solid-tv.github.io/solid-demo-app/" data-cta="hero_live_demo"
+              class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Try
+              the Live Demo</a>
+          </div>
+          <p class="mt-6 text-base text-white/90">
+            Need a hand?
+            <a href="/#services" data-cta="hero_services" class="underline font-medium text-white">Commercial support
+              &amp; services</a>
+            from SolidTV's creator.
+          </p>
         </div>
+
+        <a href="https://solid-tv.github.io/solid-demo-app/" data-cta="hero_tv_demo"
+          aria-label="Open the live SolidTV demo app" class="group block w-full max-w-xl mx-auto">
+          <div class="rounded-2xl bg-zinc-900 p-2 sm:p-3 shadow-2xl ring-1 ring-white/20">
+            <div class="relative aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-slate-900 to-slate-800">
+              <div class="absolute inset-y-0 left-0 z-10 w-[9%] flex flex-col items-center justify-center gap-3 bg-slate-950">
+                <span class="w-[42%] aspect-square rounded-sm bg-white/90"></span>
+                <span class="w-[42%] aspect-square rounded-sm bg-white/30"></span>
+                <span class="w-[42%] aspect-square rounded-sm bg-white/30"></span>
+                <span class="w-[42%] aspect-square rounded-sm bg-white/30"></span>
+              </div>
+              <div class="absolute inset-y-0 left-[13%] right-0 flex flex-col justify-center">
+                <div class="h-[8%] w-[46%] rounded bg-white/90"></div>
+                <div class="mt-[2.5%] h-[3%] w-[64%] rounded-sm bg-white/30"></div>
+                <div class="mt-[1.5%] h-[3%] w-[52%] rounded-sm bg-white/30"></div>
+                <div class="relative mt-[6%]">
+                  <div class="tv-track flex">
+                    <span class="tv-card bg-gradient-to-br from-indigo-400 to-purple-600"></span>
+                    <span class="tv-card bg-gradient-to-br from-sky-400 to-blue-700"></span>
+                    <span class="tv-card bg-gradient-to-br from-amber-300 to-orange-600"></span>
+                    <span class="tv-card bg-gradient-to-br from-emerald-300 to-teal-700"></span>
+                    <span class="tv-card bg-gradient-to-br from-rose-400 to-pink-700"></span>
+                    <span class="tv-card bg-gradient-to-br from-violet-400 to-indigo-700"></span>
+                    <span class="tv-card bg-gradient-to-br from-cyan-300 to-sky-700"></span>
+                    <span class="tv-card bg-gradient-to-br from-yellow-300 to-amber-600"></span>
+                  </div>
+                  <div class="tv-focus"></div>
+                </div>
+                <div class="flex mt-[5%] opacity-50">
+                  <span class="tv-card bg-gradient-to-br from-teal-400 to-emerald-700"></span>
+                  <span class="tv-card bg-gradient-to-br from-fuchsia-400 to-purple-700"></span>
+                  <span class="tv-card bg-gradient-to-br from-blue-400 to-indigo-700"></span>
+                  <span class="tv-card bg-gradient-to-br from-orange-300 to-rose-600"></span>
+                  <span class="tv-card bg-gradient-to-br from-lime-300 to-green-700"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mx-auto h-4 w-20 bg-zinc-900"></div>
+          <div class="mx-auto h-1.5 w-44 rounded-full bg-zinc-900"></div>
+          <p class="mt-4 text-center text-sm font-medium text-white/90 group-hover:underline">
+            &#9654; Open the live demo and drive it with your arrow keys
+          </p>
+        </a>
       </div>
     </section>
 
-    <section class="flex flex-col items-start px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
-      <h2 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
-        our features
-      </h2>
-      <h3 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
+    <section class="px-6 py-10 w-full bg-white" aria-label="Companies using SolidTV">
+      <p class="text-center text-sm font-bold uppercase tracking-[3.5px] text-zinc-500">Used by companies worldwide</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
+        <img src="/images/companies/angel-studios.png" alt="Angel Studios" width="600" height="147"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/bell-fibe-tv.png" alt="Bell Fibe TV" width="240" height="240"
+          class="h-16 w-auto" loading="lazy" />
+        <img src="/images/companies/watch-brasil.svg" alt="Watch Brasil" width="400" height="78"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/chek-news.png" alt="CHEK News" width="600" height="371"
+          class="h-12 w-auto" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full bg-white border-t border-gray-200 max-md:px-5 max-md:max-w-full">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
+        Why SolidTV
+      </p>
+      <h2 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
         SolidTV is unmatched in speed and features
-      </h3>
+      </h2>
       <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
         SolidJS is an established framework with 10,000+ members in its
         community. It is the top rated in performance across all front-end
-        frameworks and is available now for your TV app development. SolidTV
-        is
+        frameworks, and SolidTV brings it to TV app development. SolidTV is:
       </p>
       <div class="self-stretch mt-8 max-md:max-w-full">
         <div class="flex gap-5 max-md:flex-col max-md:gap-0">
           <article class="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
             <div class="flex flex-col grow self-stretch p-6 max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/3cb80164a39240c52400814966937427c763968c38c9f95c0f42cc21204ff1e2?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Feature Icon 1" class="w-8 aspect-square" />
-              <h4 class="mt-4 text-3xl font-semibold text-neutral-800">
+              <img loading="lazy" src="/images/small.svg" alt="" width="32" height="32" class="w-8 aspect-square" />
+              <h3 class="mt-4 text-3xl font-semibold text-neutral-800">
                 Small
-              </h4>
+              </h3>
               <p class="mt-2 text-base leading-6 text-gray-500">
                 ~12kb Minified + Gzipped
               </p>
@@ -229,12 +410,10 @@
           <article class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
             <div
               class="flex flex-col grow self-stretch p-6 border-l border-gray-300 border-solid max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1aed1c2baf4e54d1789bee230be7491ef1414edc8a59bbbfd9bfc5513e52c144?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Feature Icon 2" class="w-8 aspect-square" />
-              <h4 class="mt-4 text-3xl font-semibold text-neutral-800">
+              <img loading="lazy" src="/images/fast.svg" alt="" width="33" height="32" class="w-8 aspect-square" />
+              <h3 class="mt-4 text-3xl font-semibold text-neutral-800">
                 Fast
-              </h4>
+              </h3>
               <p class="mt-2 text-base leading-6 text-gray-500">
                 Direct template to node creation
               </p>
@@ -243,12 +422,10 @@
           <article class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
             <div
               class="flex flex-col grow self-stretch p-6 border-l border-gray-300 border-solid max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/153f46ffc23dcf1e378d6865106758aafdee5befa0990a8993039b9789c1343e?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Feature Icon 3" class="w-8 aspect-square" />
-              <h4 class="mt-4 text-3xl font-semibold text-neutral-800">
+              <img loading="lazy" src="/images/ready.svg" alt="" width="33" height="32" class="w-8 aspect-square" />
+              <h3 class="mt-4 text-3xl font-semibold text-neutral-800">
                 Ready
-              </h4>
+              </h3>
               <p class="mt-2 text-base leading-6 text-gray-500">
                 Fully loaded with all the features
               </p>
@@ -256,58 +433,100 @@
           </article>
         </div>
       </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mt-12 w-full">
+        <div>
+          <h3 class="text-3xl font-semibold text-neutral-800">Write JSX. Render WebGL.</h3>
+          <p class="mt-4 text-lg leading-7 text-zinc-500">
+            If your team knows React or SolidJS, they already know SolidTV. Components compile straight to renderer
+            nodes, so there is no virtual DOM and no DOM at all between your code and the GPU.
+          </p>
+          <ul class="mt-6 space-y-3 text-base text-neutral-800">
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>Remote-control focus
+                and navigation handled by <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">Row</code> and
+                <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">Column</code></span></li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Focus states and transitions
+              declared in a style object</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Fine-grained updates: only the
+              node that changed is touched</li>
+          </ul>
+        </div>
+        <pre
+          class="w-full overflow-x-auto rounded-xl bg-zinc-900 p-5 text-[13px] leading-6 text-zinc-100 shadow-lg"><code><span class="text-purple-300">import</span> { For } <span class="text-purple-300">from</span> <span class="text-emerald-300">'solid-js'</span>;
+<span class="text-purple-300">import</span> { Row } <span class="text-purple-300">from</span> <span class="text-emerald-300">'@solidtv/solid/primitives'</span>;
+
+<span class="text-purple-300">const</span> posterStyle = {
+  width: <span class="text-amber-300">240</span>,
+  height: <span class="text-amber-300">360</span>,
+  borderRadius: <span class="text-amber-300">16</span>,
+  scale: <span class="text-amber-300">1</span>,
+  transition: { scale: <span class="text-amber-300">true</span> },
+  $focus: { scale: <span class="text-amber-300">1.1</span> },
+};
+
+<span class="text-purple-300">const</span> Rail = (props) =&gt; (
+  &lt;<span class="text-sky-300">Row</span> gap={<span class="text-amber-300">24</span>} autofocus&gt;
+    &lt;<span class="text-sky-300">For</span> each={props.movies}&gt;
+      {(movie) =&gt; (
+        &lt;<span class="text-sky-300">view</span> src={movie.poster} style={posterStyle} /&gt;
+      )}
+    &lt;/<span class="text-sky-300">For</span>&gt;
+  &lt;/<span class="text-sky-300">Row</span>&gt;
+);</code></pre>
+      </div>
+
       <div class="grid grid-cols-1 mt-12 md:grid-cols-2 place-items-center gap-8 items-stretch w-full">
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Reactivity</h2>
+          <h3 class="text-2xl font-semibold">Reactivity</h3>
           <p class="grow">
             Fine-grained reactivity lets you do more with less
           </p>
         </div>
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Simple Flex Layout</h2>
+          <h3 class="text-2xl font-semibold">Simple Flex Layout</h3>
           <p class="grow">
             Layout complexity is reduced with a simple flex layout
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Mouse Support (LG Magic Remote)</h2>
+          <h3 class="text-2xl font-semibold">Mouse Support (LG Magic Remote)</h3>
           <p class="grow">
             useMouse primitive makes setting up mouse support easy
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Typescript</h2>
+          <h3 class="text-2xl font-semibold">Typescript</h3>
           <p class="grow">
             Full Typescript support for developer productivity
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Solid Primitives</h2>
+          <h3 class="text-2xl font-semibold">Solid Primitives</h3>
           <p class="grow">
-            Dozens of components builtin <a href="https://solid-tv.github.io/solid/primitives/lazy"
-              target="_blank">@solid-tv/solid/primitives</a>
+            Dozens of components builtin <a href="https://solid-tv.github.io/solid/primitives/lazy" class="underline"
+              target="_blank" rel="noopener">@solidtv/solid/primitives</a>
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Global State Management</h2>
+          <h3 class="text-2xl font-semibold">Global State Management</h3>
           <p class="grow">
             SolidJS offers reactive signals and stores built in
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Internationalization</h2>
+          <h3 class="text-2xl font-semibold">Internationalization</h3>
           <p class="grow">
             Support for multi-lingual with i18n primitive
           </p>
         </div>
 
         <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-4 w-full">
-          <h2 class="text-2xl font-semibold">Accessibility</h2>
+          <h3 class="text-2xl font-semibold">Accessibility</h3>
           <p class="grow">
             Support for color shifts, announcer and magnification
           </p>
@@ -318,30 +537,31 @@
         Router, Focus Management, Dynamic Components, Portal, Styles, Fragments, Suspense and more...
       </p>
 
-      <div class="flex gap-4 justify-center self-center mt-8 text-base font-medium leading-6">
-        <a href="https://solid-tv.github.io/solid-demo-app/"
+      <div class="flex flex-wrap gap-4 justify-center self-center mt-8 text-base font-medium leading-6">
+        <a href="https://solid-tv.github.io/solid-demo-app/" data-cta="features_demo"
           class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid">Explore
           Demo</a>
         <a href="https://docs.solidjs.com/"
           class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid">Learn
           SolidJS</a>
-        <a href="https://solid-tv.github.io/solid/"
+        <a href="https://solid-tv.github.io/solid/" data-cta="features_get_started"
           class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg">Get Started with
           SolidTV</a>
       </div>
     </section>
 
-    <section class="flex flex-col items-start px-20 py-16 w-full bg-gray-100 max-md:px-5 max-md:max-w-full">
-      <h2 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
+    <section id="platforms" class="flex flex-col items-start px-20 py-16 w-full bg-gray-100 max-md:px-5 max-md:max-w-full">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
         Supported Platforms
-      </h2>
-      <h3 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
+      </p>
+      <h2 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
         Runs everywhere your viewers watch
-      </h3>
+      </h2>
       <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
         The framework performs well on the majority of Smart TVs, set-top-boxes, and really any other device that runs
-        a modern web browser (Chrome 38+), with Apple TV support powered by NativeScript. In terms of TV apps, you should roughly be able to support these types of
-        devices:
+        a modern web browser (Chrome 38+). Apple TV has no browser, so SolidTV runs there natively through
+        <a href="/apple-tv/" class="underline text-blue-600">NativeScript</a>, from the same source code. In terms of
+        TV apps, you should roughly be able to support these types of devices:
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6 mt-10 w-full">
         <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
@@ -361,16 +581,19 @@
               class="text-xs text-zinc-500 font-normal">Sony, Philips, Panasonic, TCL</span></span>
         </div>
         <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
-          <img src="images/amazon-fire-tv.svg" alt="Amazon Fire TV logo"
+          <img src="/images/amazon-fire-tv.svg" alt="Amazon Fire TV logo"
             class="h-12 w-auto object-contain" loading="lazy" />
           <span class="text-sm font-medium text-neutral-800 text-center">Amazon Fire TV</span>
         </div>
-        <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
-          <img src="images/apple-tv.svg" alt="Apple TV logo"
+        <a href="/apple-tv/" data-cta="platforms_apple_tv"
+          class="relative flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md ring-2 ring-solidtv hover:shadow-lg transition">
+          <span
+            class="absolute -top-2.5 right-3 rounded-full bg-solidtv px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">New</span>
+          <img src="/images/apple-tv.svg" alt="Apple TV logo"
             class="h-12 w-auto object-contain" loading="lazy" />
           <span class="text-sm font-medium text-neutral-800 text-center">Apple TV<br /><span
               class="text-xs text-zinc-500 font-normal">via NativeScript</span></span>
-        </div>
+        </a>
         <div class="flex flex-col items-center justify-center gap-3 rounded-xl bg-white p-6 shadow-md">
           <img src="https://cdn.simpleicons.org/panasonic/0F58AA" alt="Panasonic logo"
             class="h-16 w-auto object-contain" loading="lazy" />
@@ -388,36 +611,73 @@
       </div>
     </section>
 
+    <section class="hero w-full px-20 py-16 max-md:px-5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[3.5px] text-white/80">New &middot; Apple TV</p>
+          <h2 class="mt-6 text-4xl font-semibold text-white">Your TV app on Apple TV, without a Swift rewrite</h2>
+          <p class="mt-6 text-lg leading-7 text-white/90">
+            Apple TV has no browser, which is why web-based TV frameworks stop at its door. SolidTV now runs on tvOS
+            through NativeScript, with no WebView in between. Your app's web entry point is imported unchanged.
+          </p>
+          <div class="flex flex-wrap gap-4 mt-8 text-base font-medium">
+            <a href="/apple-tv/" data-cta="appletv_band_learn"
+              class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">See How It Works</a>
+            <a href="/?topic=apple-tv#contact" data-cta="appletv_band_contact" data-topic="apple-tv"
+              class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Get
+              Help Porting Your App</a>
+          </div>
+        </div>
+        <ul class="space-y-4 text-white">
+          <li class="flex gap-4 rounded-xl bg-white/10 p-5 ring-1 ring-white/20">
+            <span class="text-2xl font-bold hero-text bg-clip-text text-transparent">1</span>
+            <span><strong class="font-semibold">Same source code.</strong> The <code>src/</code> you ship to Tizen,
+              WebOS and Android TV is the one that runs on tvOS.</span>
+          </li>
+          <li class="flex gap-4 rounded-xl bg-white/10 p-5 ring-1 ring-white/20">
+            <span class="text-2xl font-bold hero-text bg-clip-text text-transparent">2</span>
+            <span><strong class="font-semibold">60 fps on real hardware.</strong> Measured on a physical Apple TV HD
+              with the WebGL2 renderer.</span>
+          </li>
+          <li class="flex gap-4 rounded-xl bg-white/10 p-5 ring-1 ring-white/20">
+            <span class="text-2xl font-bold hero-text bg-clip-text text-transparent">3</span>
+            <span><strong class="font-semibold">Feels native.</strong> Siri Remote presses, the Menu button and
+              suspend and resume are wired up for you.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <section class="flex flex-col items-start px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
-      <h2 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
-        Insights & Articles
-      </h2>
-      <h3 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
+        Insights &amp; Articles
+      </p>
+      <h2 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
         Technical Deep Dives
-      </h3>
+      </h2>
       <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
         Read how we are pushing the boundaries of TV app performance.
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 w-full">
+        <a href="/blog/why-your-tv-app-is-slow.html"
+          class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-2xl font-semibold text-neutral-800">Why Your Smart TV App Is Slow</h3>
+          <p class="grow text-zinc-500">A field guide for diagnosing Tizen scroll stutter, WebOS frame drops, Fire TV
+            Stick slowness and memory leaks, with concrete fixes for each.</p>
+          <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
+        </a>
+        <a href="/blog/announcing-solidtv.html"
+          class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-2xl font-semibold text-neutral-800">Announcing SolidTV</h3>
+          <p class="grow text-zinc-500">A fork of the LightningJS renderer, rebuilt for 60fps TV apps on real low-end
+            hardware: from ~30 FPS to 60+ on the same app and the same device.</p>
+          <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
+        </a>
         <a href="/blog/boosting-lightning-fps-by-50.html"
           class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
-          <h4 class="text-2xl font-semibold text-neutral-800">Boosting FPS by 50%</h4>
+          <h3 class="text-2xl font-semibold text-neutral-800">Boosting FPS by 50%</h3>
           <p class="grow text-zinc-500">Overcoming Lightning 3 bottlenecks with zero-garbage loops, achieving 45+ FPS on
             low-end hardware like the Raspberry Pi.</p>
-          <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
-        </a>
-        <a href="/blog/what-the-fouc-on-tv.html"
-          class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
-          <h4 class="text-2xl font-semibold text-neutral-800">What the FOUC on TV</h4>
-          <p class="grow text-zinc-500">Using Atomic First Paint in SolidJS to eliminate visual layout renegotiation and
-            jitter on large screens.</p>
-          <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
-        </a>
-        <a href="/blog/solidtv-vs-blits.html"
-          class="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
-          <h4 class="text-2xl font-semibold text-neutral-800">SolidTV vs Blits</h4>
-          <p class="grow text-zinc-500">Debunking empty claims: Why SolidTV provides unmatched efficiency, size, and
-            reactivity compared to Blits.</p>
           <span class="text-blue-600 font-medium mt-2">Read Article &rarr;</span>
         </a>
       </div>
@@ -425,186 +685,349 @@
         <a href="/blog/"
           class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid text-base font-medium leading-6">Read
           the Blog</a>
-        <a href="#consulting"
+        <a href="/#services" data-cta="articles_services"
           class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium leading-6">Need
           Performance Help?</a>
       </div>
     </section>
 
-    <section class="flex flex-col items-start px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
-      <h2 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
-        Why choose us
-      </h2>
-      <div class="self-stretch mt-8 max-md:max-w-full">
-        <div class="flex gap-5 max-md:flex-col max-md:gap-0">
-          <article class="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-            <div
-              class="flex flex-col grow self-stretch p-6 md:border-r border-gray-300 border-solid max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/81ad053bc33fb91f68f7bee42ece7111825cc262a4fe6f7d54df905925925d77?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Performance Icon" class="w-8 aspect-square" />
-              <h4 class="mt-8 text-2xl font-semibold leading-9 text-neutral-800 max-md:max-w-full">
-                Performance
-              </h4>
-              <p class="mt-2 text-base leading-6 text-zinc-500 max-md:max-w-full">
-                Experience blazing-fast performance with SolidTV's WebGL
-                renderer and SolidJS's reactive updates. This translates to a
-                smooth user experience on all devices, especially low-end
-                ones. Need help? We offer expert performance consulting to
-                take your app to the next level.
-              </p>
-            </div>
-          </article>
-          <article class="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-            <div class="flex flex-col grow self-stretch p-6 max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/23562e407eb5268c0a2551cb6213353b8cf40e1622d6bb33496236fa35b9e1dd?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Reliability Icon" class="w-8 aspect-square" />
-              <h4 class="mt-8 text-2xl font-semibold leading-9 text-neutral-800 max-md:max-w-full">
-                Reliability
-              </h4>
-              <p class="mt-2 text-base leading-6 text-zinc-500 max-md:max-w-full">
-                Build rock-solid TV apps with SolidTV's well-established
-                foundation on multiple platforms. Focus on creating your app knowing
-                the framework won't be your weak link.
-              </p>
-            </div>
-          </article>
-        </div>
-      </div>
-      <div class="self-stretch max-md:max-w-full md:border-t border-gray-300">
-        <div class="flex gap-5 max-md:flex-col max-md:gap-0">
-          <article class="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-            <div
-              class="flex flex-col grow self-stretch p-6 md:border-r border-gray-300 border-solid max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/51d7c194cdf2fb33fc5a28968c56ef3134d31668bc9f1eca3365cba5e3750e0b?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Community Icon" class="w-8 aspect-square" />
-              <h4 class="mt-8 text-2xl font-semibold leading-9 text-neutral-800 max-md:max-w-full">
-                Community
-              </h4>
-              <p class="mt-2 text-base leading-6 text-zinc-500 max-md:max-w-full">
-                Never feel alone. SolidJS offers a supportive community,
-                with extensive resources and helpful developers.
-              </p>
-            </div>
-          </article>
-          <article class="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-            <div class="flex flex-col grow self-stretch p-6 max-md:px-5 max-md:max-w-full">
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0625424e901a1b1848c81511b7575d795b231d88d863c1e05ba572e7aac01a04?apiKey=23c357ad83b14e24b63f8828469e9c31&"
-                alt="Innovation Icon" class="w-8 aspect-square" />
-              <h4 class="mt-8 text-2xl font-semibold leading-9 text-neutral-800 max-md:max-w-full">
-                Innovation
-              </h4>
-              <p class="mt-2 text-base leading-6 text-zinc-500 max-md:max-w-full">
-                Stay ahead of the curve. SolidTV embraces innovation,
-                continuously evolving to meet the latest TV development needs.
-              </p>
-            </div>
-          </article>
+    <section id="about" class="px-20 py-16 w-full bg-gray-100 max-md:px-5">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">
+        Who's behind SolidTV
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-10 mt-8 items-start">
+        <img src="/images/chris-lorenzo.jpg" alt="Portrait of Chris Lorenzo, creator of SolidTV" width="480"
+          height="480" loading="lazy" class="w-44 md:w-full aspect-square rounded-2xl object-cover shadow-md" />
+        <div>
+          <h2 class="text-4xl font-semibold text-black">Built and supported by Chris Lorenzo</h2>
+          <p class="mt-6 text-lg leading-7 text-zinc-500">
+            SolidTV is created and maintained by Chris Lorenzo, a Distinguished Engineer who has spent years shipping
+            TV apps at scale. On Comcast's Lightning team he pioneered the SolidJS integration for Lightning 3 and
+            drove the component library that powers 100+ applications. Today he helps TV teams around the world ship
+            fast, accessible apps on low-powered devices. When you ask for help with SolidTV, this is who answers.
+          </p>
+          <ul class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3 text-base text-neutral-800">
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Former Distinguished Engineer,
+              Comcast Lightning team (2018&ndash;2024)</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Led a SolidJS + Lightning
+              integration for a next-generation set-top box</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Designed Lightning onboarding
+              and training for developers</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Built Voice Guidance and
+              accessibility components for TV</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Co-Chair, W3C Media &amp;
+              Entertainment Group</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Conference speaker, including
+              talks for Google and The Lead Developer</li>
+          </ul>
+          <div class="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-base font-medium text-blue-600">
+            <a href="https://www.linkedin.com/in/chris-lorenzo/" target="_blank" rel="noopener"
+              class="hover:underline">LinkedIn &rarr;</a>
+            <a href="https://github.com/chiefcll" target="_blank" rel="noopener" class="hover:underline">GitHub
+              &rarr;</a>
+            <a href="https://www.chiefhacker.com/" target="_blank" rel="noopener"
+              class="hover:underline">chiefhacker.com &rarr;</a>
+          </div>
         </div>
       </div>
     </section>
-    <section id="consulting"
-      class="flex flex-col items-start px-20 py-16 w-full bg-gray-100 max-md:px-5 max-md:max-w-full">
-      <h2 class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
-        Consulting Services
-      </h2>
-      <h3 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
-        Unlock Peak Performance for Your TV App
-      </h3>
-      <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
-        Leverage our deep expertise in SolidTV and SolidJS to identify performance bottlenecks, optimize rendering,
-        and ensure your app delivers a flawless experience on any device. From code reviews to hands-on optimization,
-        we're here to help you succeed.
+
+    <section id="services"
+      class="flex flex-col items-start px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
+      <span id="consulting" aria-hidden="true"></span>
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px] max-md:max-w-full">
+        Support &amp; Services
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 w-full">
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Performance Audits</h4>
-          <p class="grow text-zinc-500">In-depth analysis to identify and resolve performance bottlenecks in your
-            application.</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black max-md:max-w-full">
+        Expert help from the creator of SolidTV
+      </h2>
+      <p class="mt-6 text-lg leading-7 text-zinc-500 max-md:max-w-full">
+        Shipping a TV app is hard, and you shouldn't have to do it alone. Whether your app is built with SolidTV,
+        LightningJS, Blits, or React and Vue on Tizen and WebOS, you get direct access to the engineer who wrote the
+        framework and the renderer: to find performance bottlenecks, fix them, and keep your app fast on every device.
+      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10 w-full items-stretch">
+        <div class="flex flex-col rounded-xl bg-white p-6 shadow-md ring-2 ring-solidtv">
+          <span class="text-xs uppercase tracking-wider text-solidtv font-semibold">Ongoing &middot; For teams in
+            production</span>
+          <h3 class="mt-3 text-2xl font-semibold text-neutral-800">Commercial Support</h3>
+          <p class="mt-3 text-zinc-500">A support plan for teams that depend on SolidTV. Know exactly who to call when
+            something breaks the week before launch.</p>
+          <ul class="mt-5 space-y-3 text-neutral-800 grow">
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Priority answers to your
+              team's questions</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> A private support channel</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Priority bug fixes in the
+              framework and renderer</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Upgrade and migration guidance
+              for new releases</li>
+          </ul>
+          <a href="/#contact" data-cta="services_support" data-topic="support"
+            class="mt-8 text-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium leading-6">Ask
+            About Support Plans</a>
         </div>
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Architecture Review</h4>
-          <p class="grow text-zinc-500">Ensure your app is built on a solid, scalable, and performant foundation.</p>
+
+        <div class="flex flex-col rounded-xl bg-white p-6 shadow-md">
+          <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Fixed scope &middot; Agreed up
+            front</span>
+          <h3 class="mt-3 text-2xl font-semibold text-neutral-800">Packages</h3>
+          <p class="mt-3 text-zinc-500">Defined deliverables with the scope and price agreed before any work starts.</p>
+          <ul class="mt-5 space-y-4 text-neutral-800 grow">
+            <li>
+              <strong class="font-semibold">Performance Audit</strong>
+              <span class="block text-zinc-500">We profile your app on real devices and deliver a written report of
+                prioritized fixes. For any web-based TV app, not just SolidTV.</span>
+            </li>
+            <li>
+              <strong class="font-semibold">Migration Assessment</strong>
+              <span class="block text-zinc-500">A plan and estimate for moving from Lightning 2, Lightning 3, Blits or
+                React to SolidTV.</span>
+            </li>
+            <li>
+              <strong class="font-semibold">Apple TV Port</strong>
+              <span class="block text-zinc-500">Bring your existing SolidTV app to tvOS with NativeScript.</span>
+            </li>
+          </ul>
+          <a href="/#contact" data-cta="services_packages" data-topic="audit"
+            class="mt-8 text-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid text-base font-medium leading-6">Scope
+            a Package</a>
         </div>
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Memory Optimization</h4>
-          <p class="grow text-zinc-500">Reduce memory footprint to ensure smooth operation on low-spec hardware.</p>
+
+        <div class="flex flex-col rounded-xl bg-white p-6 shadow-md">
+          <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Hands-on &middot; Flexible</span>
+          <h3 class="mt-3 text-2xl font-semibold text-neutral-800">Custom Development &amp; Training</h3>
+          <p class="mt-3 text-zinc-500">Extra senior hands for the parts of your app where performance matters
+            most.</p>
+          <ul class="mt-5 space-y-3 text-neutral-800 grow">
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Custom components and features
+              built for performance</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Architecture review for new or
+              existing apps</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Memory optimization and
+              rendering pipeline tuning</li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> Team training and workshops</li>
+          </ul>
+          <a href="/#contact" data-cta="services_custom" data-topic="development"
+            class="mt-8 text-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid text-base font-medium leading-6">Start
+            a Conversation</a>
         </div>
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Rendering Pipeline Tuning</h4>
-          <p class="grow text-zinc-500">Optimize shaders and rendering logic for maximum frame rates.</p>
-        </div>
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Team Training</h4>
-          <p class="grow text-zinc-500">Empower your developers with the knowledge to build high-performance TV apps.
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 w-full">
+        <div class="flex gap-4">
+          <span class="flex-none flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold">1</span>
+          <p class="text-neutral-800"><strong class="font-semibold">Free 30-minute consultation.</strong>
+            <span class="text-zinc-500">Tell us about your app, your target devices and what's going wrong.</span>
           </p>
         </div>
-        <div class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md">
-          <h4 class="text-xl font-semibold">Custom Development</h4>
-          <p class="grow text-zinc-500">Get custom components and features built with performance as a top priority.</p>
+        <div class="flex gap-4">
+          <span class="flex-none flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold">2</span>
+          <p class="text-neutral-800"><strong class="font-semibold">A clear proposal.</strong>
+            <span class="text-zinc-500">Scope, deliverables and price, agreed before any work starts.</span>
+          </p>
+        </div>
+        <div class="flex gap-4">
+          <span class="flex-none flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold">3</span>
+          <p class="text-neutral-800"><strong class="font-semibold">Direct access.</strong>
+            <span class="text-zinc-500">You work with Chris, not an account manager.</span>
+          </p>
         </div>
       </div>
-      <div class="flex justify-center w-full mt-12">
-        <a href="#contact"
+
+      <div class="flex flex-wrap gap-4 justify-center w-full mt-12">
+        <a href="/#contact" data-cta="services_consultation"
           class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium leading-6">Get
           a Free Consultation</a>
+        <a href="/tv-app-performance-consulting/" data-cta="services_learn_more"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-200 border-blue-600 border-solid text-base font-medium leading-6">More
+          About Performance Consulting</a>
       </div>
     </section>
-    <section id="contact"
-      class="flex flex-col justify-center items-center px-6 py-16 mb-16 w-full text-sm leading-5 bg-white max-md:px-5 max-md:max-w-full">
-      <h2 class="font-bold text-blue-600 uppercase leading-[140%] tracking-[3.5px]">
-        Contact Us
-      </h2>
-      <h3 class="mt-4 text-4xl font-semibold text-center leading-[50.4px] text-zinc-900 max-md:max-w-full">
-        Let's build something great together
-      </h3>
-      <p class="mt-4 text-xl leading-7 text-center text-gray-500 w-[629px] max-md:max-w-full">
-        Whether you have a question, an idea, or need expert advice, our team
-        is ready to assist you.
-      </p>
-      <form action="https://api.web3forms.com/submit" method="POST"
-        class="mt-6 font-medium text-gray-900 max-md:max-w-full w-[629px] max-md:max-w-full">
-        <input type="hidden" name="access_key" value="c8da829a-18c1-42f6-ba93-87e6b5f0db91" />
-        <div class="flex flex-col flex-1">
-          <label for="name" class="font-medium text-gray-900">Your Name</label>
-          <input type="text" id="name" name="name"
-            class="justify-center px-4 py-2 mt-2 max-w-full text-gray-500 bg-gray-50 rounded-lg border border-gray-300 border-solid"
-            placeholder="Fullname" aria-label="Your name" />
-        </div>
-        <div class="flex gap-5 mt-6 max-w-full max-md:flex-wrap">
-          <div class="flex flex-col flex-1">
-            <label for="email" class="font-medium text-gray-900">Your Email</label>
-            <input type="email" id="email" name="email"
-              class="justify-center px-4 py-2 mt-2 text-gray-500 bg-gray-50 rounded-lg border border-gray-300 border-solid"
-              placeholder="Email" aria-label="Your Email" />
+
+    <section id="faq" class="flex flex-col items-start px-20 py-16 w-full bg-gray-100 max-md:px-5 max-md:max-w-full">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">FAQ</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">Frequently asked questions</h2>
+      <div class="mt-8 w-full space-y-4">
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            Which TV platforms does SolidTV support?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">SolidTV runs on any device with a modern web browser (Chrome 38+), including
+            Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select
+            set-top-boxes. Apple TV (tvOS) is supported through NativeScript.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            How does SolidTV run on Apple TV?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">Through NativeScript, without a browser or WebView. NativeScript is the
+            runtime, its canvas plugin provides the WebGL surface, and the
+            <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/nativescript</code> package connects the
+            renderer, the Siri Remote and the app lifecycle. Your app's web entry point is imported unchanged.
+            <a href="/apple-tv/" class="underline text-blue-600">Read how it works</a>.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            How does SolidTV compare to LightningJS?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">SolidTV delivers roughly 50% higher FPS than LightningJS on equivalent
+            hardware, eliminates layout jitter via Atomic First Paint, and is approximately 12kb minified + gzipped.
+            <a href="/lightningjs-alternative/" class="underline text-blue-600">See the full comparison</a>.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            Is SolidTV open source?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">Yes. SolidTV is released under the Apache 2.0 license and developed in the
+            open on <a href="https://github.com/solid-tv/solid" class="underline text-blue-600" target="_blank"
+              rel="noopener">GitHub</a>. The SolidTV Renderer and the NativeScript host are published on npm under the
+            same license.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            Do you offer commercial support for SolidTV?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">Yes. Support plans give your team priority answers, a private support channel,
+            priority bug fixes and upgrade guidance. We also offer fixed-scope performance audits, migration
+            assessments, Apple TV ports, custom development and team training.
+            <a href="/#services" class="underline text-blue-600">See support &amp; services</a>.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            Can you help if our TV app isn't built with SolidTV?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">Yes. Performance audits and consulting cover any web-based TV app, including
+            LightningJS, Blits, React and Vue apps running on Tizen, WebOS, Android TV and Fire TV.</p>
+        </details>
+        <details class="group rounded-xl bg-white p-6 shadow-md">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
+            Who is behind SolidTV?
+            <span class="flex-none text-2xl text-blue-600 transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-4 text-zinc-500">SolidTV is created and maintained by Chris Lorenzo, a former Distinguished
+            Engineer on Comcast's Lightning team who has spent years shipping TV apps at scale.
+            <a href="/#about" class="underline text-blue-600">More about Chris</a>.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="contact" class="px-20 py-16 mb-16 w-full bg-white max-md:px-5">
+      <div class="text-center">
+        <p class="text-sm font-bold text-blue-600 uppercase leading-[140%] tracking-[3.5px]">
+          Contact Us
+        </p>
+        <h2 class="mt-4 text-4xl font-semibold leading-[50.4px] text-zinc-900">
+          Let's talk about your TV app
+        </h2>
+        <p class="mt-4 text-xl leading-7 text-gray-500 max-w-2xl mx-auto">
+          Tell us what you're building and where it hurts. The first 30-minute consultation is free, and you'll hear
+          back from Chris directly.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-10 mt-10 text-sm leading-5">
+        <form action="https://api.web3forms.com/submit" method="POST"
+          class="lg:col-span-3 font-medium text-gray-900 w-full">
+          <input type="hidden" name="access_key" value="c8da829a-18c1-42f6-ba93-87e6b5f0db91" />
+          <input type="hidden" name="subject" value="New inquiry from solidtv.dev" />
+          <input type="hidden" name="from_name" value="solidtv.dev" />
+          <input type="hidden" name="redirect" value="https://solidtv.dev/thanks.html" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none" tabindex="-1"
+            autocomplete="off" />
+          <div class="flex gap-5 max-md:flex-wrap">
+            <div class="flex flex-col flex-1">
+              <label for="name" class="font-medium text-gray-900">Your Name</label>
+              <input type="text" id="name" name="name" required autocomplete="name"
+                class="justify-center px-4 py-2 mt-2 max-w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border-solid"
+                placeholder="Full name" />
+            </div>
+            <div class="flex flex-col flex-1">
+              <label for="email" class="font-medium text-gray-900">Work Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email"
+                class="justify-center px-4 py-2 mt-2 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border-solid"
+                placeholder="you@company.com" />
+            </div>
+          </div>
+          <div class="flex gap-5 mt-6 max-md:flex-wrap">
+            <div class="flex flex-col flex-1">
+              <label for="company" class="font-medium text-gray-900">Company <span
+                  class="font-normal text-gray-500">(optional)</span></label>
+              <input type="text" id="company" name="company" autocomplete="organization"
+                class="justify-center px-4 py-2 mt-2 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border-solid"
+                placeholder="Company" />
+            </div>
+            <div class="flex flex-col flex-1">
+              <label for="topic" class="font-medium text-gray-900">What do you need?</label>
+              <select id="topic" name="topic"
+                class="px-4 py-2 mt-2 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border-solid">
+                <option value="support">Commercial support plan</option>
+                <option value="audit">Performance audit</option>
+                <option value="migration">Migration to SolidTV</option>
+                <option value="apple-tv">Apple TV port</option>
+                <option value="development">Custom development or training</option>
+                <option value="other" selected>Something else</option>
+              </select>
+            </div>
           </div>
           <div class="flex flex-col flex-1">
-            <label for="phone" class="font-medium text-gray-900">Your Phone</label>
-            <input type="tel" id="phone" name="phone"
-              class="justify-center px-4 py-2 mt-2 text-gray-500 bg-gray-50 rounded-lg border border-gray-300 border-solid"
-              placeholder="Phone Number" aria-label="Your Phone" />
+            <label for="message" class="mt-6 font-medium text-gray-900">Your message</label>
+            <textarea id="message" name="message" required rows="6"
+              class="justify-center px-4 py-3 mt-2 max-w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border-solid"
+              placeholder="Your app, your target devices, and what you'd like help with"></textarea>
           </div>
-        </div>
-        <div class="flex flex-col flex-1">
-          <label for="message" class="mt-6 font-medium text-gray-900 max-md:max-w-full">Your message</label>
-          <textarea id="message" name="message"
-            class="justify-center px-4 pt-3 pb-14 mt-2 max-w-full text-gray-500 bg-gray-50 rounded-lg border border-gray-300 border-solid"
-            placeholder="Write text here ..." aria-label="Your message"></textarea>
-        </div>
-        <div class="h-captcha mt-6" data-captcha="true"></div>
-        <button type="submit"
-          class="justify-center self-end px-5 py-3 mt-6 mr-80 text-base font-medium leading-6 text-white whitespace-nowrap bg-blue-600 rounded-lg max-md:mr-2.5">
-          Submit
-        </button>
-      </form>
+          <div class="h-captcha mt-6" data-captcha="true"></div>
+          <button type="submit" data-cta="contact_submit"
+            class="justify-center px-5 py-3 mt-6 text-base font-medium leading-6 text-white whitespace-nowrap bg-blue-600 hover:bg-blue-800 rounded-lg">
+            Request a Call
+          </button>
+        </form>
+
+        <aside class="lg:col-span-2 rounded-xl bg-gray-100 p-6 text-base leading-6 self-start w-full">
+          <h3 class="text-xl font-semibold text-neutral-800">Prefer to reach out directly?</h3>
+          <ul class="mt-5 space-y-5 text-neutral-800">
+            <li>
+              <strong class="font-semibold">LinkedIn</strong>
+              <span class="block text-zinc-500">Message Chris at
+                <a href="https://www.linkedin.com/in/chris-lorenzo/" target="_blank" rel="noopener"
+                  data-cta="contact_linkedin" class="underline text-blue-600">linkedin.com/in/chris-lorenzo</a></span>
+            </li>
+            <li>
+              <strong class="font-semibold">Discord</strong>
+              <span class="block text-zinc-500">Join the <a href="https://discord.com/invite/solidjs" target="_blank"
+                  rel="noopener" data-cta="contact_discord" class="underline text-blue-600">SolidJS Discord</a>, open
+                the #SolidTV channel and message <em>chiefcll</em></span>
+            </li>
+            <li>
+              <strong class="font-semibold">Found a bug?</strong>
+              <span class="block text-zinc-500">Open an issue on
+                <a href="https://github.com/solid-tv/solid/issues" target="_blank" rel="noopener"
+                  class="underline text-blue-600">GitHub</a></span>
+            </li>
+          </ul>
+          <p class="mt-6 text-sm text-zinc-500">Based in Philadelphia, PA, and working remotely with TV teams around
+            the world.</p>
+        </aside>
+      </div>
     </section>
   </main>
   <footer
     class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
-    <ul class="flex items-center h-8 mb-2 text-sm">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
       <li class="mx-2">
         <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
           <path fill="currentColor"
@@ -612,7 +1035,7 @@
           </path>
         </svg>
         <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
-        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/renderer">SolidTV Renderer</a>
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
       </li>
       <li class="mx-2">
         <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
@@ -620,7 +1043,7 @@
             d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
           </path>
         </svg>
-        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS</a>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
       </li>
       <li class="mx-2">
         <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
@@ -631,8 +1054,28 @@
         <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
       </li>
     </ul>
-    <p class="text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2025 As One Strategy LLC</p>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
   </footer>
+
+  <script>
+    // Report CTA clicks to GA4 and carry the clicked service into the contact form's topic select
+    (function () {
+      var select = document.getElementById('topic');
+      function setTopic(value) {
+        if (!select || !value) return;
+        for (var i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === value) select.value = value;
+        }
+      }
+      setTopic(new URLSearchParams(window.location.search).get('topic'));
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+        if (!el) return;
+        setTopic(el.getAttribute('data-topic'));
+        if (window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+      });
+    })();
+  </script>
 </body>
 
 </html>

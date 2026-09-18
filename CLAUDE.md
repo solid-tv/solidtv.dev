@@ -19,10 +19,20 @@ Husky + lint-staged run Prettier on staged `.ts/.js/.cjs/.md` files on commit.
 
 ## Architecture
 
-- `docs/index.html` — the entire site is a single HTML file (~487 lines). All content, layout, and Tailwind utility classes live here.
+- `docs/index.html` — the homepage: hero, customer logos, features, platforms, Apple TV band, articles, about, support & services (`#services`, with a legacy `#consulting` anchor), FAQ, and the contact form.
+- `docs/apple-tv/`, `docs/lightningjs-alternative/`, `docs/tv-app-performance-consulting/` — search landing pages, one `index.html` each.
+- `docs/blog/` — blog index and articles, one HTML file per post.
+- `docs/thanks.html` — where the contact form redirects after a submission (`noindex`); it fires the GA4 `generate_lead` event.
+- `docs/sitemap.xml` — add every new indexable page here.
 - `docs/input.css` — Tailwind entrypoint (`@tailwind base/components/utilities`).
-- `docs/output.css` — generated; do not edit by hand. Rebuild via `npm run build` or `npm run watch`.
-- `tailwind.config.js` — scans `./docs/*.{html,js}` and defines two brand colors: `solidtv` (`#6F45E8`) and `solidtv-dark` (`#1C64F2`).
-- `docs/images/` — static assets (logos, favicons).
+- `docs/output.css` — generated; do not edit by hand. Rebuild via `npm run build` or `npm run watch` after adding any new utility class.
+- `tailwind.config.js` — scans `./docs/**/*.{html,js}` and defines two brand colors: `solidtv` (`#6F45E8`) and `solidtv-dark` (`#1C64F2`).
+- `docs/images/` — static assets (logos, favicons, `og-card.png` social card, `companies/` customer logos).
 
-The `docs/` directory is the deployable artifact (GitHub Pages serves it directly), which is why generated CSS is committed.
+There is no templating. The `<header>`, `<footer>`, font links and GA snippet are duplicated in every page, so a change to the nav or footer must be applied to all of them. Use root-relative URLs (`/images/...`, `/#services`) so the same markup works at any depth.
+
+The FAQ on the homepage exists twice: as visible `<details>` elements and as `FAQPage` JSON-LD in the `<head>`. Keep the two in sync.
+
+Links with a `data-cta` attribute report a `cta_click` event to GA4. On the homepage a `data-topic` attribute, or a `?topic=` query parameter, preselects the contact form's "What do you need?" option.
+
+The `docs/` directory is the deployable artifact (GitHub Pages serves it directly), which is why generated CSS is committed. Anything written under `docs/` is published, so keep notes, specs and scratch files out of it.

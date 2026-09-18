@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart TV App Performance Consulting | SolidTV</title>
+  <meta name="description"
+    content="Performance audits and consulting for Smart TV apps on Tizen, WebOS, Android TV and Fire TV. LightningJS, Blits, React or SolidTV. Led by SolidTV&#x27;s creator.">
+  <meta name="keywords"
+    content="TV app performance consulting, Smart TV app optimization, Tizen performance, WebOS performance, Fire TV performance, LightningJS consultant, Lightning 3 optimization, TV app audit">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/tv-app-performance-consulting/">
+  <meta property="og:title" content="Smart TV app performance consulting">
+  <meta property="og:description"
+    content="We find out why your TV app is slow on real devices, and fix it. LightningJS, Blits, React or SolidTV.">
+  <meta property="og:url" content="https://solidtv.dev/tv-app-performance-consulting/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://solidtv.dev/images/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Smart TV app performance consulting">
+  <meta name="twitter:description"
+    content="We find out why your TV app is slow on real devices, and fix it. LightningJS, Blits, React or SolidTV.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .hero {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(to right, #6f45e8, #1c64f2);
+    }
+
+    .hero-text {
+      background-image: linear-gradient(to bottom right, #f3a346, #f2ff5c);
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "name": "Smart TV App Performance Consulting",
+        "serviceType": "TV app performance audit and optimization",
+        "description": "Performance audits, optimization, migration and commercial support for Smart TV apps on Samsung Tizen, LG WebOS, Android TV, Fire TV and Apple TV.",
+        "url": "https://solidtv.dev/tv-app-performance-consulting/",
+        "areaServed": "Worldwide",
+        "provider": {
+          "@type": "Organization",
+          "name": "SolidTV",
+          "url": "https://solidtv.dev",
+          "logo": "https://solidtv.dev/images/logo-400.png",
+          "founder": { "@type": "Person", "name": "Chris Lorenzo", "url": "https://www.chiefhacker.com/" }
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "SolidTV", "item": "https://solidtv.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "TV App Performance Consulting", "item": "https://solidtv.dev/tv-app-performance-consulting/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-10">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-screen-xl mx-auto">
+    <section class="hero w-full lg:rounded-3xl px-6 py-14 md:px-12 lg:px-20 lg:py-20">
+      <p class="text-sm font-bold uppercase tracking-[3.5px] text-white/80">Performance consulting</p>
+      <h1 class="mt-4 text-4xl sm:text-5xl font-bold text-white leading-tight max-w-4xl">Smart TV app <span class="hero-text bg-clip-text text-transparent">performance consulting</span></h1>
+      <p class="mt-6 text-lg md:text-xl text-white/90 max-w-3xl">
+        Scroll stutter on Tizen. Frame drops on WebOS. A Fire TV Stick that can't keep up. We find out why your TV app is slow on real devices, and fix it, whatever framework it's built with.
+      </p>
+      <div class="flex flex-wrap gap-4 mt-10 text-base font-medium">
+        <a href="/?topic=audit#contact" data-cta="consult_hero_contact" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get a Free Consultation</a>
+        <a href="/blog/why-your-tv-app-is-slow.html" data-cta="consult_hero_guide" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Read the Field Guide First</a>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-white">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Sound familiar?</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">The problems we get called about</h2>
+      <p class="mt-6 text-lg leading-7 text-zinc-500">
+        TV hardware is years behind the phone in your pocket, and the app that flies on your laptop crawls on the
+        device your viewers own. These are the usual suspects:
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 w-full">
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">Scrolling stutters</h3>
+          <p class="text-zinc-500">Rows hitch as they move, usually from garbage collection in the render loop or too many nodes alive off screen.</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">Frames drop on older sets</h3>
+          <p class="text-zinc-500">The app holds 60fps on this year's flagship and 20fps on the five-year-old TVs most of your audience has.</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">Memory climbs until it crashes</h3>
+          <p class="text-zinc-500">Leaked textures and detached nodes that never show up on a desktop build take a Samsung set down in an evening.</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">The first screen jitters</h3>
+          <p class="text-zinc-500">Layout renegotiates after the first draw, so rows visibly jump into place on a 65-inch screen.</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">Startup is slow</h3>
+          <p class="text-zinc-500">A bundle that parses instantly on a laptop takes seconds on a TV chipset before anything is on screen.</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-xl bg-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-neutral-800">Nobody can say why</h3>
+          <p class="text-zinc-500">Without on-device profiling and telemetry, every fix is a guess. We start by measuring.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-gray-100">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">The Performance Audit</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">What you get</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 w-full items-start">
+        <ul class="space-y-5 text-lg text-neutral-800">
+          <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><strong class="font-semibold">Profiling on real devices.</strong> <span class="text-zinc-500">Your app is measured on TV hardware, not a desktop browser.</span></span></li>
+          <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><strong class="font-semibold">A written report.</strong> <span class="text-zinc-500">Every finding explained and ranked, so your team knows what to fix first.</span></span></li>
+          <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><strong class="font-semibold">Fixed scope and price.</strong> <span class="text-zinc-500">Agreed up front, before any work starts.</span></span></li>
+          <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><strong class="font-semibold">Hands-on fixes if you want them.</strong> <span class="text-zinc-500">We can implement the changes alongside your team, or train them to do it.</span></span></li>
+        </ul>
+        <div class="rounded-xl bg-white p-6 shadow-md">
+          <h3 class="text-xl font-semibold text-neutral-800">Any web-based TV app</h3>
+          <p class="mt-3 text-zinc-500">You don't need to be on SolidTV. Audits cover:</p>
+          <ul class="mt-4 space-y-2 text-neutral-800">
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>LightningJS (Lightning 2 and 3) and Blits</span></li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>React, Vue and other DOM-based TV apps</span></li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>SolidTV and SolidJS</span></li>
+            <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>Samsung Tizen, LG WebOS, Android TV, Fire TV and set-top boxes</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-white">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Who does the work</p>
+      <div class="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-10 mt-8 items-start w-full">
+        <img src="/images/chris-lorenzo.jpg" alt="Portrait of Chris Lorenzo, creator of SolidTV" width="480"
+          height="480" loading="lazy" class="w-44 md:w-full aspect-square rounded-2xl object-cover shadow-md" />
+        <div>
+          <h2 class="text-4xl font-semibold text-black">Chris Lorenzo, creator of SolidTV</h2>
+          <p class="mt-6 text-lg leading-7 text-zinc-500">
+            Chris spent nearly six years as a Distinguished Engineer on Comcast's Lightning team, where he pioneered the
+            SolidJS integration for Lightning 3 and drove the component library that powers 100+ applications. He
+            then forked the Lightning renderer and doubled its frame rate on real hardware. When your app has a
+            performance problem, you work with him directly.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
+            <div>
+              <p class="text-3xl font-bold text-solidtv">30 &rarr; 60+</p>
+              <p class="mt-1 text-sm text-zinc-500">FPS on a XumoTV after swapping in the SolidTV renderer</p>
+            </div>
+            <div>
+              <p class="text-3xl font-bold text-solidtv">+50%</p>
+              <p class="mt-1 text-sm text-zinc-500">FPS on a Raspberry Pi 3 from renderer optimization</p>
+            </div>
+            <div>
+              <p class="text-3xl font-bold text-solidtv">100+</p>
+              <p class="mt-1 text-sm text-zinc-500">apps powered by the Lightning component library he led</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-base font-medium text-blue-600">
+            <a href="/#about" class="hover:underline">More about Chris &rarr;</a>
+            <a href="https://www.linkedin.com/in/chris-lorenzo/" target="_blank" rel="noopener"
+              class="hover:underline">LinkedIn &rarr;</a>
+          </div>
+        </div>
+      </div>
+      <p class="mt-14 text-center text-sm font-bold uppercase tracking-[3.5px] text-zinc-500 w-full">SolidTV is used
+        by companies worldwide</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-x-14 gap-y-8 w-full">
+        <img src="/images/companies/angel-studios.png" alt="Angel Studios" width="600" height="147"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/bell-fibe-tv.png" alt="Bell Fibe TV" width="240" height="240"
+          class="h-16 w-auto" loading="lazy" />
+        <img src="/images/companies/watch-brasil.svg" alt="Watch Brasil" width="400" height="78"
+          class="h-7 w-auto" loading="lazy" />
+        <img src="/images/companies/chek-news.png" alt="CHEK News" width="600" height="371"
+          class="h-12 w-auto" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-gray-100">
+      <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Beyond the audit</p>
+      <h2 class="mt-6 text-4xl font-semibold text-black">Other ways we help</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 w-full">
+        <a href="/#services" class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-neutral-800">Commercial Support</h3>
+          <p class="grow text-zinc-500">Priority answers, a private channel and priority bug fixes for teams running
+            SolidTV in production.</p>
+        </a>
+        <a href="/lightningjs-alternative/" class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-neutral-800">Migration Assessment</h3>
+          <p class="grow text-zinc-500">A plan and estimate for moving from Lightning 2, Lightning 3, Blits or React
+            to SolidTV.</p>
+        </a>
+        <a href="/apple-tv/" class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-neutral-800">Apple TV Port</h3>
+          <p class="grow text-zinc-500">Bring your SolidTV app to tvOS through NativeScript, from the same source
+            code.</p>
+        </a>
+        <a href="/#services" class="flex flex-col gap-2 rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-neutral-800">Development &amp; Training</h3>
+          <p class="grow text-zinc-500">Custom components, architecture reviews, memory and rendering pipeline tuning,
+            and team workshops.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="px-20 py-16 mb-16 w-full bg-white max-md:px-5">
+      <div class="hero rounded-2xl px-8 py-12 text-center">
+        <h2 class="text-3xl md:text-4xl font-semibold text-white">Tell us where it hurts</h2>
+        <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">The first consultation is free. Bring the symptoms, the devices and the framework, and leave with a clear next step.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 text-base font-medium">
+          <a href="/?topic=audit#contact" data-cta="consult_bottom_contact" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get a Free Consultation</a>
+          <a href="/#services" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">See All Support &amp; Services</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>
