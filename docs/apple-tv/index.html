@@ -123,7 +123,7 @@
         Apple TV has no browser, so web-based TV apps have never been able to run there. SolidTV now runs on tvOS through NativeScript, with no WebView in between, from the same source code you ship to every other TV.
       </p>
       <div class="flex flex-wrap gap-4 mt-10 text-base font-medium">
-        <a href="https://www.npmjs.com/package/@solidtv/nativescript" target="_blank" rel="noopener" data-cta="appletv_npm" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Get @solidtv/nativescript</a>
+        <a href="https://solid-tv.github.io/solid/#/deploy/appletv" target="_blank" rel="noopener" data-cta="appletv_guide" class="justify-center px-5 py-3 bg-white text-zinc-900 hover:bg-gray-300 rounded-lg">Read the Apple TV Guide</a>
         <a href="https://github.com/solid-tv/solid-demo-app/tree/main/nativescript" target="_blank" rel="noopener" data-cta="appletv_demo_source" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">See the Demo App Setup</a>
         <a href="/?topic=apple-tv#contact" data-cta="appletv_hero_contact" class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Get Help Porting Your App</a>
       </div>
@@ -153,9 +153,9 @@
         <div class="flex flex-col gap-3 rounded-xl bg-gray-100 p-6">
           <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">The host</span>
           <h3 class="text-2xl font-semibold text-neutral-800">@solidtv/nativescript</h3>
-          <p class="text-zinc-500">Renderer settings for a full-screen canvas, a key bridge that turns Siri Remote
-            presses into the key events SolidTV's focus manager already understands, and lifecycle bindings for
-            suspend and resume.</p>
+          <p class="text-zinc-500">A renderer platform for the native canvas, shims for the browser globals the
+            polyfill lacks, a bridge that turns Siri Remote presses into the key events SolidTV's focus manager
+            already understands, and lifecycle bindings for suspend and resume.</p>
         </div>
       </div>
     </section>
@@ -181,43 +181,42 @@
 
     <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-white">
       <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Setup</p>
-      <h2 class="mt-6 text-4xl font-semibold text-black">Two files of glue</h2>
+      <h2 class="mt-6 text-4xl font-semibold text-black">A small NativeScript project beside your app</h2>
       <p class="mt-6 text-lg leading-7 text-zinc-500">
-        A NativeScript boot file creates the renderer on the canvas and wires up the remote, and one webpack helper
-        adds the Solid JSX rule. The full walkthrough is in the
-        <a href="https://www.npmjs.com/package/@solidtv/nativescript" target="_blank" rel="noopener"
-          class="underline text-blue-600">package README</a>.
+        The tvOS build lives next to your web app: a boot file that binds the native canvas and the Siri Remote and
+        then imports your web entry, a webpack config, and the usual NativeScript settings. Your web build keeps using
+        Vite. The <a href="https://solid-tv.github.io/solid/#/deploy/appletv" target="_blank" rel="noopener" data-cta="appletv_guide_setup"
+          class="underline text-blue-600">Apple TV deployment guide</a> walks through every file, from
+        <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">package.json</code> to running on a physical Apple TV.
       </p>
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-10 w-full">
-        <pre class="lg:col-span-3 overflow-x-auto rounded-xl bg-zinc-900 p-5 text-[13px] leading-6 text-zinc-100 shadow-lg"><code>// app.ts
+        <pre class="lg:col-span-3 overflow-x-auto rounded-xl bg-zinc-900 p-5 text-[13px] leading-6 text-zinc-100 shadow-lg"><code>// app/app.ts (simplified from the guide)
 import &#x27;@nativescript/canvas-polyfill&#x27;;
 import &#x27;@solidtv/nativescript/shims&#x27;;
-import { Application, Screen } from &#x27;@nativescript/core&#x27;;
+import { Application } from &#x27;@nativescript/core&#x27;;
 import { isTvOS } from &#x27;@nativescript/core/platform&#x27;;
-import { createRenderer, registerDefaultShaders } from &#x27;@solidtv/solid&#x27;;
+import { Config, renderer } from &#x27;@solidtv/solid&#x27;;
 import {
   KeyBridge,
+  bindCanvas,
   bindLifecycle,
   bindRemote,
-  loadSdfFont,
-  rendererSettings,
-  stubTarget,
 } from &#x27;@solidtv/nativescript&#x27;;
 
-canvas.on(&#x27;ready&#x27;, () =&gt; {
-  const { renderer, render } = createRenderer(
-    rendererSettings(canvas, Screen.mainScreen),
-    stubTarget,
-  );
-  registerDefaultShaders(renderer.stage.shManager);
+// A Menu press nothing handled leaves the app, as tvOS expects
+Config.preventDefaultOnHandledKeys = true;
 
-  const bridge = new KeyBridge();               // Siri Remote -&gt; keydown / keyup
-  bindLifecycle(renderer, bridge, Application); // pause on suspend, resume on resume
+function boot(canvas) {
+  // This native view stands in for the canvas your app would create
+  bindCanvas(canvas);
+  // Siri Remote -&gt; key events on document, where the focus manager listens
+  const bridge = new KeyBridge({ target: document });
+  // Pause on suspend, resume when the app comes back
+  bindLifecycle(() =&gt; renderer, bridge, Application);
   if (isTvOS) bindRemote(bridge, Application.ios.window);
-
-  loadSdfFont(renderer.stage, { /* font files from the app bundle */ })
-    .then(() =&gt; render(() =&gt; &lt;App bridge={bridge} /&gt;));
-});</code></pre>
+  // Your app&#x27;s own entry, unchanged
+  import(&#x27;../../src/index&#x27;);
+}</code></pre>
         <div class="lg:col-span-2 flex flex-col gap-8">
           <pre class="overflow-x-auto rounded-xl bg-zinc-900 p-5 text-[13px] leading-6 text-zinc-100 shadow-lg"><code>// webpack.config.js
 const webpack = require(&#x27;@nativescript/webpack&#x27;);
@@ -225,15 +224,19 @@ const { chainSolidTV } = require(&#x27;@solidtv/nativescript/webpack&#x27;);
 
 module.exports = (env) =&gt; {
   webpack.init(env);
-  webpack.chainWebpack(chainSolidTV);
+  webpack.chainWebpack((config) =&gt; {
+    // Solid JSX, browser export conditions,
+    // and the aliases from your vite.config.js
+    chainSolidTV(config, { alias: {} });
+  });
   return webpack.resolveConfig();
 };</code></pre>
           <div class="rounded-xl bg-gray-100 p-6">
             <h3 class="text-xl font-semibold text-neutral-800">Requirements</h3>
             <ul class="mt-4 space-y-2 text-neutral-800">
-              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/solid</code> 1.6.3 or later</span></li>
-              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/renderer</code> 1.9.3 or later</span></li>
-              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">"jsx": "preserve"</code> and <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">"jsxImportSource": "@solidtv/solid"</code> in the app's tsconfig</span></li>
+              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>A Mac with Xcode and the tvOS platform</span></li>
+              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span>To run a browser app unchanged: the releases after <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/solid</code> 1.6.3, <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/renderer</code> 1.9.3 and <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/nativescript</code> 0.1.1. See the guide's <a href="https://solid-tv.github.io/solid/#/deploy/appletv?id=how-it-works" target="_blank" rel="noopener" class="underline text-blue-600">version note</a></span></li>
+              <li class="flex gap-3"><span class="text-blue-600 font-bold">&check;</span> <span><code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">"jsx": "preserve"</code> and <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">"jsxImportSource": "@solidtv/solid"</code> in the tvOS project's tsconfig</span></li>
             </ul>
           </div>
         </div>
@@ -263,6 +266,12 @@ module.exports = (env) =&gt; {
         <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/nativescript</code> is an early release (v0.1) under the Apache 2.0 license. No
         app has gone through App Store submission with it yet, and we'd like to work closely with the first teams that
         do. If that's you, <a href="/?topic=apple-tv#contact" class="underline text-blue-600">get in touch</a>.
+      </p>
+      <p class="mt-4 text-lg leading-7 text-zinc-500">
+        Known limits today: video playback on tvOS goes through a native <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">AVPlayer</code> view,
+        which the host does not cover yet, SVG images do not decode, and there is no pointer input. The guide's
+        <a href="https://solid-tv.github.io/solid/#/deploy/appletv?id=limitations" target="_blank" rel="noopener" class="underline text-blue-600">Limitations</a>
+        section has the full list and the workarounds.
       </p>
     </section>
 

@@ -189,7 +189,7 @@
             "name": "Which TV platforms does SolidTV support?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select set-top-boxes. Apple TV (tvOS) is supported through NativeScript."
+              "text": "SolidTV runs on any device with a modern web browser (Chrome 38+), including Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select set-top-boxes. Apple TV (tvOS) is supported through NativeScript. The one exception is Roku, which only runs apps written in its own BrightScript language."
             }
           },
           {
@@ -297,7 +297,8 @@
           <p class="mt-8 text-sm font-bold uppercase tracking-[3.5px] text-white/80">The fastest TV app framework</p>
           <h1 class="mt-3 text-4xl sm:text-5xl xl:text-6xl font-bold text-white leading-tight">
             Build once.<br />
-            Ship to <span class="hero-text bg-clip-text text-transparent">every TV.</span>
+            Ship to <span class="hero-text bg-clip-text text-transparent">every TV.</span><a href="#roku-note"
+              aria-label="Footnote: except Roku" class="align-super text-2xl font-medium text-white/70 hover:text-white">*</a>
           </h1>
           <p class="mt-6 text-lg md:text-xl text-white/90">
             SolidTV is the open-source framework for crafting stunning TV apps with SolidJS and WebGL. Ship the same
@@ -320,6 +321,8 @@
               &amp; services</a>
             from SolidTV's creator.
           </p>
+          <p class="mt-6 text-xs text-white/70">* Every TV except Roku, which only runs apps written in its own
+            BrightScript language.</p>
         </div>
 
         <a href="https://solid-tv.github.io/solid-demo-app/" data-cta="hero_tv_demo"
@@ -609,6 +612,10 @@
           <span class="text-sm font-medium text-neutral-800 text-center">Select Set-Top-Boxes</span>
         </div>
       </div>
+      <p id="roku-note" class="mt-8 text-sm text-zinc-500">
+        * The one exception is Roku. Its platform only runs apps written in BrightScript, Roku's own language, so no
+        web-based or JavaScript framework can target it.
+      </p>
     </section>
 
     <section class="hero w-full px-20 py-16 max-md:px-5">
@@ -627,6 +634,11 @@
               class="justify-center px-5 py-3 text-white rounded-lg border hover:bg-blue-800 border-white border-solid">Get
               Help Porting Your App</a>
           </div>
+          <p class="mt-6 text-base text-white/90">
+            Building it yourself?
+            <a href="https://solid-tv.github.io/solid/#/deploy/appletv" target="_blank" rel="noopener" data-cta="appletv_band_guide"
+              class="underline font-medium text-white">Read the Apple TV deployment guide</a>.
+          </p>
         </div>
         <ul class="space-y-4 text-white">
           <li class="flex gap-4 rounded-xl bg-white/10 p-5 ring-1 ring-white/20">
@@ -855,7 +867,8 @@
           </summary>
           <p class="mt-4 text-zinc-500">SolidTV runs on any device with a modern web browser (Chrome 38+), including
             Samsung Tizen, LG WebOS, Android TV (Sony, Philips, Panasonic, TCL), Amazon Fire TV, Panasonic, and select
-            set-top-boxes. Apple TV (tvOS) is supported through NativeScript.</p>
+            set-top-boxes. Apple TV (tvOS) is supported through NativeScript. The one exception is Roku, which only
+            runs apps written in its own BrightScript language.</p>
         </details>
         <details class="group rounded-xl bg-white p-6 shadow-md">
           <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
@@ -866,7 +879,8 @@
             runtime, its canvas plugin provides the WebGL surface, and the
             <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/nativescript</code> package connects the
             renderer, the Siri Remote and the app lifecycle. Your app's web entry point is imported unchanged.
-            <a href="/apple-tv/" class="underline text-blue-600">Read how it works</a>.</p>
+            <a href="/apple-tv/" class="underline text-blue-600">Read how it works</a>, or follow the
+            <a href="https://solid-tv.github.io/solid/#/deploy/appletv" target="_blank" rel="noopener" class="underline text-blue-600">deployment guide</a>.</p>
         </details>
         <details class="group rounded-xl bg-white p-6 shadow-md">
           <summary class="flex cursor-pointer items-center justify-between gap-4 text-xl font-semibold text-neutral-800">
