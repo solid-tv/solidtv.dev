@@ -117,7 +117,10 @@
 
   <main class="flex flex-col mt-[130px] max-w-screen-xl mx-auto">
     <section class="hero w-full lg:rounded-3xl px-6 py-14 md:px-12 lg:px-20 lg:py-20">
-      <p class="text-sm font-bold uppercase tracking-[3.5px] text-white/80">New &middot; Apple TV</p>
+      <p class="flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-[3.5px] text-white/80">
+        New &middot; Apple TV
+        <span class="rounded-full bg-white text-solidtv px-2 py-0.5 text-xs font-bold uppercase tracking-wide">Beta</span>
+      </p>
       <h1 class="mt-4 text-4xl sm:text-5xl font-bold text-white leading-tight max-w-4xl">Your SolidTV app, now on <span class="hero-text bg-clip-text text-transparent">Apple TV</span></h1>
       <p class="mt-6 text-lg md:text-xl text-white/90 max-w-3xl">
         Apple TV has no browser, so web-based TV apps have never been able to run there. SolidTV now runs on tvOS through NativeScript, with no WebView in between, from the same source code you ship to every other TV.
@@ -245,7 +248,7 @@ module.exports = (env) =&gt; {
 
     <section class="flex flex-col items-start px-20 py-16 w-full max-md:px-5 bg-gray-100">
       <p class="text-sm font-bold leading-5 text-blue-600 uppercase tracking-[3.5px]">Status</p>
-      <h2 class="mt-6 text-4xl font-semibold text-black">New, and verified on real hardware</h2>
+      <h2 class="mt-6 text-4xl font-semibold text-black">In beta, and verified on real hardware</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 w-full">
         <div class="rounded-xl bg-white p-6 shadow-md">
           <p class="text-4xl font-bold text-solidtv">60 fps</p>
@@ -263,6 +266,7 @@ module.exports = (env) =&gt; {
         </div>
       </div>
       <p class="mt-8 text-lg leading-7 text-zinc-500">
+        Apple TV support is in beta.
         <code class="text-sm bg-gray-100 rounded px-1.5 py-0.5">@solidtv/nativescript</code> is an early release (v0.1) under the Apache 2.0 license. No
         app has gone through App Store submission with it yet, and we'd like to work closely with the first teams that
         do. If that's you, <a href="/?topic=apple-tv#contact" class="underline text-blue-600">get in touch</a>.
