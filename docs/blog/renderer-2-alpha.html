@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SolidTV Renderer 2.0 Alpha: Rebuilt From Scratch, Same API | SolidTV</title>
   <meta name="description"
-    content="SolidTV Renderer 2.0 is in alpha: a ground-up, AI-assisted rewrite with a data-oriented core, under half the main-thread frame time of 1.x, and no breaking changes for apps." />
+    content="SolidTV Renderer 2.0 alpha: a ground-up rewrite with the same API. First LG webOS results: 2x the FPS and about 4x faster scene loads on a Chrome 38 TV." />
   <meta name="keywords"
-    content="SolidTV Renderer 2.0, TV app renderer, WebGL TV renderer, LightningJS renderer alternative, data-oriented renderer, garbage collection TV, low-end TV hardware, Mali-400 shaders, SDF text, SolidJS TV, Solid 2.0, Chrome 38" />
+    content="SolidTV Renderer 2.0, TV app renderer, WebGL TV renderer, LightningJS renderer alternative, data-oriented renderer, garbage collection TV, low-end TV hardware, Mali-400 shaders, SDF text, SolidJS TV, Solid 2.0, Chrome 38, LG webOS performance" />
   <meta name="author" content="Chris Lorenzo" />
   <link rel="canonical" href="https://solidtv.dev/blog/renderer-2-alpha.html" />
   <meta property="og:title" content="SolidTV Renderer 2.0 Alpha: Rebuilt From Scratch, Same API" />
   <meta property="og:description"
-    content="A ground-up rewrite of the SolidTV renderer for TV hardware: a data-oriented core, a loop that sleeps, visibility-ordered image loading, and no breaking changes for apps." />
+    content="A ground-up rewrite of the SolidTV renderer, now tested on LG webOS: 2x the redraw FPS and about 4x faster scene loads on a Chrome 38 TV, with no breaking changes for apps." />
   <meta property="og:url" content="https://solidtv.dev/blog/renderer-2-alpha.html" />
   <meta property="og:type" content="article" />
   <meta property="og:image" content="https://solidtv.dev/images/og-card.png" />
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SolidTV Renderer 2.0 Alpha" />
   <meta name="twitter:description"
-    content="Rebuilt from scratch for TV hardware, with the same API. Under half the main-thread frame time of 1.x in early lab tests." />
+    content="Rebuilt from scratch, same API. On an older LG TV with Chrome 38: 2x the FPS and about 4x faster scene loads." />
   <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png" />
   <link href="/output.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -144,9 +144,56 @@
       margin: 0.25rem 0 0;
     }
 
+    .results-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .results {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .results th,
+    .results td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+    }
+
+    .results thead th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+
+    .results td:first-child {
+      color: #111827;
+    }
+
+    .article-prose p.table-note {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #6b7280;
+    }
+
     @media (max-width: 480px) {
       .stats {
         grid-template-columns: 1fr;
+      }
+
+      .results {
+        font-size: 0.85rem;
+      }
+
+      .results th,
+      .results td {
+        padding: 0.5rem 0.4rem;
       }
     }
   </style>
@@ -156,7 +203,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "SolidTV Renderer 2.0 Alpha: Rebuilt From Scratch, Same API",
-    "description": "SolidTV Renderer 2.0 is in alpha: a ground-up, AI-assisted rewrite with a data-oriented core, under half the main-thread frame time of 1.x, and no breaking changes for apps.",
+    "description": "SolidTV Renderer 2.0 alpha: a ground-up rewrite with the same API. First LG webOS results: 2x the FPS and about 4x faster scene loads on a Chrome 38 TV.",
     "author": {
       "@type": "Person",
       "name": "Chris Lorenzo",
@@ -174,7 +221,7 @@
     "dateModified": "2026-10-04",
     "mainEntityOfPage": "https://solidtv.dev/blog/renderer-2-alpha.html",
     "image": "https://solidtv.dev/images/og-card.png",
-    "keywords": "SolidTV Renderer 2.0, TV app renderer, WebGL, data-oriented design, garbage collection, low-end TV hardware, SolidJS, Solid 2.0"
+    "keywords": "SolidTV Renderer 2.0, TV app renderer, WebGL, LG webOS, data-oriented design, garbage collection, low-end TV hardware, SolidJS, Solid 2.0"
   }
   </script>
 
@@ -231,13 +278,15 @@
           SolidTV Renderer 2.0 Alpha: Rebuilt From Scratch, Same API
         </h1>
         <p class="mt-4 text-zinc-500 text-base">
-          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published October 4, 2026 &middot; 5 min read
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published October 4, 2026 &middot; 7 min read
         </p>
       </header>
 
       <p>I'm getting ready for Solid 2.0, and I decided to start at the bottom of the stack. Before changing anything
         in the framework, I rewrote the renderer underneath it from scratch, using AI to optimize every part of the
-        code. <strong>SolidTV Renderer 2.0</strong> is now in alpha.</p>
+        code. <strong>SolidTV Renderer 2.0</strong> is now in alpha, and the first device results are in: on an older LG
+        TV running Chrome 38, it doubles the frame rate of 1.x on a heavy stress scene and loads scenes about four
+        times faster.</p>
 
       <p>The API is the one you already know. Almost everything under it is new. TV apps run on chips with a fraction
         of a laptop's power, so v2 is built around where that hardware loses frames: garbage collection pauses, work
@@ -256,30 +305,129 @@
         Every task was written test-first, and each phase had to match 1.10's output in visual regression tests
         before the next one began. From the first design doc to a working alpha took about a week.</p>
 
-      <h3>Early numbers</h3>
+      <h3>First results on real TVs</h3>
+
+      <p>Today I ran the alpha on hardware for the first time, against 1.10 on two LG webOS devices:</p>
+
+      <ul>
+        <li><strong>An older LG TV:</strong> webOS 3.8, Chrome 38, two CPU cores and a 720p panel. Exactly the kind of
+          device TV apps struggle on.</li>
+        <li><strong>A newer LG smart monitor:</strong> webOS 9.1, Chrome 108, four cores and a 4K panel.</li>
+      </ul>
+
+      <p>Both versions ran the same test pages, taking turns going first, with a fresh page load for every run. No
+        run failed or logged a page error. On the older TV:</p>
 
       <div class="stats">
         <div>
-          <p class="label">Main-thread time per frame</p>
-          <p class="value">Under half of 1.x</p>
+          <p class="label">Redraw FPS, 400 cards</p>
+          <p class="value">2&times; <span class="block text-sm font-normal text-zinc-500">8 &rarr; 15.6 FPS</span></p>
         </div>
         <div>
-          <p class="label">Stress-test scene load</p>
-          <p class="value">2.6&ndash;3.6&times; faster</p>
+          <p class="label">Scene load time</p>
+          <p class="value">~4&times; faster</p>
         </div>
         <div>
-          <p class="label">Node creation</p>
-          <p class="value">4&ndash;6&times; faster</p>
+          <p class="label">Cards loaded within 1 second</p>
+          <p class="value">75 &rarr; 400</p>
         </div>
         <div>
-          <p class="label">Garbage per steady frame</p>
-          <p class="value">30&ndash;120 B <span class="block text-sm font-normal text-zinc-500">was up to 74 kB on 1.10</span></p>
+          <p class="label">Node creation, warmed up</p>
+          <p class="value">7.9&times; faster</p>
         </div>
       </div>
 
-      <p>These are lab results: 1.10 and 2.0 running the same scenes in headless Chromium on a laptop. Node creation
-        is measured in the legacy build that older TV browsers need. None of these numbers come from a TV yet. That's
-        the next step, and I'll share the device results when I have them.</p>
+      <p>And side by side:</p>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>v2 against 1.10</th>
+              <th>Older LG TV<br>Chrome 38</th>
+              <th>LG monitor<br>Chrome 108</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Node creation, first pass</td>
+              <td>3.1&times; faster</td>
+              <td>3.6&times; faster</td>
+            </tr>
+            <tr>
+              <td>Node creation, warmed up</td>
+              <td>7.9&times; faster</td>
+              <td>7.4&times; faster</td>
+            </tr>
+            <tr>
+              <td>Scene load, same number of cards</td>
+              <td>~4&times; faster</td>
+              <td>~4&times; faster</td>
+            </tr>
+            <tr>
+              <td>Redraw FPS, 400 cards with text</td>
+              <td><strong>2&times;</strong> (8.0 &rarr; 15.6)</td>
+              <td>Tie (24.9 &rarr; 25.0)</td>
+            </tr>
+            <tr>
+              <td>Redraw FPS, 400 cards with images</td>
+              <td><strong>1.6&times;</strong> (14.7 &rarr; 23.0)</td>
+              <td>Tie (28.1 &rarr; 28.6)</td>
+            </tr>
+            <tr>
+              <td>Redraw FPS, 800 cards with text</td>
+              <td>Not run</td>
+              <td>5% slower (13.9 &rarr; 13.2)</td>
+            </tr>
+            <tr>
+              <td>Main thread busy per frame, 800 cards</td>
+              <td>Not traced</td>
+              <td><strong>Half</strong> (40.0 &rarr; 20.7 ms)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="table-note">Medians of five runs per version (three for the image-only redraw). Each card has a
+        rounded background and an image thumbnail; the text cards add a title and a subtitle. "Cards loaded within
+        1 second" is the largest grid of text cards that builds and settles in under a second.</p>
+
+      <h4>What the numbers say</h4>
+
+      <p><strong>Wherever the renderer's own JavaScript is the work, v2 wins on both devices.</strong> Creating nodes
+        is 3 to 4 times faster on the first pass and 7 to 8 times faster once the engine warms up, and scenes load in
+        about a quarter of the time, on the old engine and the new one.</p>
+
+      <p><strong>Redraw speed depends on the device's bottleneck.</strong> On the older TV the main thread limits the
+        frame rate, so v2's leaner frame doubles it, on exactly the kind of hardware where TV apps hurt most. On the
+        monitor, a Chrome trace shows the browser's GPU thread busy for 99% of every frame in both versions, running
+        the same GL commands. Lighter JavaScript can't buy more frames there.</p>
+
+      <p><strong>Even where FPS ties, v2 gives the main thread back.</strong> At 800 cards on the monitor, the main
+        thread is busy for 20.7 ms of each frame on v2 against 40 ms on 1.10, and garbage collection drops from
+        0.8 ms a frame to 0.1 ms. That's time your app gets back for its own work, like responding to key presses.
+      </p>
+
+      <p><strong>Not everything is a win yet.</strong> At 800 cards on the monitor, v2 is 5% slower than 1.10, in all
+        five runs. The trace puts the extra 3.2 ms a frame in the compositor's frame paint, most likely the GPU driver
+        handling v2's larger per-frame vertex data. v2 currently re-uploads every visible glyph every frame, which
+        also costs about 4.5 ms a frame on the older TV. Uploading only what changed should help on both.</p>
+
+      <p>One lesson applies to any TV app, not just this renderer: find out which thread is your bottleneck before you
+        optimize. On one device, leaner JavaScript doubled the frame rate. On the other it changed nothing, and the
+        fix there is fewer draw calls. That's the first thing I look for in a
+        <a href="/tv-app-performance-consulting/">performance audit</a>.</p>
+
+      <p>A word on these tests: 400 to 800 cards redrawn every frame is far heavier than a real screen. The absolute
+        FPS shows where each device's bottleneck is, not what your app will see. These are the renderer's own test
+        pages, not a full app, and the LG monitor isn't a TV, though it runs a current webOS release. Node creation
+        compares builds that target older browsers, as TV apps usually do.</p>
+
+      <h4>In the lab</h4>
+
+      <p>The earlier lab numbers, from headless Chromium on a laptop, point the same way: v2's frame takes under half
+        of 1.10's main-thread time, and a steady frame allocates 30 to 120 bytes of garbage, against up to 74 kB on
+        1.10.</p>
 
       <h3>What's new</h3>
 
@@ -310,20 +458,30 @@
       <p>One thing to check first: v2 draws text only with SDF fonts, so every font your app uses needs an SDF atlas.
         If you already use SDF fonts, there's nothing to change.</p>
 
-      <p>v2 also keeps the same reach as 1.x: Chrome 38 and up. That covers the same Tizen, WebOS, Android TV, Fire TV
-        and set-top box browsers you ship to today.</p>
+      <p>v2 also keeps the same reach as 1.x: Chrome 38 and up. The older LG TV in the tests runs Chrome 38, and v2
+        ran there without a single page error. That covers the same Tizen, webOS, Android TV, Fire TV and set-top box
+        browsers you ship to today.</p>
 
-      <h3>Tested before it touches a TV</h3>
+      <h3>How it's tested</h3>
 
-      <p>The alpha has about 1,500 unit tests, each run in two build configurations, plus 184 visual regression
+      <p>Alongside the device runs, the alpha has about 1,500 unit tests, each run in two build configurations, plus 184 visual regression
         snapshots. Allocation tests hold each scene to a per-frame byte budget, so the garbage collection gains can't
         quietly regress.</p>
 
       <h3>What's next</h3>
 
-      <p>Real devices. I'll start testing the alpha on TVs soon, and the beta will follow once the numbers hold up on
-        real hardware. I'm excited to see what it does on the low-end boxes that pushed me to write it. After that
-        comes Solid 2.0 itself.</p>
+      <p>Device testing has started, and the results set the list:</p>
+
+      <ul>
+        <li><strong>Fewer GL calls per card.</strong> Each card costs two draw calls and two texture binds, and on the
+          monitor those saturate the GPU thread. Batching images through a shared texture would cut both.</li>
+        <li><strong>Upload only the glyph data that changed.</strong> This should win back the 4.5 ms a frame on the
+          older TV and close the gap at 800 cards on the monitor.</li>
+        <li><strong>A full app on a reference TV.</strong> The solid-demo-app benchmark, 1.10 against v2.</li>
+      </ul>
+
+      <p>The beta follows once those hold up, and after that comes Solid 2.0 itself. Doubling the frame rate on a
+        Chrome 38 TV on the first day of device testing is a good start, and I'm excited to keep pushing.</p>
 
       <h3>Want to test it early?</h3>
 
