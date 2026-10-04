@@ -408,6 +408,11 @@
         0.8 ms a frame to 0.1 ms. That's time your app gets back for its own work, like responding to key presses.
       </p>
 
+      <p><strong>Not everything is a win yet.</strong> At 800 cards on the monitor, v2 is 5% slower than 1.10, in all
+        five runs. The trace puts the extra 3.2 ms a frame in the compositor's frame paint, most likely the GPU driver
+        handling v2's larger per-frame vertex data. v2 currently re-uploads every visible glyph every frame, which
+        also costs about 4.5 ms a frame on the older TV. Uploading only what changed should help on both.</p>
+
       <p>One lesson applies to any TV app, not just this renderer: find out which thread is your bottleneck before you
         optimize. On one device, leaner JavaScript doubled the frame rate. On the other it changed nothing, and the
         fix there is fewer draw calls. That's the first thing I look for in a
@@ -470,7 +475,8 @@
       <ul>
         <li><strong>Fewer GL calls per card.</strong> Each card costs two draw calls and two texture binds, and on the
           monitor those saturate the GPU thread. Batching images through a shared texture would cut both.</li>
-        <li><strong>Upload only the glyph data that changed,</strong> instead of every visible glyph every frame.</li>
+        <li><strong>Upload only the glyph data that changed.</strong> This should win back the 4.5 ms a frame on the
+          older TV and close the gap at 800 cards on the monitor.</li>
         <li><strong>A full app on a reference TV.</strong> The solid-demo-app benchmark, 1.10 against v2.</li>
       </ul>
 
