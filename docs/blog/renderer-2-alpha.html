@@ -423,15 +423,12 @@
         likely because it re-uploads every visible glyph each frame. Uploading only what changed should close the gap.
       </p>
 
-      <p>One lesson applies to any TV app, not just this renderer: find out which thread is your bottleneck before you
-        optimize. On one device, leaner JavaScript doubled the frame rate. On the other it changed nothing, and the
-        fix there is fewer draw calls. That's the first thing I look for in a
+      <p>The lesson for any TV app: find the bottleneck thread before you optimize. Leaner JavaScript doubled one
+        device's frame rate and did nothing on the other. It's the first thing I check in a
         <a href="/tv-app-performance-consulting/">performance audit</a>.</p>
 
-      <p>A word on these tests: 400 to 800 cards redrawn every frame is far heavier than a real screen. The absolute
-        FPS shows where each device's bottleneck is, not what your app will see. These are the renderer's own test
-        pages, not a full app, and the LG monitor isn't a TV, though it runs a current webOS release. Node creation
-        compares builds that target older browsers, as TV apps usually do.</p>
+      <p>These stress scenes are far heavier than a real app's screen, so the FPS shows each device's bottleneck, not
+        what your app will see. And the LG monitor isn't a TV, though it runs a current webOS release.</p>
 
       <h3>Against Lightning 3.5.1 on the Lightning benchmark</h3>
 
