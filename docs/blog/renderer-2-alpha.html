@@ -199,10 +199,11 @@
 
       .results th,
       .results td {
-        padding: 0.5rem 0.4rem;
+        padding: 0.5rem 0.25rem;
       }
 
       .results thead th {
+        font-size: 0.65rem;
         letter-spacing: 0;
       }
     }
@@ -288,7 +289,7 @@
           SolidTV Renderer 2.0 Alpha: Rebuilt From Scratch, Same API
         </h1>
         <p class="mt-4 text-zinc-500 text-base">
-          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published October 4, 2026 &middot; Updated October 5, 2026 &middot; 9 min read
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published October 4, 2026 &middot; Updated October 5, 2026 &middot; 8 min read
         </p>
       </header>
 
@@ -436,13 +437,12 @@
       <h3>Against Lightning 3.5.1 on the Lightning benchmark</h3>
 
       <p>I also ran v2 through the <a href="https://github.com/lightning-js/benchmark" target="_blank"
-          rel="noopener">LightningJS benchmark</a>, against the upstream Lightning renderer 3.5.1 and SolidTV Renderer
-        1.10. Lightning 3.5.1 ran the benchmark's renderer harness unmodified, and 1.10 and v2 ran ports of it that
-        change only the API calls. The benchmark runs on a laptop with the CPU throttled six times, so these are
+          rel="noopener">LightningJS benchmark</a>, against the upstream Lightning renderer 3.5.1. Lightning ran the
+        benchmark's renderer harness unmodified, and v2 ran a port of it that changes only the API calls. The benchmark runs on a laptop with the CPU throttled six times, so these are
         desktop numbers, not TV numbers.</p>
 
       <p><strong>v2 is the fastest on every test.</strong> On the benchmark's weighted score, where 1.00 means fastest
-        on every test, v2 scores 1.00, Lightning 3.5.1 scores 2.24 and 1.10 scores 2.26.</p>
+        on every test, v2 scores 1.00 and Lightning 3.5.1 scores 2.24.</p>
 
       <div class="results-wrap">
         <table class="results">
@@ -452,7 +452,6 @@
               <th>Lightning 3.5.1</th>
               <th>SolidTV v2</th>
               <th>v2 vs Lightning</th>
-              <th>SolidTV 1.10</th>
             </tr>
           </thead>
           <tbody>
@@ -461,119 +460,84 @@
               <td>32.2</td>
               <td>8.5</td>
               <td><strong>3.8&times;</strong></td>
-              <td>32.6</td>
             </tr>
             <tr>
               <td>Update all 1,000 rows</td>
               <td>26.9</td>
               <td>6.8</td>
               <td><strong>4.0&times;</strong></td>
-              <td>37.2</td>
             </tr>
             <tr>
               <td>Update every 10th row</td>
               <td>25.5</td>
               <td>3.3</td>
               <td><strong>7.7&times;</strong></td>
-              <td>32.4</td>
             </tr>
             <tr>
               <td>Select a row</td>
               <td>26.4</td>
               <td>2.5</td>
               <td><strong>10.8&times;</strong></td>
-              <td>38.8</td>
             </tr>
             <tr>
               <td>Swap 2 rows</td>
               <td>26.3</td>
               <td>2.5</td>
               <td><strong>10.6&times;</strong></td>
-              <td>35.0</td>
             </tr>
             <tr>
               <td>Remove a row</td>
               <td>16.5</td>
               <td>2.2</td>
               <td><strong>7.4&times;</strong></td>
-              <td>19.3</td>
             </tr>
             <tr>
               <td>Create 10,000 rows</td>
               <td>85.8</td>
               <td>30.3</td>
               <td><strong>2.8&times;</strong></td>
-              <td>48.1</td>
             </tr>
             <tr>
               <td>Append 10,000 rows</td>
               <td>99.7</td>
               <td>41.1</td>
               <td><strong>2.4&times;</strong></td>
-              <td>50.9</td>
             </tr>
             <tr>
               <td>Clear the rows</td>
               <td>19.0</td>
               <td>1.1</td>
               <td><strong>17&times;</strong></td>
-              <td>16.9</td>
             </tr>
             <tr>
               <td>Memory test: 20,000 nodes</td>
               <td>257<br><span class="cell-note">draws nothing</span></td>
               <td>61.5<br><span class="cell-note">draws all</span></td>
               <td><strong>4.2&times;</strong></td>
-              <td>Hangs</td>
             </tr>
             <tr>
-              <td>Memory test: JS heap</td>
-              <td>24.4 MB</td>
-              <td>5.5 MB</td>
-              <td><strong>4.5&times;</strong> smaller</td>
-              <td>&ndash;</td>
+              <td>Memory test: JS heap (MB)</td>
+              <td>24.4</td>
+              <td>5.5</td>
+              <td><strong>4.5&times;</strong><br><span class="cell-note">smaller</span></td>
             </tr>
             <tr>
-              <td>JS bundle</td>
-              <td>179.0 kB</td>
-              <td>153.8 kB</td>
-              <td>14% smaller</td>
-              <td>143.0 kB</td>
+              <td>JS bundle (kB)</td>
+              <td>179.0</td>
+              <td>153.8</td>
+              <td><strong>14%</strong><br><span class="cell-note">smaller</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p class="table-note">Times in milliseconds, mean of three interleaved rounds; lower is better. Chromium 153 on an Apple M4 Pro laptop
-        with a 6&times; CPU throttle. To make all three draw the same picture, the 1.10 and v2 harnesses give each row
-        a zIndex, which costs v2 1 to 2 ms a test.</p>
-
-      <p><strong>The small tests mostly measure the loop.</strong> Select, swap, remove and clear touch only a handful
-        of nodes, so their times are mostly how long each renderer takes to notice a change, draw it and report that
-        it's done. Lightning 3.5.1 and 1.10 poll for changes on a timer while idle, so a change waits for the next
-        poll, and they report done one frame after drawing: about two frames in all. v2 wakes on the change, draws it
-        on the next frame and reports done in that same frame. Part of that gap is how the benchmark measures, but the
-        wait for the poll is real latency after a key press on a still screen.</p>
-
-      <p><strong>The node-heavy tests show the engine.</strong> Creating and appending 10,000 rows, and the memory
-        test, build enough nodes that waiting stops mattering. There v2 is 2.4 to 4.2 times faster than Lightning 3.5.1
-        and 1.2 to 1.6 times faster than 1.10, with a JS heap 4.5 times smaller.</p>
-
-      <p><strong>Only v2 draws the memory test.</strong> It puts 20,000 small quads on screen in a single frame, more
-        than the 16,384 that a 16-bit index buffer can address in one draw. v2 flushes when its buffer fills and keeps
-        drawing. Lightning 3.5.1 finishes without drawing anything, and 1.10 freezes.</p>
-
-      <p><strong>This is 1.10's best case.</strong> The benchmark builds for the latest browsers, which keeps 1.10's
-        native class fields. Built for Chrome 38, as an app for older TVs has to be, those fields become helper calls,
-        and 1.10 creates nodes up to about 20 times slower. v2 creates nodes at the same speed whichever browsers it
-        targets.</p>
+      <p class="table-note">Times in milliseconds unless noted, mean of three interleaved rounds; lower is better. Chromium 153 on an Apple M4 Pro laptop
+        with a 6&times; CPU throttle. To draw the same picture as Lightning, the v2 harness gives each row a zIndex,
+        which costs v2 1 to 2 ms a test.</p>
 
       <p><strong>And it's still getting faster.</strong> Memory-layout changes on October 5 packed most of each
         node's data into two contiguous records, which made the node-heavy tests 21% to 41% faster in a day. They
         landed after the LG runs above, so the devices will be the real test.</p>
-
-      <p>Earlier lab measurements point the same way: v2's frame takes under half of 1.10's main-thread time, and a
-        steady frame allocates 30 to 120 bytes of garbage, against up to 74 kB on 1.10.</p>
 
       <h3>What's new</h3>
 
