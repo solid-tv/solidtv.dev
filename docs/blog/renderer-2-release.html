@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolidTV Renderer 2.0 Is Released: Same Work, 40% Faster | SolidTV</title>
+  <meta name="description"
+    content="SolidTV Renderer 2.0 is released. After a week in production, it does the same work as 1.x about 40% faster across devices, with less garbage for smoother frames." />
+  <meta name="keywords"
+    content="SolidTV Renderer 2.0, SolidTV Renderer release, TV app renderer, WebGL TV renderer, LightningJS renderer alternative, garbage collection TV, TV frame pacing, WPE WebKit, JavaScriptCore JIT, SDF text layout, SolidJS TV, Chrome 38" />
+  <meta name="author" content="Chris Lorenzo" />
+  <link rel="canonical" href="https://solidtv.dev/blog/renderer-2-release.html" />
+  <meta property="og:title" content="SolidTV Renderer 2.0 Is Released: Same Work, 40% Faster" />
+  <meta property="og:description"
+    content="A week in production: 2.0 does the same work as 1.x about 40% faster across devices, with less garbage created and collected for smoother frames." />
+  <meta property="og:url" content="https://solidtv.dev/blog/renderer-2-release.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://solidtv.dev/images/og-card.png" />
+  <meta property="article:published_time" content="2026-10-15T12:00:00Z" />
+  <meta property="article:author" content="Chris Lorenzo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SolidTV Renderer 2.0 Is Released" />
+  <meta name="twitter:description"
+    content="A week in production: the same work as 1.x, about 40% faster across devices, and less garbage for smoother frames." />
+  <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png" />
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png" />
+  <link rel="manifest" href="/images/site.webmanifest" />
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose h4 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .stats div {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .stats .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .stats .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0.25rem 0 0;
+    }
+
+    .results-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .results {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .results th,
+    .results td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+    }
+
+    .results thead th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+
+    .results td:first-child {
+      color: #111827;
+    }
+
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .results {
+        font-size: 0.85rem;
+      }
+
+      .results th,
+      .results td {
+        padding: 0.5rem 0.25rem;
+      }
+
+      .results thead th {
+        font-size: 0.65rem;
+        letter-spacing: 0;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "SolidTV Renderer 2.0 Is Released: Same Work, 40% Faster",
+    "description": "SolidTV Renderer 2.0 is released. After a week in production, it does the same work as 1.x about 40% faster across devices, with less garbage for smoother frames.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2026-10-15",
+    "mainEntityOfPage": "https://solidtv.dev/blog/renderer-2-release.html",
+    "image": "https://solidtv.dev/images/og-card.png",
+    "keywords": "SolidTV Renderer 2.0, TV app renderer, WebGL, garbage collection, frame pacing, WPE WebKit, JavaScriptCore, SDF text, SolidJS"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-50">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>Renderer 2.0 Released</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Announcement</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          SolidTV Renderer 2.0 Is Released: Same Work, 40% Faster
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published October 15, 2026 &middot; 7 min read
+        </p>
+      </header>
+
+      <p>Eleven days ago I announced the <a href="/blog/renderer-2-alpha.html">SolidTV Renderer 2.0 alpha</a>, a
+        ground-up rewrite of the renderer with the same API. <strong>2.0 is now officially released.</strong> 2.0.0
+        went out on October 7, it has been running in production for almost a week, and the numbers are impressive:
+        2.0 does the same work as 1.x, with the same result on screen, about 40% faster across devices.</p>
+
+      <p>The alpha's numbers came from stress scenes on test devices. These come from a production app, which is the
+        test that counts.</p>
+
+      <div class="stats">
+        <div>
+          <p class="label">Renderer work per frame</p>
+          <p class="value">~40% faster <span class="block text-sm font-normal text-zinc-500">in production, across
+              devices</span></p>
+        </div>
+        <div>
+          <p class="label">Garbage per steady frame</p>
+          <p class="value">30&ndash;120 B <span class="block text-sm font-normal text-zinc-500">against up to 74 kB on
+              1.10</span></p>
+        </div>
+        <div>
+          <p class="label">Text layout</p>
+          <p class="value">2&ndash;3.7&times; faster <span class="block text-sm font-normal text-zinc-500">with
+              identical output</span></p>
+        </div>
+        <div>
+          <p class="label">Slow frames on a Xumo TV</p>
+          <p class="value">6.25% &rarr; 2.4% <span class="block text-sm font-normal text-zinc-500">after the
+              frame-cap fix</span></p>
+        </div>
+      </div>
+
+      <h3>What production shows</h3>
+
+      <p>Every frame, the renderer works out what changed on screen, then draws it. 2.0 does exactly the job 1.x
+        did, and the screen looks the same. It just gets that job done about 40% faster, across the devices the app
+        ships to. (For the technical reader: that's the update and draw phase of each frame, against 1.10.)</p>
+
+      <p>That time goes back to your app. At 60 FPS a frame lasts 16.7 ms, and everything has to fit inside it:
+        handling the key press, processing data, layout, and the renderer's own work. The less of each frame the
+        renderer takes, the more is left for everything else, and the less likely a busy frame runs long and
+        drops.</p>
+
+      <p>The other half is garbage. 2.0 keeps node state in typed arrays, so a steady frame allocates almost nothing:
+        30 to 120 bytes in the lab, against up to 74 kB on 1.10. Less garbage created means less to collect, and
+        fewer collection pauses landing in the middle of a scroll. On TVs with little memory, those pauses are the
+        stutters you can see.</p>
+
+      <h3>What's new since the alpha</h3>
+
+      <p>2.0 has had seven releases since the alpha, up to 2.0.6 today. Most of that work came from running it on
+        real hardware, much of it on a Xumo TV. Xumo TVs run WPE WebKit, the browser engine common on RDK-based TVs
+        and set-top boxes.</p>
+
+      <h4>Smoother frames on WebKit TVs</h4>
+
+      <ul>
+        <li><strong>The 60 FPS cap no longer holds frames that are on time.</strong> On WPE WebKit, frame timestamps
+          are whole milliseconds and wobble around the display's refresh. The cap read some on-time frames as early
+          and held them for a whole refresh, turning a 16 ms frame into a 33 ms one. 1.10 had the same flaw. With the
+          fix, slow frames on the Xumo TV fell from 6.25% to 2.4%, and animated FPS rose from 57.0 to 59.2.</li>
+        <li><strong>Uncapped by default.</strong> <code>targetFPS</code> now defaults to uncapped. Set it to 60 to
+          keep 1.10's cap.</li>
+        <li><strong>Frames drawn while idle reach the screen.</strong> On WPE WebKit, a frame drawn while the app was
+          otherwise idle, like an image swapped from a timer or a QR code set from a promise, could stay off screen
+          until the next key press. The new <code>presentOnIdle</code> setting nudges WebKit to show it, and the loop
+          still sleeps when nothing changes.</li>
+      </ul>
+
+      <h4>Faster text, laid out before it's needed</h4>
+
+      <ul>
+        <li><strong>Text layout is 2 to 3.7 times faster</strong>, with output identical to the bit. A test compares
+          25,160 layouts against a verbatim copy of the old code, and all 79 text visual regression snapshots still
+          pass. On the Xumo TV, text layout fell from 97&ndash;124 ms per test run to 70 ms in a first run.</li>
+        <li><strong>Layout moves to idle time.</strong> Text nodes that exist but aren't on screen yet now lay out
+          while the renderer is idle, and the new <code>renderer.measureText()</code> lets an app lay out text it
+          knows is coming, like the next row's titles. The frame that brings that text on screen just looks the
+          layout up.</li>
+      </ul>
+
+      <p>That second change came out of the most interesting bug of the week. On the Xumo TV, one title on the test
+        page dropped a frame on every run: 17 to 18 ms for a 16-glyph title that takes microseconds to lay out. The
+        layout wasn't slow. That title was the 86th layout of the session, the one that made JavaScriptCore decide
+        the layout function was hot enough for its optimizing compiler. On this engine that compile runs on the main
+        thread, inside the frame. On a laptop the same compile takes about 1 ms.</p>
+
+      <p>Splitting the function in two only split the compile into more stalls. Moving layout into idle time took
+        that stall from 3 runs out of 3 to none. A laptop profiler will never show you a stall like this, which is
+        why a <a href="/tv-app-performance-consulting/">performance audit</a> starts on the devices you ship to.</p>
+
+      <h4>Animations that start and move evenly</h4>
+
+      <ul>
+        <li><strong>Cheaper to start.</strong> A key press often starts several animations at once. Starting one is
+          now 1.4 to 1.6 times faster in microbenchmarks (about 2.6 times with a <code>cubic-bezier</code> easing),
+          and it allocates about half the memory.</li>
+        <li><strong>The first step is one frame.</strong> An animation started during a busy frame used to take that
+          frame's whole delta as its first step, key handler included. A 200 ms focus animation started after a 46 ms
+          key handler opened 23% of the way in. Now its first step is at most one frame.</li>
+        <li><strong>Even motion, opt-in.</strong> The new <code>animationSnapRate</code> setting steps animations by
+          whole display frames instead of raw frame timestamps. On a 2020 Samsung TV running Tizen 5.5, 25% to 35% of
+          raw steps were off by a quarter of a frame or more. With snapping, 86% to 90% of steps are exactly one
+          frame, at the same frame rate. It stays opt-in until it has run on the LG and Xumo TVs.</li>
+      </ul>
+
+      <p>Both animation fixes came out of a frame-pacing report from a partner team running 2.0.</p>
+
+      <h4>Faster first screens and steadier images</h4>
+
+      <ul>
+        <li><strong>Shaders compile while the app waits for data.</strong> Between booting and the app's first API
+          response, the renderer usually sits idle for a second or two. 2.0 now compiles the first screen's shader
+          programs in that window, one at a time, instead of inside the first frames.</li>
+        <li><strong>More images in flight.</strong> On the Xumo TV, 2.0's cold page load trailed 1.10's, because 2.0
+          allowed only 4 image loads in flight, network fetches included. The default is now 14, which brought
+          visible images in about a second sooner on a slow network. Cold loads on that TV are still a little behind
+          1.10, and they're next on my list.</li>
+        <li><strong>Image swaps under memory pressure.</strong> With <code>doNotExceedCriticalThreshold</code> on, a
+          large image swapped near the memory limit could stay stuck on the old image. 2.0.1 fixed it: in a test of
+          77 swaps under memory pressure, the swaps that never showed went from 29 to none.</li>
+        <li><strong>Fewer draw calls.</strong> Rounded boxes that use the border or shadow shaders, but show no
+          border or shadow, now batch across different opacities. A row of cards fading at different alphas no longer
+          splits into separate draws.</li>
+      </ul>
+
+      <h4>For framework authors</h4>
+
+      <p>2.0 also adds the pieces <code>@solidtv/solid</code> needed: <code>TextNode.measure()</code> for flex
+        layouts sized by their text, <code>Node.insertBefore</code> so draw order follows Solid's child order, a text
+        layout cache whose lookups went from up to 0.8 &micro;s and 1 kB of garbage to 0.017 &micro;s and none, and
+        1.10's read-only <code>clippingRect</code>. In DevTools, every WebGL program now carries the name of the
+        shader it draws.</p>
+
+      <h3>Upgrading</h3>
+
+      <p>For apps built on <code>@solidtv/solid</code>, upgrading is a version bump. Install 2.0 with the matching
+        Solid release, which is on npm's <code>next</code> tag:</p>
+
+      <pre><code>npm install @solidtv/renderer@^2.0.6 @solidtv/solid@next</code></pre>
+
+      <p>Three things to check:</p>
+
+      <ul>
+        <li><strong>Fonts.</strong> 2.0 draws text only with SDF fonts, so every font your app uses needs an SDF
+          atlas. If you already use SDF fonts, there's nothing to change.</li>
+        <li><strong>Defaults.</strong> A few defaults changed from 1.10. If your app relied on one, set it
+          explicitly.</li>
+        <li><strong>WPE WebKit devices.</strong> On Xumo and other WPE-based devices, turn on
+          <code>presentOnIdle</code>.</li>
+      </ul>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>Setting</th>
+              <th>1.10</th>
+              <th>2.0</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>targetFPS</code></td>
+              <td>60</td>
+              <td>Uncapped</td>
+            </tr>
+            <tr>
+              <td><code>bounds<wbr>Margin</code></td>
+              <td>200 on every side</td>
+              <td>[100, 100, 450, 50]<br><span class="text-xs text-zinc-500">top, right, bottom, left</span></td>
+            </tr>
+            <tr>
+              <td><code>image<wbr>Decode<wbr>Concurrency</code></td>
+              <td>4</td>
+              <td>14, and it now caps network requests too</td>
+            </tr>
+            <tr>
+              <td><code>texture<wbr>Processing<wbr>TimeLimit</code></td>
+              <td>10 ms</td>
+              <td>25 ms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The browser floor is still Chrome 38, so 2.0 reaches the same Tizen, webOS, Android TV, Fire TV and set-top
+        box browsers as 1.x.</p>
+
+      <h3>What's next</h3>
+
+      <ul>
+        <li><strong>Cold image loads on WebKit TVs,</strong> to close the remaining gap with 1.10.</li>
+        <li><strong><code>animationSnapRate</code> on the LG and Xumo TVs,</strong> to see whether it can be on by
+          default.</li>
+        <li><strong>Solid 2.0,</strong> the reason this rewrite started.</li>
+      </ul>
+
+      <p>From the first design doc to the 2.0.0 release took eight days. A week of production later, the numbers
+        say it was worth it, and I'm excited to keep pushing.</p>
+
+      <h3>Upgrading a production app?</h3>
+
+      <p>If you'd like help moving your app to 2.0, or want someone to look at frame pacing on your devices,
+        <a href="/?topic=migration#contact" data-cta="renderer2_release_contact">get in touch</a>.</p>
+
+      <ul>
+        <li><strong>Renderer</strong>: <a href="https://www.npmjs.com/package/@solidtv/renderer" target="_blank"
+            rel="noopener"><code>@solidtv/renderer</code></a></li>
+        <li><strong>Framework</strong>: <a href="https://www.npmjs.com/package/@solidtv/solid" target="_blank"
+            rel="noopener"><code>@solidtv/solid</code></a></li>
+        <li><strong>Docs</strong>: <a href="https://solid-tv.github.io/solid/">solid-tv.github.io/solid</a></li>
+        <li><strong>GitHub</strong>: <a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+      </ul>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Planning the move to 2.0?</h3>
+      <p class="mt-3 text-zinc-500">
+        I help teams move TV apps to SolidTV and get them running fast on real hardware: performance audits,
+        migrations from LightningJS, and commercial support for teams shipping on Tizen, WebOS, Android TV, Fire TV and
+        Apple TV.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/?topic=migration#contact" data-cta="renderer2_release_bottom_contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/#services" data-cta="renderer2_release_bottom_services"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">View
+          Support &amp; Services</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>
