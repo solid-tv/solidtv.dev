@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why React TV Apps Are Slow on Older Smart TVs | SolidTV</title>
+  <meta name="description"
+    content="React, Preact and even SolidJS on the DOM all pay for HTML parsing, style, layout and paint on one thread. On a TV running Chrome 38 to 69, that is the bottleneck.">
+  <meta name="keywords"
+    content="React TV app slow, React smart TV performance, Preact TV performance, virtual DOM TV performance, HTML performance smart TV, DOM performance low-end TV, CSS layout performance TV, Tizen Chromium version, webOS Chromium version, SolidJS TV app, WebGL TV app framework">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/why-react-tv-apps-are-slow.html">
+  <meta property="og:title" content="Why Your React TV App Is Slow (and Why Preact Won't Fix It)">
+  <meta property="og:description"
+    content="The bottleneck on older TVs isn't your framework. It's the browser's HTML and CSS pipeline, running on a weak CPU in a Chrome from 2014 to 2018.">
+  <meta property="og:url" content="https://solidtv.dev/blog/why-react-tv-apps-are-slow.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://solidtv.dev/images/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16T12:00:00Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why Your React TV App Is Slow (and Why Preact Won't Fix It)">
+  <meta name="twitter:description"
+    content="On older TVs the bottleneck is the browser's HTML and CSS pipeline, not your framework.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/og-card.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+    .article-prose figure {
+      margin: 2rem 0;
+    }
+
+    .article-prose figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+    }
+
+    .article-prose figcaption {
+      margin-top: 0.75rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .results-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .results {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .results th,
+    .results td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+    }
+
+    .results thead th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+
+    .results td:first-child {
+      color: #111827;
+    }
+
+    .results .old {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .pipeline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0 1.5rem;
+    }
+
+    .pipeline span {
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .pipeline .step {
+      background: #f1f5f9;
+      color: #1f2937;
+    }
+
+    .pipeline .arrow {
+      padding: 0;
+      color: #9ca3af;
+    }
+
+    .pipeline .gpu {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    @media (max-width: 480px) {
+      .results {
+        font-size: 0.85rem;
+      }
+
+      .results th,
+      .results td {
+        padding: 0.5rem 0.25rem;
+      }
+
+      .results thead th {
+        font-size: 0.65rem;
+        letter-spacing: 0;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Why Your React TV App Is Slow (and Why Preact Won't Fix It)",
+    "description": "React, Preact and SolidJS on the DOM all pay for the browser's HTML and CSS pipeline: DOM, style calculation, layout and paint on one main thread. On older smart TVs running Chromium 38 to 69 on weak CPUs, that pipeline is the bottleneck. How SolidTV skips it with WebGL.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2026-10-16",
+    "dateModified": "2026-10-16",
+    "mainEntityOfPage": "https://solidtv.dev/blog/why-react-tv-apps-are-slow.html",
+    "image": "https://solidtv.dev/images/og-card.png",
+    "keywords": "React TV app performance, Preact, virtual DOM, HTML rendering pipeline, smart TV Chromium version, SolidJS, WebGL"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-50">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>Why React TV Apps Are Slow</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Performance</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          Why Your React TV App Is Slow (and Why Preact Won't Fix It)
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Oct 16, 2026 &middot; 8 min read
+        </p>
+      </header>
+
+      <p>A team that recently found SolidTV described the path that led them here, and I hear versions of it all the
+        time. They built their TV app in React and traced the slowness to the virtual DOM and the overhead of DOM nodes.
+        They tried Preact, and it barely helped. They moved to SolidJS, which was better, and then went looking for
+        something built specifically for TVs.</p>
+
+      <p>Every step on that path is reasonable, and each one fixes something real. But on an older TV, the biggest cost
+        isn't in any of those frameworks. It's in the browser underneath them: the work it does to turn HTML and CSS
+        into pixels, on a slow CPU, in a version of Chrome that's years behind the one on your laptop.</p>
+
+      <h2>What the browser does with every change</h2>
+
+      <p>Chrome's team wrote a great walkthrough of this in <a
+          href="https://developer.chrome.com/blog/inside-browser-part3">Inside look at modern web browser (part 3)</a>,
+        and it's worth reading in full. The short version: every page goes through a pipeline, and most of that pipeline
+        runs on a single main thread.</p>
+
+      <div class="pipeline" aria-label="The browser rendering pipeline">
+        <span class="step">HTML &rarr; DOM</span><span class="arrow">&rarr;</span>
+        <span class="step">Style</span><span class="arrow">&rarr;</span>
+        <span class="step">Layout</span><span class="arrow">&rarr;</span>
+        <span class="step">Paint</span><span class="arrow">&rarr;</span>
+        <span class="gpu">Composite</span>
+      </div>
+
+      <ul>
+        <li><strong>Parse.</strong> HTML becomes the DOM, the browser's internal model of the page and the API your
+          framework writes to.</li>
+        <li><strong>Style.</strong> The browser parses your CSS into the CSSOM, then matches selectors against every
+          element and resolves the cascade and inheritance to get each element's computed style.</li>
+        <li><strong>Layout.</strong> With styles known, it works out the size and position of every box. Text makes
+          this expensive: fonts, line breaks and wrapping all have to be measured.</li>
+        <li><strong>Paint.</strong> It walks the layout tree and records drawing instructions in the right order.</li>
+        <li><strong>Composite.</strong> The page is split into layers that are rasterized and combined, mostly off the
+          main thread.</li>
+      </ul>
+
+      <p>The article makes the point that matters most for TVs. Each stage feeds the next, so a change early in the
+        pipeline means redoing the later stages for whatever it touched. And because style, layout and paint share the
+        main thread with your JavaScript, all of it has to fit in about 16.7 milliseconds if you want 60 frames a
+        second.</p>
+
+      <p>Now think about what a TV UI does all day. Moving focus one tile to the right changes a class or a style on
+        two elements. The browser recalculates style for them and anything whose selectors depend on them, lays out
+        what changed, repaints it, and composites the result, while the row's scroll animation is asking for the next
+        frame. A home screen with a dozen rows of posters, titles, badges and gradients can easily run past a thousand
+        DOM nodes, each with a computed style and a box in the layout tree.</p>
+
+      <h2>Where React, Preact and SolidJS fit</h2>
+
+      <p>Frameworks sit on top of that pipeline. They decide how much JavaScript runs before the browser's work starts,
+        and how many DOM changes they hand over.</p>
+
+      <ul>
+        <li><strong>React</strong> re-runs component functions when state changes, builds a new virtual tree, diffs it
+          against the old one, then commits the differences to the DOM. All of that is JavaScript on the main thread,
+          and it happens before the browser starts on style and layout. React and ReactDOM are also about 44 KB gzipped
+          to download, parse and compile at startup.</li>
+        <li><strong>Preact</strong> keeps the same model in <a href="https://preactjs.com/">about 3 KB</a>. Startup is
+          cheaper and the diff is lighter. But once Preact touches the DOM, the browser does exactly the same style,
+          layout and paint work it would have done for React. That's why switching often barely moves the numbers on a
+          TV.</li>
+        <li><strong>SolidJS</strong> has no virtual DOM. Its compiled JSX updates exactly the DOM nodes that depend on a
+          changed signal, which is why it runs within a few percent of hand-written JavaScript in
+          js-framework-benchmark (the numbers are in my <a href="/blog/why-your-tv-app-is-slow.html">guide to slow TV
+            apps</a>). It's the best you can do on the DOM.
+          But it's still the DOM, and every update still goes through style, layout and paint.</li>
+      </ul>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>Work per update</th>
+              <th>React</th>
+              <th>Preact</th>
+              <th>SolidJS (DOM)</th>
+              <th>SolidTV</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Virtual DOM diff</td>
+              <td>Yes</td>
+              <td>Yes, lighter</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>DOM changes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Only what changed</td>
+              <td>No DOM</td>
+            </tr>
+            <tr>
+              <td>CSS style calculation</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>No, styles are plain properties</td>
+            </tr>
+            <tr>
+              <td>Layout</td>
+              <td>Browser</td>
+              <td>Browser</td>
+              <td>Browser</td>
+              <td>Flex in JS, only for flex nodes</td>
+            </tr>
+            <tr>
+              <td>Drawing</td>
+              <td>Browser paint</td>
+              <td>Browser paint</td>
+              <td>Browser paint</td>
+              <td>WebGL draw calls</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Moving from React to Preact to SolidJS shrinks the first row. The rest of the table belongs to the browser, and
+        it doesn't change when you change frameworks.</p>
+
+      <h2>Old Chrome on a slow CPU</h2>
+
+      <p>Two things make that pipeline far more expensive on a TV than on your laptop.</p>
+
+      <p>The first is the hardware. Smart TVs ship with low-power processors chosen for cost. The older LG TV I test
+        SolidTV on has two CPU cores and a 720p panel, and that's the main thread your app, your framework and the
+        browser's whole rendering pipeline have to share.</p>
+
+      <p>The second is the browser. Both LG and Samsung tie the web engine to the platform version, so the browser in a
+        TV is the one its platform shipped with. Here's what their developer docs list for each year:</p>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>LG webOS</th>
+              <th>Samsung Tizen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2016</td>
+              <td>webOS 3.x: <span class="old">Chromium 38</span></td>
+              <td>Tizen 2.4: <span class="old">WebKit</span></td>
+            </tr>
+            <tr>
+              <td>2017</td>
+              <td>webOS 3.x: <span class="old">Chromium 38</span></td>
+              <td>Tizen 3.0: <span class="old">Chromium 47</span></td>
+            </tr>
+            <tr>
+              <td>2018</td>
+              <td>webOS 4.x: <span class="old">Chromium 53</span></td>
+              <td>Tizen 4.0: <span class="old">Chromium 56</span></td>
+            </tr>
+            <tr>
+              <td>2019</td>
+              <td>webOS 4.x: <span class="old">Chromium 53</span></td>
+              <td>Tizen 5.0: <span class="old">Chromium 63</span></td>
+            </tr>
+            <tr>
+              <td>2020</td>
+              <td>webOS 5.x: <span class="old">Chromium 68</span></td>
+              <td>Tizen 5.5: <span class="old">Chromium 69</span></td>
+            </tr>
+            <tr>
+              <td>2021</td>
+              <td>webOS 6.x: Chromium 79</td>
+              <td>Tizen 6.0: Chromium 76</td>
+            </tr>
+            <tr>
+              <td>2022</td>
+              <td>webOS 22: Chromium 87</td>
+              <td>Tizen 6.5: Chromium 85</td>
+            </tr>
+            <tr>
+              <td>2023</td>
+              <td>webOS 23: Chromium 94</td>
+              <td>Tizen 7.0: Chromium 94</td>
+            </tr>
+            <tr>
+              <td>2024</td>
+              <td>webOS 24: Chromium 108</td>
+              <td>Tizen 8.0: Chromium 108</td>
+            </tr>
+            <tr>
+              <td>2025</td>
+              <td>webOS 25: Chromium 120</td>
+              <td>Tizen 9.0: Chromium 120</td>
+            </tr>
+            <tr>
+              <td>2026</td>
+              <td>webOS 26: Chromium 132</td>
+              <td>Tizen 10.0: Chromium 130</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-sm text-zinc-500">Sources: <a
+          href="https://webostv.developer.lge.com/develop/specifications/web-api-and-web-engine">LG webOS TV web
+          engine</a> and <a
+          href="https://developer.samsung.com/smarttv/develop/specifications/web-engine-specifications.html">Samsung
+          web engine specifications</a>. LG lists release years for each webOS version.</p>
+
+      <p>Every LG and Samsung TV platform from before 2021 ships Chromium 69 or older. LG's 2016 and 2017 platform,
+        webOS 3.x, runs Chromium 38, which came out in 2014.</p>
+
+      <p>Chromium has changed a lot since then, and much of that work went straight into the pipeline above:</p>
+
+      <ul>
+        <li><strong>Ignition and TurboFan</strong> (Chrome 59, 2017): V8's new interpreter and optimizing compiler,
+          which <a href="https://v8.dev/blog/launching-ignition-and-turbofan">improved Speedometer scores by 5 to
+            10%</a>. TVs on Chromium 38, 47, 53 and 56 predate it.</li>
+        <li><strong>LayoutNG</strong> (2019 to 2021): a rewrite of Blink's layout engine, with block flow in 2019, flex
+          in 2020 and everything else in 2021, built for <a
+            href="https://developer.chrome.com/docs/chromium/layoutng">predictable, linear layout performance</a>.</li>
+        <li><strong>Threaded GPU rasterization</strong> (2019) and the completion of
+          <strong>CompositeAfterPaint</strong> (2021), both part of Chrome's <a
+            href="https://developer.chrome.com/docs/chromium/renderingng">RenderingNG</a> architecture.</li>
+        <li><strong>Sparkplug</strong> (Chrome 91, 2021): a fast non-optimizing JavaScript compiler worth <a
+            href="https://v8.dev/blog/sparkplug">5 to 15% on real-world browsing benchmarks</a>.</li>
+      </ul>
+
+      <p>A TV on Chromium 69 or older has none of it. Chrome's rendering lead describes RenderingNG as an architecture
+        that "greatly outperforms what came before." Many of your users' TVs are running what came before.</p>
+
+      <p>So the same React app pays twice on a TV: a slower CPU runs each step, and an older engine does more work per
+        step. Profiling in desktop Chrome hides both.</p>
+
+      <h2>Skip the DOM entirely</h2>
+
+      <p>This is why LightningJS, and SolidTV after it, render with WebGL instead of HTML. SolidTV keeps its own tree
+        of nodes, much like the DOM, but each node is a plain object with properties such as <code>x</code>,
+        <code>y</code>, <code>width</code>, <code>height</code>, <code>color</code> and <code>alpha</code>. There are
+        no selectors to match and no cascade or inheritance to resolve. Layout is a small flexbox implementation in
+        JavaScript that only runs for nodes using <code>display: flex</code>; everything else is positioned directly.
+        The renderer then draws the whole scene into a single canvas with WebGL, so the browser has one element to
+        composite instead of a thousand to style, lay out and paint.</p>
+
+      <div class="pipeline" aria-label="The SolidTV rendering path">
+        <span class="step">Signal changes</span><span class="arrow">&rarr;</span>
+        <span class="step">Update node properties</span><span class="arrow">&rarr;</span>
+        <span class="step">Flex layout (if needed)</span><span class="arrow">&rarr;</span>
+        <span class="gpu">WebGL draw</span>
+      </div>
+
+      <p>It isn't free. The renderer's work runs on the main thread too. The difference is that it's a small,
+        purpose-built job instead of a general-purpose engine that has to handle the whole web. Because SolidTV owns
+        that job, it can keep making it faster, like the same app going from 30 to 60+ FPS on a XumoTV when the
+        upstream Lightning 3 renderer was swapped for SolidTV's. There are more numbers on the <a
+          href="/lightningjs-alternative/">LightningJS alternative</a> page.</p>
+
+      <!-- DOM vs WebGL A/B results from the solid-demo-app on the LG Chrome 38 TV go here. -->
+
+      <p>For a React team, the code won't feel foreign. SolidTV uses JSX and components, with SolidJS signals in place
+        of hooks. A focusable poster looks like this:</p>
+
+      <pre><code>const posterStyle = {
+  width: 185,
+  height: 278,
+  borderRadius: 12,
+  scale: 1,
+  focus: { scale: 1.1 },
+  transition: { scale: true },
+};
+
+const Poster = (props) =&gt; (
+  &lt;view style={posterStyle} src={props.image}&gt;
+    &lt;text y={290} fontSize={24}&gt;{props.title}&lt;/text&gt;
+  &lt;/view&gt;
+);</code></pre>
+
+      <p>The <a href="/blog/solidtv-basics.html">SolidTV basics tutorial</a> walks through routing, remote-control
+        focus, layout and signals from there.</p>
+
+      <h2>When HTML is fine</h2>
+
+      <p>None of this means HTML can't work on a TV.</p>
+
+      <ul>
+        <li><strong>Newer TVs.</strong> A 2024 TV on Chromium 108 with a quad-core CPU is a very different machine. If
+          you only support recent models, a carefully built DOM app can do well.</li>
+        <li><strong>Simple screens.</strong> Settings pages, sign-in forms and other screens without large animated
+          grids don't push the pipeline hard.</li>
+        <li><strong>Platforms with a strong HTML engine.</strong> SolidTV ships a <a
+            href="https://solid-tv.github.io/solid/#/articles/domrenderer">DOM renderer</a> for exactly these cases;
+          devices like the PlayStation 5 can do better with HTML.</li>
+      </ul>
+
+      <p>If you stay on the DOM, the usual advice applies: keep the node count down, virtualize long rows, and animate
+        only <code>transform</code> and <code>opacity</code> so the compositor can run the animation off the main
+        thread. The Chrome article explains why compositor-only animations are the smoothest.</p>
+
+      <p>But if your app has to support the TVs in that table, the browser's pipeline is the ceiling. You can optimize
+        everything below it, but you can't optimize through it.</p>
+
+      <h2>Where to go from here</h2>
+
+      <ul>
+        <li><a href="/blog/why-your-tv-app-is-slow.html">Why your smart TV app is slow</a>: the framework, rendering and
+          memory fixes that apply whatever you're built on.</li>
+        <li><a href="/blog/lightningjs-vs-react-native-for-tv.html">LightningJS or React Native for TV</a>, if your team
+          is weighing React Native.</li>
+        <li><a href="/blog/solidtv-basics.html">SolidTV basics</a>, to see what building on SolidTV looks like.</li>
+      </ul>
+
+      <p>If you have a React or HTML TV app that struggles on older models, I can help. A <a
+          href="/?topic=audit#contact" data-cta="react_slow_post_inline_audit">performance audit</a> shows how much you
+        can win back where you are, and a <a href="/?topic=migration#contact"
+          data-cta="react_slow_post_inline_migration">migration assessment</a> shows what moving to SolidTV would
+        take.</p>
+
+      <h2>Further reading</h2>
+
+      <ul>
+        <li><a href="https://developer.chrome.com/blog/inside-browser-part3">Inside look at modern web browser (part
+            3)</a>, Chrome for Developers</li>
+        <li><a href="https://developer.chrome.com/docs/chromium/renderingng">RenderingNG</a> and <a
+            href="https://developer.chrome.com/docs/chromium/layoutng">LayoutNG</a>, Chrome for Developers</li>
+        <li><a href="https://v8.dev/blog/launching-ignition-and-turbofan">Launching Ignition and TurboFan</a> and <a
+            href="https://v8.dev/blog/sparkplug">Sparkplug</a>, V8 blog</li>
+      </ul>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Is your React TV app slow on older TVs?</h3>
+      <p class="mt-3 text-zinc-500">
+        Send the symptoms and the devices you support. A free consultation will tell you whether the fix is in your
+        app, or whether the browser is the ceiling.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/?topic=audit#contact" data-cta="react_slow_post_bottom_contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/#services" data-cta="react_slow_post_bottom_services"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">View
+          Support &amp; Services</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>
