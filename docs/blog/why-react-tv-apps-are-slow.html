@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Why React TV Apps Are Slow on Older Smart TVs | SolidTV</title>
   <meta name="description"
-    content="React, Preact and even SolidJS on the DOM all pay for HTML parsing, style, layout and paint on one thread. On a TV running Chrome 38 to 69, that is the bottleneck.">
+    content="React, Preact and SolidJS on the DOM all pay for the browser's HTML pipeline. On a Chrome 38 TV, hand-written HTML took 0.9 s to show a key press; WebGL took 0.16 s.">
   <meta name="keywords"
     content="React TV app slow, React smart TV performance, Preact TV performance, virtual DOM TV performance, HTML performance smart TV, DOM performance low-end TV, CSS layout performance TV, Tizen Chromium version, webOS Chromium version, SolidJS TV app, WebGL TV app framework">
   <meta name="author" content="Chris Lorenzo">
@@ -239,7 +239,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Why Your React TV App Is Slow (and Why Preact Won't Fix It)",
-    "description": "React, Preact and SolidJS on the DOM all pay for the browser's HTML and CSS pipeline: DOM, style calculation, layout and paint on one main thread. On older smart TVs running Chromium 38 to 69 on weak CPUs, that pipeline is the bottleneck. How SolidTV skips it with WebGL.",
+    "description": "React, Preact and SolidJS on the DOM all pay for the browser's HTML and CSS pipeline: DOM, style calculation, layout and paint on one main thread. On older smart TVs running Chromium 38 to 69 on weak CPUs, that pipeline is the bottleneck. Includes an A/B of the same screen drawn with WebGL and as hand-written HTML on two LG devices.",
     "author": {
       "@type": "Person",
       "name": "Chris Lorenzo",
@@ -314,7 +314,7 @@
           Why Your React TV App Is Slow (and Why Preact Won't Fix It)
         </h1>
         <p class="mt-4 text-zinc-500 text-base">
-          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Oct 16, 2026 &middot; 8 min read
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Oct 16, 2026 &middot; 11 min read
         </p>
       </header>
 
@@ -350,8 +350,9 @@
         <li><strong>Layout.</strong> With styles known, it works out the size and position of every box. Text makes
           this expensive: fonts, line breaks and wrapping all have to be measured.</li>
         <li><strong>Paint.</strong> It walks the layout tree and records drawing instructions in the right order.</li>
-        <li><strong>Composite.</strong> The page is split into layers that are rasterized and combined, mostly off the
-          main thread.</li>
+        <li><strong>Composite.</strong> The page is split into layers that are rasterized into pixels and combined,
+          mostly off the main thread. On a two-core TV, though, "off the main thread" still means the same two
+          cores.</li>
       </ul>
 
       <p>The article makes the point that matters most for TVs. Each stage feeds the next, so a change early in the
@@ -540,7 +541,8 @@
             href="https://developer.chrome.com/docs/chromium/layoutng">predictable, linear layout performance</a>.</li>
         <li><strong>Threaded GPU rasterization</strong> (2019) and the completion of
           <strong>CompositeAfterPaint</strong> (2021), both part of Chrome's <a
-            href="https://developer.chrome.com/docs/chromium/renderingng">RenderingNG</a> architecture.</li>
+            href="https://developer.chrome.com/docs/chromium/renderingng">RenderingNG</a> architecture. The Chrome 38
+          TV in the test below still rasterizes pages in software.</li>
         <li><strong>Sparkplug</strong> (Chrome 91, 2021): a fast non-optimizing JavaScript compiler worth <a
             href="https://v8.dev/blog/sparkplug">5 to 15% on real-world browsing benchmarks</a>.</li>
       </ul>
@@ -574,8 +576,6 @@
         upstream Lightning 3 renderer was swapped for SolidTV's. There are more numbers on the <a
           href="/lightningjs-alternative/">LightningJS alternative</a> page.</p>
 
-      <!-- DOM vs WebGL A/B results from the solid-demo-app on the LG Chrome 38 TV go here. -->
-
       <p>For a React team, the code won't feel foreign. SolidTV uses JSX and components, with SolidJS signals in place
         of hooks. A focusable poster looks like this:</p>
 
@@ -597,6 +597,122 @@ const Poster = (props) =&gt; (
       <p>The <a href="/blog/solidtv-basics.html">SolidTV basics tutorial</a> walks through routing, remote-control
         focus, layout and signals from there.</p>
 
+      <h2>We measured it: WebGL vs hand-written HTML</h2>
+
+      <p>To put numbers on this, I built the same screen two ways and ran both on two LG devices. The screen is the
+        TMDB rows page from the SolidTV demo app: a hero row and eight rows of posters. One version is SolidTV with its
+        WebGL renderer. The other is the same screen written by hand in plain HTML and CSS, with no framework at all,
+        and it follows the usual performance advice: CSS flexbox for the rows, and scrolling and focus done as CSS
+        <code>transform</code> transitions that the compositor animates off the main thread.</p>
+
+      <p>Each version got five fresh launches per device and 40 simulated remote presses moving through the rows, with
+        identical data served from a laptop on the same network. The results are medians.</p>
+
+      <p><strong>An older LG TV</strong>: webOS 3, Chrome 38, two CPU cores, a Mali-400 GPU and 680 MB of memory.</p>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th>SolidTV (WebGL)</th>
+              <th>Hand-written HTML</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frames shown during a move</td>
+              <td>27 FPS</td>
+              <td>24 FPS</td>
+            </tr>
+            <tr>
+              <td>Key press to screen</td>
+              <td>164 ms</td>
+              <td class="old">887 ms</td>
+            </tr>
+            <tr>
+              <td>Main-thread frames</td>
+              <td>36.8 FPS</td>
+              <td class="old">6.0 FPS</td>
+            </tr>
+            <tr>
+              <td>Runs that froze</td>
+              <td>0 of 5</td>
+              <td class="old">3 of 5, for 3.7 to 15.8 s</td>
+            </tr>
+            <tr>
+              <td>Elements on the page</td>
+              <td>36</td>
+              <td>370</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>A newer LG 4K smart monitor</strong>: webOS 9.1, Chrome 108, four CPU cores.</p>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th>SolidTV (WebGL)</th>
+              <th>Hand-written HTML</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frames shown during a move</td>
+              <td>53 FPS</td>
+              <td>18 FPS</td>
+            </tr>
+            <tr>
+              <td>Key press to screen</td>
+              <td>30 ms</td>
+              <td>173 ms</td>
+            </tr>
+            <tr>
+              <td>Main-thread frames</td>
+              <td>59.5 FPS</td>
+              <td>35.6 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-sm text-zinc-500"><em>Frames shown during a move</em> counts the frames actually presented in the
+        300 ms after each press, from DevTools traces. <em>Key press to screen</em> runs from the press to the first
+        frame that shows it, also from traces; tracing slows the older TV down, so compare the ratio there, not the
+        milliseconds. <em>Main-thread frames</em> is the page's own <code>requestAnimationFrame</code> rate. The HTML
+        page animates on the compositor, so that rate understates its motion; the frames shown during a move are the
+        fair comparison.</p>
+
+      <p>On the older TV, the HTML page's animations were nearly as smooth as WebGL's once a move had started. The
+        compositor did its job. But the page took about 0.9 seconds to start showing each key press, against 0.16 for
+        WebGL, and in three of its five runs it stopped producing frames entirely for between 3.7 and 15.8 seconds.</p>
+
+      <p>The traces show where that time went, and it wasn't JavaScript, style or layout. The HTML page's main thread
+        was mostly idle, and style and layout took 3 to 4 ms a frame. The time went to the back half of the pipeline:
+        painting, rasterizing tiles in software on two worker threads, compositing, and uploading the tiles to the GPU
+        as textures, all competing for a two-core CPU. The WebGL version spent its frame in about 23 ms of JavaScript,
+        the renderer and the app, and almost nothing else: no style, layout, paint or page rasterization.</p>
+
+      <p>On the newer monitor, HTML did much better: 36 frames a second and 0.17 seconds to answer a press. WebGL was
+        still well ahead. One thing counts against HTML there: the monitor has a 4K panel, so Chrome rasterizes the HTML
+        page at 3840&times;2160 while the WebGL canvas draws at 1080p. Forced to draw at 4K, WebGL dropped to 30 frames
+        a second, but it still answered a press in 56 ms and showed more frames during a move than HTML (23 against
+        18).</p>
+
+      <p>HTML did win one thing: startup. The hand-written page, a single 15 kB script, had its first screen complete
+        in 1.6 seconds on the older TV. The SolidTV demo app took about 11 seconds, mostly because it loads a 1.2 MB
+        legacy bundle with polyfills for Chrome 38 before any of it runs. That's the demo app's build rather than WebGL,
+        and it's worth fixing, but it's a real cost today.</p>
+
+      <p>These are results for one demo screen on two devices, not a claim about every app or every TV. The HTML page is
+        one reasonable implementation, written for this test and not tuned per device, and a leaner design could do
+        better on the older TV. I've kept the full method, traces and per-run numbers. If you want to dig into them,
+        <a href="/?topic=audit#contact" data-cta="react_slow_post_data_contact">get in touch</a>.</p>
+
       <h2>When HTML is fine</h2>
 
       <p>None of this means HTML can't work on a TV.</p>
@@ -613,7 +729,9 @@ const Poster = (props) =&gt; (
 
       <p>If you stay on the DOM, the usual advice applies: keep the node count down, virtualize long rows, and animate
         only <code>transform</code> and <code>opacity</code> so the compositor can run the animation off the main
-        thread. The Chrome article explains why compositor-only animations are the smoothest.</p>
+        thread. The Chrome article explains why compositor-only animations are the smoothest. Just know that the
+        hand-written page in the test above did all of that, and on the Chrome 38 TV it still took close to a second to
+        answer a key press.</p>
 
       <p>But if your app has to support the TVs in that table, the browser's pipeline is the ceiling. You can optimize
         everything below it, but you can't optimize through it.</p>
