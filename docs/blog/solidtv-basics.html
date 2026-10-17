@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolidTV Basics: Build a Smart TV App with SolidJS | SolidTV</title>
+  <meta name="description"
+    content="A hands-on intro to building a TV app with SolidTV and SolidJS: routing, remote-control focus, JSX components, flex layout, signals and focus effects.">
+  <meta name="keywords"
+    content="SolidTV tutorial, SolidJS TV app, SolidJS smart TV, build a TV app with JSX, SolidJS WebGL, TV app focus management, LightningJS SolidJS tutorial, React alternative for TV apps">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/solidtv-basics.html">
+  <meta property="og:title" content="SolidTV Basics: Build a Smart TV App with SolidJS">
+  <meta property="og:description"
+    content="From the starter template to focus effects: routing, remote-control focus, JSX components, flex layout and signals in SolidTV.">
+  <meta property="og:url" content="https://solidtv.dev/blog/solidtv-basics.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://solidtv.dev/images/blog/solidtv-basics/solidtv-demo-app.jpg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="576">
+  <meta property="article:published_time" content="2024-10-02T13:04:25Z">
+  <meta property="article:modified_time" content="2026-10-16T12:00:00Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SolidTV Basics: Build a Smart TV App with SolidJS">
+  <meta name="twitter:description"
+    content="Routing, remote-control focus, JSX components, flex layout and signals in SolidTV.">
+  <meta name="twitter:image" content="https://solidtv.dev/images/blog/solidtv-basics/solidtv-demo-app.jpg">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+    .article-prose figure {
+      margin: 2rem 0;
+    }
+
+    .article-prose figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+    }
+
+    .article-prose figcaption {
+      margin-top: 0.75rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "SolidTV Basics: Build a Smart TV App with SolidJS",
+    "description": "A hands-on introduction to SolidTV: the starter template, renderer config, routing, remote-control focus, JSX components, styles, flex layout, signals, focus effects and dynamic lists.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2024-10-02",
+    "dateModified": "2026-10-16",
+    "mainEntityOfPage": "https://solidtv.dev/blog/solidtv-basics.html",
+    "image": "https://solidtv.dev/images/blog/solidtv-basics/solidtv-demo-app.jpg",
+    "keywords": "SolidTV tutorial, SolidJS TV app, smart TV app development, focus management, JSX"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-50">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>SolidTV Basics</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Tutorial</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          SolidTV Basics: Build a Smart TV App with SolidJS
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Oct 2, 2024 &middot; Updated Oct
+          16, 2026 &middot; 10 min read
+        </p>
+      </header>
+
+      <aside class="mb-8 rounded-lg border-l-4 border-solidtv bg-violet-50 px-5 pt-4 pb-1 text-sm">
+        <p><strong>Updated for SolidTV.</strong> This tutorial first appeared on Medium in October 2024 as "Lightning 3:
+          The Basics of SolidJS", written for <code>@lightningtv/solid</code>. The code below uses the current package,
+          <code>@solidtv/solid</code>. Moving an older app? Follow the <a
+            href="https://solid-tv.github.io/solid/#/migrate">migration guide</a>.</p>
+      </aside>
+
+      <p>SolidTV is built on <a href="https://www.solidjs.com/">SolidJS</a>, the fastest full-featured frontend
+        framework available today. SolidJS is often compared to React, the most popular framework, because the two look
+        alike, but SolidJS stands out with its performance. That can be a game-changer when you're developing for
+        low-power devices, even with older browsers. That's why SolidTV is an excellent choice for building
+        high-performance TV apps.</p>
+
+      <p>Prefer video? Watch the <a href="https://www.youtube.com/watch?v=9UU7Ntf7Tww">walkthrough on YouTube</a>. It
+        was recorded for the earlier <code>@lightningtv/solid</code> release, so a few names differ.</p>
+
+      <h2>Quick Start</h2>
+
+      <p>To kick things off, let's set up a SolidTV app with a starter template built specifically for TV.</p>
+
+      <pre><code>&gt; npx degit solid-tv/solid-starter-template my-app
+&gt; cd my-app
+&gt; npm i # or yarn or pnpm
+&gt; npm start # or yarn or pnpm</code></pre>
+
+      <p>This will clone the starter template, which gets you up and running with a basic "Hello World" app in no time.
+        If you want something more fleshed out, check out the demo app: <a
+          href="https://github.com/solid-tv/solid-demo-app">github.com/solid-tv/solid-demo-app</a>.</p>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/solidtv-demo-app.jpg"
+          alt="The SolidTV demo app: a featured movie hero, a row of posters, a left navigation bar and an FPS counter"
+          width="1024" height="576" loading="eager" />
+      </figure>
+
+      <p>Once inside the starter template, you'll notice a few key files:</p>
+
+      <ul>
+        <li><strong>index.tsx</strong>: The entry point of your app. It contains the configuration for both the SolidTV
+          renderer and the router.</li>
+        <li><strong>App.tsx</strong>: Your main app wrapper. It's like the outer shell for your app — think navigation
+          bars, backgrounds, and global layouts.</li>
+      </ul>
+
+      <p>You'll also see that we're using TypeScript by default (hence <code>.ts</code> and <code>.tsx</code> file
+        extensions). If you're using VS Code, you'll enjoy the sweet auto-completion for most of the code, making it
+        even easier to get going!</p>
+
+      <h2>Configuring the Renderer</h2>
+
+      <p>Let's take a peek inside <code>index.tsx</code> to see some of the SolidTV-specific configurations.</p>
+
+      <pre><code>// Default font settings for all &lt;text&gt; nodes
+Config.fontSettings.fontFamily = 'Roboto';
+Config.fontSettings.color = 0xffffffff;
+
+// Settings for SolidTV Renderer passed in for starting application
+Config.rendererOptions = {
+  numImageWorkers: 1,
+  fontEngines: [SdfTextRenderer],
+  renderEngine: WebGlCoreRenderer,
+  inspector: Inspector,
+  // Set the resolution based on window height
+  deviceLogicalPixelRatio: window.innerHeight / 1080,
+  devicePhysicalPixelRatio: 1,
+  boundsMargin: 200,
+};</code></pre>
+
+      <p>Here, we're setting up a few important things:</p>
+
+      <ul>
+        <li>We're defaulting font settings for all <code>&lt;text&gt;</code> nodes.</li>
+        <li>The <code>rendererOptions</code> allow us to pass options to the SolidTV renderer, including the number of
+          image workers, font engines, and pixel ratios.</li>
+        <li><code>boundsMargin</code> is the preload margin around the viewport, in logical pixels. It defaults to
+          <code>200</code>, which is usually what you want — it loads textures ahead of a node scrolling into view.</li>
+      </ul>
+
+      <h2>Routing with SolidJS Router</h2>
+
+      <p>Routing in SolidTV is handled with the popular <a href="https://github.com/solidjs/solid-router">SolidJS
+          Router</a>. Why write your own? It's robust, fast, and flexible.</p>
+
+      <pre><code>// Lazy load routes easily with lazy
+const TextPage = lazy(() =&gt; import('./pages/Text'));
+
+// Create the renderer and load fonts
+const { render } = createRenderer();
+await loadFonts(fonts);
+
+// Render the app using the HashRouter from SolidRouter
+render(() =&gt; (
+  &lt;HashRouter root={App}&gt;
+    &lt;Route path="/" component={HelloWorld} preload={getHomeData} /&gt;
+    &lt;Route path="/text" component={TextPage} /&gt;
+    &lt;Route path="/*all" component={NotFound} /&gt;
+  &lt;/HashRouter&gt;
+));</code></pre>
+
+      <p>Lazy-loading routes? Oh yeah! This helps reduce the initial bundle size and lets your app boot up super fast.
+        The cool thing about the router is the ability to preload data for routes before they fully load. By following
+        the "render as you fetch" pattern, we can make API calls while a component is being rendered, giving us that
+        super snappy feel.</p>
+
+      <p>If you need different sections of your app with varying layouts (say, some with a sidebar and some without),
+        you can easily structure it like this:</p>
+
+      <pre><code>render(() =&gt; (
+  &lt;HashRouter root={App}&gt;
+    &lt;Route path="/main" component={LeftNav}&gt;
+      &lt;Route path="/" component={HelloWorld} preload={getHomeData} /&gt;
+      &lt;Route path="/text" component={TextPage} /&gt;
+    &lt;/Route&gt;
+    {/* These routes won't have left nav */}
+    &lt;Route path="/*all" component={NotFound} /&gt;
+  &lt;/HashRouter&gt;
+));</code></pre>
+
+      <p>Here, any route under <code>/main</code> will include a left-side navigation bar, but routes outside of that
+        won't. There is lots the router can do and I recommend you check out their <a
+          href="https://github.com/solidjs/solid-router">official documentation</a>.</p>
+
+      <h2>Focus Management and Accessibility</h2>
+
+      <p>In <code>App.tsx</code>, we start seeing the power of SolidJS and SolidTV's ecosystem working together. Take a
+        look at this:</p>
+
+      <pre><code>const App = (props) =&gt; {
+  useFocusManager({
+    Announcer: ["a"],
+    Menu: ["m"],
+    Text: "t",
+    Escape: ["Escape", 27],
+    Backspace: ["Backspace", 8],
+    Left: ["ArrowLeft", 37],
+    Right: ["ArrowRight", 39],
+    Up: ["ArrowUp", 38],
+    Down: ["ArrowDown", 40],
+    Enter: ["Enter", 13],
+  });
+  useMouse();
+  const navigate = useNavigate();
+  const announcer = useAnnouncer();
+  announcer.debug = false;
+  announcer.enabled = false;
+  // ...</code></pre>
+
+      <p>The <code>useFocusManager</code> is the go-to for handling key events, like those from remote controls or
+        keyboards. For instance, pressing "t" will trigger an <code>onText</code> callback. You can dive into all the
+        details on focus management in the <a
+          href="https://solid-tv.github.io/solid/#/essentials/focus?id=focus-key-handling-or-remotes">SolidTV
+          docs</a>.</p>
+
+      <p><code>useMouse</code> adds support for remote controls like the LG Magic Mouse, while
+        <code>useAnnouncer</code> integrates accessibility features, like screen reader voice-out for focused elements.
+        All this out of the box.</p>
+
+      <p>There are also a ton of <a href="https://github.com/solidjs-community/solid-primitives">Solid Primitives</a>
+        available that will help you with localstorage, debouncing, and other common app problems.</p>
+
+      <h2>The Power of JSX</h2>
+
+      <p>SolidTV embraces JSX for templating, which makes the development process feel super natural and fluid. JSX is
+        well supported in editors and has been widely adopted thanks to React. Why change a good thing…</p>
+
+      <pre><code>return (
+  &lt;view
+    ref={window.APP}
+    onAnnouncer={() =&gt; (announcer.enabled = !announcer.enabled)}
+    onLast={() =&gt; history.back()}
+    onText={() =&gt; navigate('/text')}
+    onMenu={() =&gt; navigate('/')}
+  &gt;
+    &lt;view color={0x071423ff} /&gt;
+    {props.children}
+  &lt;/view&gt;
+);</code></pre>
+
+      <p>Here, our top level <code>&lt;view&gt;</code> is handling all sorts of actions, like toggling the announcer or
+        navigating between routes. It's also a great example of how key events naturally bubble up through the DOM,
+        with parent components catching unhandled events from their children. This is our main App wrapper, and
+        <code>props.children</code> is filled with a Page from the router.</p>
+
+      <h2>Page Components</h2>
+
+      <p>Pages in SolidTV are nothing more than components themselves — simple functions that take in props. You can
+        import any components you need and simply return them as part of your page. No need to register pages in any
+        special way; it's all just components under the hood.</p>
+
+      <pre><code>const HelloWorld = (props) =&gt; {
+  return &lt;text&gt;Hello World&lt;/text&gt;;
+};
+
+export default HelloWorld;</code></pre>
+
+      <p>See how simple that is? The <code>HelloWorld</code> page is just a function that receives <code>props</code>
+        (an object with key-value pairs) to pass around. There's no need to define what those props are ahead of time;
+        just treat them like a dynamic object. And the best part? There's no performance overhead for calling these
+        functions. You can create as many components as you want and use them freely without worrying about extra
+        resource consumption. SolidJS's reactivity engine ensures everything is blazing fast.</p>
+
+      <h2>Core Elements: <code>&lt;view&gt;</code> and <code>&lt;text&gt;</code></h2>
+
+      <p>There are two key intrinsic elements that you'll rely on when building apps in SolidTV:
+        <code>&lt;view&gt;</code> and <code>&lt;text&gt;</code>. These correspond to the core SolidTV renderer
+        primitives (everything's a node or text in the renderer) and require no imports. Let's build a simple
+        button:</p>
+
+      <pre><code>&lt;view width={300} height={150} color="#4169e1" borderRadius={24}&gt;
+  &lt;text textAlign="center" contain="both" lineHeight={150} width={300}&gt;
+    Hello World
+  &lt;/text&gt;
+&lt;/view&gt;</code></pre>
+
+      <p>Each attribute gets passed straight through to the SolidTV renderer. And remember, since SolidTV is rendering
+        to a canvas, every element is positioned like <code>position: absolute</code> would be in HTML/CSS, giving you
+        precise control over layout. Everything has an <code>x</code> and a <code>y</code> position which default to
+        0,0 if not present. We've made a simple button:</p>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/hello-world-button.png" alt="A blue rounded button labeled Hello World"
+          width="588" height="324" loading="lazy" />
+      </figure>
+
+      <h2>Reusable Components: A Button</h2>
+
+      <p>Reusability is one of the things that makes frontend frameworks so much fun. Let's make our button component
+        reusable.</p>
+
+      <pre><code>export function Button(props) {
+  return (
+    &lt;view {...props} width={300} height={150} color="#4169e1" borderRadius={24}&gt;
+      &lt;text textAlign="center" contain="both" lineHeight={150} width={300}&gt;
+        {props.children}
+      &lt;/text&gt;
+    &lt;/view&gt;
+  );
+}
+
+// We can add multiple buttons now!
+&lt;Button&gt;Hello World&lt;/Button&gt; &lt;Button x={350}&gt;SolidJS&lt;/Button&gt;</code></pre>
+
+      <p>Now we have a simple button component that accepts props, making it easy to customize and reuse throughout our
+        app. Yup, it's just a function returning JSX. The same as pages. Also, we can <code>{...props}</code> to take
+        arbitrary values and apply them to the container. But what if we wanted different colors or widths?</p>
+
+      <h2>Adding Styles for Flexibility</h2>
+
+      <p>We can improve our button's flexibility by introducing a style object. This also has the benefit of keeping
+        our styles separate from the UI, similar to how CSS works with HTML. We could import our styles from another
+        file or leave them inline — choice is yours.</p>
+
+      <pre><code>const buttonStyle = {
+  width: 300,
+  height: 150,
+  color: '#4169e1',
+  borderRadius: 24,
+};
+
+const textStyle = {
+  textAlign: 'center',
+  contain: 'both',
+  fontSize: 36,
+  lineHeight: 150,
+  width: 300,
+};
+
+export function Button(props) {
+  return (
+    &lt;view {...props} style={buttonStyle}&gt;
+      &lt;text style={textStyle}&gt;{props.children}&lt;/text&gt;
+    &lt;/view&gt;
+  );
+}</code></pre>
+
+      <p>This allows us to create more flexible buttons by applying default styles that can be overridden with props.
+        We can also reuse styles following your standard object spread giving us a ton of flexibility rather than
+        writing the same styles over and over again.</p>
+
+      <pre><code>const defaultHeader = {
+  fontSize: 32,
+  fontWeight: 600,
+};
+
+const largeHeader = {
+  ...defaultHeader,
+  fontSize: 48,
+};</code></pre>
+
+      <p>One problem we have now is all the buttons are a set size… let's fix that.</p>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/fixed-width-button.png"
+          alt="A fixed-width button that cuts its label off after 'SolidJS with…'" width="760" height="448"
+          loading="lazy" />
+      </figure>
+
+      <h2>Layout with Flex</h2>
+
+      <p>Flex is a fundamental tool for building layouts. By using the <a
+          href="https://solid-tv.github.io/solid/#/flow/layout?id=flex">flex implementation</a> in SolidTV, we can
+        create layouts that are responsive and easy to manage. Let's make a button that resizes based on the size of its
+        text:</p>
+
+      <pre><code>const buttonStyle = {
+  display: 'flex',
+  height: 150,
+  color: '#4169e1',
+  borderRadius: 24,
+};
+
+const textStyle = {
+  fontSize: 36,
+  lineHeight: 150,
+  marginLeft: 40,
+  marginRight: 40,
+};
+
+export function Button(props) {
+  return (
+    &lt;view {...props} style={buttonStyle}&gt;
+      &lt;text style={textStyle}&gt;{props.children}&lt;/text&gt;
+    &lt;/view&gt;
+  );
+}</code></pre>
+
+      <p>With <code>display: flex</code>, it's easy to create dynamic layouts where content automatically adjusts based
+        on the size of the text or other items (and using margin for a bit of padding).</p>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/flex-button.png"
+          alt="A button that has grown to fit the full label 'SolidJS with Lightning is Awesome'" width="1024"
+          height="336" loading="lazy" />
+      </figure>
+
+      <p>This is especially important with dynamically loaded content or switching user languages or putting images in
+        between text. Check out this example:</p>
+
+      <pre><code>const SublineContainer = {
+  width: 900,
+  height: 36,
+  gap: 6,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flexStart",
+}
+
+&lt;view style={SublineContainer}&gt;
+  &lt;text style={Subline}&gt;Subline Text&lt;/text&gt;
+  &lt;view width={28} height={28} src={'/assets/rt-popcorn.png'} /&gt;
+  &lt;text style={Subline}&gt;More Text&lt;/text&gt;
+&lt;/view&gt;</code></pre>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/flex-text-with-icon.png"
+          alt="Two pieces of text with a popcorn icon laid out between them in a flex row" width="626" height="128"
+          loading="lazy" />
+      </figure>
+
+      <p>Pretty powerful stuff. Could you imagine doing this without flex? Using callbacks and resizing things and
+        moving their X positions to make things work? What if you had to support alternative languages?</p>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/flex-text-spanish.png"
+          alt="The same flex row translated into Spanish, with the popcorn icon still sitting between the words"
+          width="864" height="136" loading="lazy" />
+      </figure>
+
+      <p>With flex, everything just lays out how you'd expect.</p>
+
+      <h2>SolidJS Signals: Reactivity Made Simple</h2>
+
+      <p>One of the killer features of SolidJS is its fine-grained reactivity system, which lets you manage state
+        effortlessly.</p>
+
+      <pre><code>import { createSignal } from 'solid-js';
+import { Button } from '../components/button';
+
+const HelloWorld = () =&gt; {
+  const [isFavorite, setIsFavorite] = createSignal(false);
+
+  return (
+    &lt;Button onEnter={() =&gt; setIsFavorite((p) =&gt; !p)} autofocus x={50} y={50}&gt;
+      {isFavorite() ? 'Unfavorite' : 'Favorite'}
+    &lt;/Button&gt;
+  );
+};
+
+export default HelloWorld;</code></pre>
+
+      <figure>
+        <div class="flex flex-wrap justify-center gap-4">
+          <img src="/images/blog/solidtv-basics/favorite-button.png" alt="A button labeled Favorite" width="524"
+            height="402" class="!mx-0 w-64" loading="lazy" />
+          <img src="/images/blog/solidtv-basics/unfavorite-button.png"
+            alt="The same button labeled Unfavorite after pressing Enter" width="588" height="410" class="!mx-0 w-64"
+            loading="lazy" />
+        </div>
+        <figcaption>Switching state between two buttons onEnter</figcaption>
+      </figure>
+
+      <p>See that <code>createSignal</code> function? That's how we handle state changes. Solid's reactivity is
+        incredibly efficient, only updating the parts of the DOM that need to change. Oh, and that "state" doesn't have
+        to be part of the component. It can be global or pulled in from a shared <code>state.js</code> file. You can
+        easily separate your app state from your UI, no tight coupling, no API calls being made in your UI layer (unless
+        you do that sort of thing).</p>
+
+      <h2>Fancy Focus Effects</h2>
+
+      <p>Want to add a little flair to your buttons? Let's throw in some transitions and focus styles.</p>
+
+      <pre><code>export function Button(props) {
+  const buttonStyle = {
+    height: 150,
+    color: '#4169e1',
+    alpha: 0.8,
+    scale: 1,
+    borderRadius: 24,
+    focus: {
+      alpha: 1,
+      scale: 1.1,
+    },
+    transition: { alpha: true, scale: true },
+  };
+
+  return (
+    &lt;view {...props} style={buttonStyle}&gt;
+      &lt;text&gt;{props.children}&lt;/text&gt;
+    &lt;/view&gt;
+  );
+}</code></pre>
+
+      <figure>
+        <div class="flex flex-wrap justify-center gap-4">
+          <img src="/images/blog/solidtv-basics/button-unfocused.png"
+            alt="The Favorite button at 80% opacity and normal size while unfocused" width="472" height="368"
+            class="!mx-0 w-60" loading="lazy" />
+          <img src="/images/blog/solidtv-basics/button-focused.png"
+            alt="The Favorite button scaled up and fully opaque when focused" width="488" height="400" class="!mx-0 w-60"
+            loading="lazy" />
+        </div>
+        <figcaption>Unfocused vs focused state</figcaption>
+      </figure>
+
+      <p>Now, when the button is focused, it'll smoothly scale up and increase in opacity — perfect for drawing
+        attention to UI elements. Let's wrap this up bringing it all together:</p>
+
+      <h2>Dynamic Content with <code>&lt;For&gt;</code></h2>
+
+      <p>Let's say you want to dynamically generate buttons based on a list of items. SolidJS provides the
+        <code>&lt;For&gt;</code> component to handle this easily.</p>
+
+      <pre><code>import { For } from 'solid-js';
+import { Row } from '@solidtv/solid/primitives';
+import { Button } from '../components/button';
+
+const HelloWorld = () =&gt; {
+  const buttons = [
+    {
+      label: 'Favorite',
+      action: () =&gt; console.log('Favorite clicked'),
+      color: 0x1e90ffff,
+    },
+    {
+      label: 'SolidJS',
+      action: () =&gt; console.log('SolidJS clicked'),
+      color: 0x4682b4ff,
+    },
+    {
+      label: 'Lightning',
+      action: () =&gt; console.log('Lightning clicked'),
+      color: 0x556b2fff,
+    },
+    {
+      label: 'Rocks',
+      action: () =&gt; console.log('Rocks clicked'),
+      color: 0xcd853fff,
+    },
+  ];
+
+  return (
+    &lt;Row x={50} y={50} gap={50}&gt;
+      &lt;For each={buttons}&gt;
+        {(button) =&gt; (
+          &lt;Button color={button.color} onEnter={button.action}&gt;
+            {button.label}
+          &lt;/Button&gt;
+        )}
+      &lt;/For&gt;
+    &lt;/Row&gt;
+  );
+};
+
+export default HelloWorld;</code></pre>
+
+      <figure>
+        <img src="/images/blog/solidtv-basics/row-of-buttons.gif"
+          alt="A row of four colored buttons, Favorite, SolidJS, Lightning and Rocks, with focus moving between them"
+          width="1332" height="314" loading="lazy" />
+      </figure>
+
+      <p>With SolidTV, generating dynamic content like this is a breeze. We're also using the <code>Row</code>
+        component from SolidTV's primitives. It's a simple flex container that moves focus between its children with
+        the Left and Right keys. The <a href="https://solid-tv.github.io/solid/#/primitives/row_column">Row and Column
+          docs</a> cover scrolling, selection and the rest of the options.</p>
+
+      <p>That's just scratching the surface of what you can do with <strong>SolidTV</strong>. To dive deeper, check out
+        the resources below:</p>
+
+      <ul>
+        <li><strong>Docs</strong>: <a href="https://solid-tv.github.io/solid/">solid-tv.github.io/solid</a></li>
+        <li><strong>GitHub Repository</strong>: <a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+        <li><strong>Join the Community</strong>: <a href="https://discord.com/invite/solidjs">SolidJS Discord
+            (#SolidTV)</a></li>
+        <li><strong>Connect with me</strong>: <a href="https://www.linkedin.com/in/chris-lorenzo/">Chris Lorenzo on
+            LinkedIn</a></li>
+      </ul>
+
+      <p class="text-sm text-zinc-500 mt-12 pt-6 border-t border-gray-200">
+        First published as "Lightning 3: The Basics of SolidJS" in <a
+          href="https://javascript.plainenglish.io/lightning-3-the-basics-of-solidjs-e6e21d73205e" rel="noopener"
+          target="_blank">JavaScript in Plain English</a> on Medium.
+      </p>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Building your first TV app?</h3>
+      <p class="mt-3 text-zinc-500">
+        Get your team productive on SolidTV quickly with training and hands-on help from the engineer who wrote the
+        framework, or bring an existing React, Lightning or Blits app across.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/?topic=development#contact" data-cta="basics_post_bottom_contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="https://solid-tv.github.io/solid/" data-cta="basics_post_bottom_docs"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">Read
+          the Docs</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>

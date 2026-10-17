@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightningJS or React Native for TV App Development? | SolidTV</title>
+  <meta name="description"
+    content="React Native or LightningJS for your TV app? How they compare on performance, focus handling and debugging across LG webOS, Samsung Tizen, Fire TV and tvOS.">
+  <meta name="keywords"
+    content="LightningJS vs React Native, React Native TV, React Native tvOS, React TV app performance, React Native Web Tizen, SolidJS TV app, TV app framework comparison, Smart TV app development">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/lightningjs-vs-react-native-for-tv.html">
+  <meta property="og:title" content="LightningJS or React Native for TV App Development?">
+  <meta property="og:description"
+    content="React Native suits teams already deep in React. LightningJS with SolidJS is built for TV performance. Here's how to choose.">
+  <meta property="og:url" content="https://solidtv.dev/blog/lightningjs-vs-react-native-for-tv.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image"
+    content="https://solidtv.dev/images/blog/lightningjs-vs-react-native-for-tv/lightning-solidjs-vs-react-native-tv.jpg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="683">
+  <meta property="article:published_time" content="2025-05-27T19:25:33Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LightningJS or React Native for TV App Development?">
+  <meta name="twitter:description"
+    content="React Native suits teams already deep in React. LightningJS with SolidJS is built for TV performance.">
+  <meta name="twitter:image"
+    content="https://solidtv.dev/images/blog/lightningjs-vs-react-native-for-tv/lightning-solidjs-vs-react-native-tv.jpg">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+    .article-prose figure {
+      margin: 2rem 0;
+    }
+
+    .article-prose figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+    }
+
+    .article-prose figcaption {
+      margin-top: 0.75rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "LightningJS or React Native for TV App Development?",
+    "description": "React Native suits teams already deep in React who want to share code. LightningJS paired with SolidJS is purpose-built for TV performance. A comparison of performance, focus handling and debugging on TV platforms.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2025-05-27",
+    "dateModified": "2026-10-16",
+    "mainEntityOfPage": "https://solidtv.dev/blog/lightningjs-vs-react-native-for-tv.html",
+    "image": "https://solidtv.dev/images/blog/lightningjs-vs-react-native-for-tv/lightning-solidjs-vs-react-native-tv.jpg",
+    "keywords": "LightningJS vs React Native, React Native TV, React Native tvOS, SolidJS, TV app framework"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-50">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>LightningJS or React Native</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Framework Comparison</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          LightningJS or React Native for TV App Development?
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published May 27, 2025 &middot; 3 min read
+        </p>
+      </header>
+
+      <aside class="mb-8 rounded-lg border-l-4 border-solidtv bg-violet-50 px-5 pt-4 pb-1 text-sm">
+        <p><strong>Update, October 2026:</strong> since this was written, the SolidJS integration for Lightning has
+          become <a href="/">SolidTV</a>, with its own fork of the Lightning renderer. The tvOS gap mentioned at the end
+          is closed too: SolidTV apps now <a href="/apple-tv/">run on Apple TV through NativeScript</a>, with no
+          WebView. Apple TV support is in beta.</p>
+      </aside>
+
+      <p>As the demand for rich, responsive TV apps grows, developers are sizing up their options for building
+        high-performance experiences tailored to the quirks of TV platforms. Two frameworks often considered:
+        LightningJS and React Native. Both are solid, but they take very different routes in terms of architecture,
+        performance, and overall developer experience.</p>
+
+      <figure>
+        <img src="/images/blog/lightningjs-vs-react-native-for-tv/lightning-solidjs-vs-react-native-tv.jpg"
+          alt="A TV split in two: a Lightning + SolidJS app on the left and a React Native TV app on the right"
+          width="1024" height="683" loading="eager" />
+      </figure>
+
+      <h2>TL;DR</h2>
+
+      <ul>
+        <li><strong>React Native</strong> is great for teams already using React who want to move quickly and share
+          code. But expect extra work for focus management, performance tuning, and debugging.</li>
+        <li><strong>LightningJS</strong> is purpose-built for TV, and when paired with SolidJS, gives you unmatched
+          performance, control, and a surprisingly smooth dev experience.</li>
+      </ul>
+
+      <p>If you already have a development team, lean towards what they are most comfortable with. Web developers? Go
+        with SolidJS and Lightning. Native devs or backend engineers — check out React Native.</p>
+
+      <h2>LightningJS</h2>
+
+      <p>LightningJS is an open-source WebGL renderer built specifically for TV platforms and runs in a Web Browser.
+        Originally developed by Metrological, it now powers apps on LG webOS, Samsung Tizen, and even Fire TV and
+        Android TV (via web view). It's all about performance and you can bring your own framework to build on top — I
+        recommend <a href="https://github.com/solid-tv/solid">SolidJS</a>.</p>
+
+      <h2>React Native for TV: The Hype and the Reality</h2>
+
+      <p>React Native, built for mobile, has extended to TV with <a
+          href="https://github.com/react-native-tvos/react-native-tvos">React Native for Android TV and tvOS</a>. The
+        pitch is compelling: reuse components, business logic, and developer know-how across platforms. Write once, run
+        (almost) everywhere. If your team is already in the React world, it makes sense. But in practice, things get a
+        bit more complicated:</p>
+
+      <ul>
+        <li><strong>Focus is fiddly.</strong> Handling remote input and tvOS-specific UX often means custom workarounds
+          or separate component logic.</li>
+        <li><strong>Performance has limits.</strong> Fine for simple UIs, but once you throw in animations or anything
+          complex, it can start to chug compared to pure native or WebGL-based renderers.</li>
+        <li><strong>Debugging can be a pain.</strong> You're often tracing bugs across JavaScript, native bridges, and
+          platform-specific code. Sometimes you're knee-deep in Swift, Objective-C, or Kotlin.</li>
+      </ul>
+
+      <p>That said, React Native for TV is improving quickly. The new architecture (0.76) is snappier, and if your app
+        is fairly lightweight or your team is deep into React, it's worth a look. Just be ready for the extra layers
+        when debugging (though 0.79 has some new tools to make that easier). And fair warning: React Native Web builds
+        for LG and Tizen don't perform nearly as well as Lightning's WebGL rendering. Sometimes, it's faster to build a
+        few tailored codebases than to wrestle a unified one into shape.</p>
+
+      <h2>LightningJS with SolidJS</h2>
+
+      <p>One of LightningJS's best features? It doesn't force a framework on you. It's just a renderer. You get to pick
+        how you build.</p>
+
+      <p>That's where SolidJS comes in.</p>
+
+      <p>Solid is known for being ridiculously fast, with fine-grained reactivity and no virtual DOM overhead. Combine
+        that with Lightning's GPU-accelerated rendering and you've got very fast TV apps.</p>
+
+      <ul>
+        <li><strong>Fast ramp-up.</strong> If you know Solid (or React), you can learn Lightning in a few days.</li>
+        <li><strong>No CSS headaches.</strong> Lightning skips the usual CSS weirdness across TV platforms. Styling is
+          straightforward and consistent.</li>
+        <li><strong>Production ready.</strong> You can build scalable, responsive TV apps with a proven, modern frontend
+          stack.</li>
+        <li><strong>Large community.</strong> Much easier to hire web developers than native devs, and SolidJS has 10k+
+          folks on its Discord.</li>
+      </ul>
+
+      <p>It's a great combo: best-in-class reactivity and composability from SolidJS, with high-performance rendering
+        from LightningJS. LightningJS is a web based framework and will deploy "natively" to LG and Tizen TVs — for
+        Android / Fire TV devices you can wrap the web app with a WebView and deploy to the TVs using React Native (so
+        you get to use both). However, you'll still need to build a solution for tvOS as they don't allow WebViews.</p>
+
+      <h2>Need Help?</h2>
+
+      <p>If you're diving into TV app development and want expert guidance with LightningJS, get in touch! See <a
+          href="/#services">SolidTV support &amp; services</a> to learn more, or <a href="/?topic=migration#contact"
+          data-cta="rn_post_inline_contact">reach out directly</a>. Whether you're building from scratch or migrating an
+        existing app, we're happy to help.</p>
+
+      <h2>Resources</h2>
+
+      <ul>
+        <li><a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+        <li><a href="https://github.com/react-native-tvos/react-native-tvos">github.com/react-native-tvos/react-native-tvos</a></li>
+        <li><a href="https://reactnative.dev/blog">reactnative.dev/blog</a></li>
+        <li><a href="https://github.com/solid-tv/solid-demo-app">github.com/solid-tv/solid-demo-app</a></li>
+        <li>Join the SolidJS Discord: <a href="https://discord.com/invite/solidjs">discord.com/invite/solidjs</a></li>
+      </ul>
+
+      <p class="text-sm text-zinc-500 mt-12 pt-6 border-t border-gray-200">
+        Originally published on <a
+          href="https://medium.com/@chiefcll/lightningjs-or-react-native-for-tv-app-development-59f30c23d048"
+          rel="noopener" target="_blank">Medium</a>.
+      </p>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Is your React TV app slow?</h3>
+      <p class="mt-3 text-zinc-500">
+        We help teams choose between React Native, LightningJS and SolidTV, and move when the first choice stops
+        scaling. A free consultation will tell you whether the fix is in your app or in the stack.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/?topic=migration#contact" data-cta="rn_post_bottom_contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/lightningjs-alternative/" data-cta="rn_post_bottom_alternative"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">Compare
+          SolidTV and LightningJS</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>

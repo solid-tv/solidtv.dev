@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolidJS vs Blits in the Real World: Load Time, Memory and Code | SolidTV</title>
+  <meta name="description"
+    content="The same TMDB TV app built with SolidJS and with Blits on Lightning 3: 2.5s vs 3.5s to load, 9.2MB vs 11.9MB of memory, and the code side by side.">
+  <meta name="keywords"
+    content="SolidJS vs Blits, Blits alternative, Blits performance, Lightning 3 framework, LightningJS SolidJS, TV app load time, TV app memory usage, TMDB demo app">
+  <meta name="author" content="Chris Lorenzo">
+  <link rel="canonical" href="https://solidtv.dev/blog/solid-vs-blits-real-world-performance.html">
+  <meta property="og:title" content="LightningJS 3: Solid &amp; Blits Performance in the Real World">
+  <meta property="og:description"
+    content="The same TMDB app in SolidJS and Blits: 30% faster loads and less memory with Solid, plus routing, data fetching and components compared.">
+  <meta property="og:url" content="https://solidtv.dev/blog/solid-vs-blits-real-world-performance.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image"
+    content="https://solidtv.dev/images/blog/solid-vs-blits-real-world-performance/solid-tmdb-demo.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="604">
+  <meta property="article:published_time" content="2024-10-31T16:26:09Z">
+  <meta property="article:author" content="Chris Lorenzo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Solid &amp; Blits Performance in the Real World">
+  <meta name="twitter:description"
+    content="The same TMDB app in SolidJS and Blits: 2.5s vs 3.5s to load and 9.2MB vs 11.9MB of memory.">
+  <meta name="twitter:image"
+    content="https://solidtv.dev/images/blog/solid-vs-blits-real-world-performance/solid-tmdb-demo.png">
+  <link href="/output.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-underline-offset: 3px;
+    }
+
+    .logo-href {
+      font-weight: 500;
+    }
+
+    .article-prose h2 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .article-prose h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .article-prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .article-prose ul,
+    .article-prose ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: #374151;
+    }
+
+    .article-prose ul {
+      list-style: disc;
+    }
+
+    .article-prose ol {
+      list-style: decimal;
+    }
+
+    .article-prose li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-prose blockquote {
+      border-left: 4px solid #6F45E8;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
+
+    .article-prose a {
+      color: #1C64F2;
+      text-decoration: underline;
+    }
+
+    .article-prose a:hover {
+      color: #1e40af;
+    }
+
+    .article-prose strong {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .article-prose pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+    }
+
+    .article-prose code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .article-prose :not(pre) > code {
+      background: #f1f5f9;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      color: #be185d;
+    }
+    .article-prose figure {
+      margin: 2rem 0;
+    }
+
+    .article-prose figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+    }
+
+    .article-prose figcaption {
+      margin-top: 0.75rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "LightningJS 3: Solid & Blits Performance in the Real World",
+    "description": "A head-to-head comparison of the TMDB example app built with SolidJS and with Blits on the Lightning 3 renderer: load time, memory, render-as-you-fetch routing, data fetching and components.",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Lorenzo",
+      "url": "https://www.linkedin.com/in/chris-lorenzo/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SolidTV",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://solidtv.dev/images/logo-400.png"
+      }
+    },
+    "datePublished": "2024-10-31",
+    "dateModified": "2026-10-16",
+    "mainEntityOfPage": "https://solidtv.dev/blog/solid-vs-blits-real-world-performance.html",
+    "image": "https://solidtv.dev/images/blog/solid-vs-blits-real-world-performance/solid-tmdb-demo.png",
+    "keywords": "SolidJS vs Blits, Blits performance, Lightning 3, TV app framework, TMDB"
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1J1PLNT23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V1J1PLNT23');
+  </script>
+</head>
+
+<body class="bg-gray-100">
+  <header class="shadow-lg shadow-gray-500/50 bg-white fixed top-0 left-0 right-0 z-50">
+    <div class="flex flex-row items-center py-6 md:py-0 pl-2 pr-2 md:pl-6 justify-between max-w-screen-xl mx-auto">
+      <div class="flex-1">
+        <a class="logo-href" href="/">
+          <img src="/images/SolidTV_transparent.png" alt="SolidTV Logo" class="inline w-10 lg:w-16 aspect-square" />
+          <span class="relative md:top-1 md:text-2xl text-black">Solid<span
+              class="bg-gradient-to-r from-solidtv to-solidtv-dark bg-clip-text text-transparent">TV</span></span>
+        </a>
+      </div>
+      <nav class="flex-none flex justify-end items-center gap-3 md:gap-8 p-2 md:p-6 text-sm sm:text-base font-medium text-gray-900">
+        <a href="/blog/" class="md:text-xl hover:text-blue-600">Blog</a>
+        <a href="https://solid-tv.github.io/solid/" class="md:text-xl hover:text-blue-600">Docs</a>
+        <a href="/apple-tv/" class="hidden lg:inline md:text-xl hover:text-blue-600">Apple TV</a>
+        <a href="/#services" class="md:text-xl hover:text-blue-600">Services</a>
+        <a href="/#contact" class="md:text-xl hover:text-blue-600">Contact</a>
+        <a href="https://github.com/solid-tv/solid" target="_blank" rel="noopener"
+          aria-label="SolidTV on GitHub" class="hidden min-[400px]:flex items-center hover:text-blue-600">
+          <span class="sr-only">GitHub</span>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 md:w-7 md:h-7" aria-hidden="true">
+            <path fill="currentColor"
+              d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-col mt-[130px] max-w-3xl mx-auto px-6 md:px-8 py-12">
+    <nav class="text-sm text-zinc-500 mb-6">
+      <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+      <a href="/blog/" class="hover:text-blue-600">Blog</a> &rsaquo;
+      <span>Solid &amp; Blits in the Real World</span>
+    </nav>
+
+    <article class="article-prose bg-white rounded-xl p-8 md:p-12 shadow-md">
+      <header class="mb-8 pb-8 border-b border-gray-200">
+        <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Framework Comparison</span>
+        <h1 class="mt-3 text-4xl md:text-5xl font-bold text-black leading-tight">
+          LightningJS 3: Solid &amp; Blits Performance in the Real World
+        </h1>
+        <p class="mt-4 text-zinc-500 text-base">
+          By <strong class="text-zinc-700">Chris Lorenzo</strong> &middot; Published Oct 31, 2024 &middot; 6 min read
+        </p>
+      </header>
+
+      <aside class="mb-8 rounded-lg border-l-4 border-solidtv bg-violet-50 px-5 pt-4 pb-1 text-sm">
+        <p><strong>Note:</strong> these measurements were taken in October 2024, with SolidJS on the Lightning 3
+          renderer. The SolidJS integration has since become <a href="/">SolidTV</a>, which ships its own fork of that
+          renderer. For newer numbers, see <a href="/lightningjs-alternative/">SolidTV as a LightningJS and Blits
+            alternative</a>.</p>
+      </aside>
+
+      <p>When it comes to <strong>SolidJS</strong> and <strong>Blits</strong>, a common question is: which is better
+        suited for building performant, scalable TV applications? To help answer this, let's dive into a head-to-head
+        comparison using the <strong>TMDB (The Movie Database)</strong> example app, exploring each framework's
+        performance, developer experience, and more.</p>
+
+      <h2>Overview: Solid vs. Blits</h2>
+
+      <p>While not identical, the Solid and Blits TMDB versions are close enough to allow for a fair comparison. The
+        <strong>Solid</strong> app includes a left navigation drawer, titles above rows, and leverages <strong>Solid-UI
+          components</strong>. While these extra features should give Blits a performance lead, Solid maintains its
+        edge.</p>
+
+      <figure>
+        <div class="space-y-4">
+          <img src="/images/blog/solid-vs-blits-real-world-performance/solid-tmdb-demo.png"
+            alt="The SolidJS TMDB demo app: a featured movie hero with a Popular Movies row and a left navigation bar"
+            width="1024" height="604" loading="eager" />
+          <img src="/images/blog/solid-vs-blits-real-world-performance/blits-tmdb-demo.png"
+            alt="The Blits TMDB demo app showing the same featured movie and poster row"
+            width="1024" height="604" loading="lazy" />
+        </div>
+        <figcaption>Solid and Blits TMDB app side by side</figcaption>
+      </figure>
+
+      <h2>Performance Comparison</h2>
+
+      <p>So, how do these apps measure up in real-world performance? I tested both versions with a 20x CPU slowdown and
+        cached network response using Chrome's performance inspector.</p>
+
+      <figure>
+        <div class="space-y-4">
+          <img src="/images/blog/solid-vs-blits-real-world-performance/solid-load-timeline.png"
+            alt="Chrome DevTools performance timeline of the SolidJS TMDB app loading"
+            width="1024" height="604" loading="lazy" />
+          <img src="/images/blog/solid-vs-blits-real-world-performance/blits-load-timeline.png"
+            alt="Chrome DevTools performance timeline of the Blits TMDB app loading"
+            width="1024" height="604" loading="lazy" />
+        </div>
+        <figcaption>Solid vs Blits timeline loading</figcaption>
+      </figure>
+
+      <p>SolidJS consistently loads in about <strong>2.5 seconds</strong>, compared to <strong>3.5 seconds</strong>
+        for Blits — a 30% improvement in load time. For users, this means faster interactions and a more responsive
+        feel, crucial for engagement. SolidJS' speed advantage also grows with dynamic routing and <strong>preloading
+          capabilities</strong>.</p>
+
+      <h2>Memory Comparison</h2>
+
+      <p>SolidJS isn't just significantly faster — it also uses less memory than Blits, which is crucial for low-end
+        devices. In this comparison, Solid consumed <strong>9.2MB</strong>, while Blits used <strong>11.9MB</strong>,
+        making Solid the more efficient choice in both performance and memory usage.</p>
+
+      <figure>
+        <div class="space-y-4">
+          <img src="/images/blog/solid-vs-blits-real-world-performance/solid-heap-snapshot.png"
+            alt="Chrome heap snapshot of the SolidJS TMDB app: 9.2 MB"
+            width="1024" height="497" loading="lazy" />
+          <img src="/images/blog/solid-vs-blits-real-world-performance/blits-heap-snapshot.png"
+            alt="Chrome heap snapshot of the Blits TMDB app: 11.9 MB"
+            width="1024" height="463" loading="lazy" />
+        </div>
+        <figcaption>Solid vs Blits memory usage</figcaption>
+      </figure>
+
+      <h2>But SolidJS is built for the DOM?</h2>
+
+      <p>Yes, SolidJS is built for the DOM, but <strong>Lightning is a DOM too — just not an HTML DOM</strong>. It has
+        nodes, a tree structure, and a rendering pipeline. Solid's reactivity model makes it a great fit for Lightning
+        because <strong>it uses signals for immediate updates</strong>, aligning perfectly with Lightning's rendering
+        strategy. Solid's fine-grained reactivity makes it highly efficient for updating Lightning's node tree.</p>
+
+      <h2>But Blits will save you from performance problems…</h2>
+
+      <p>Really? Can any framework guarantee that? If it were that simple, wouldn't React have solved performance
+        issues entirely? Blits doesn't magically eliminate inefficiencies — you can still write slow code. Performance
+        depends on how you structure your app, manage state, and optimize rendering. If someone claims a framework will
+        "save you from performance problems," be skeptical. There's no silver bullet.</p>
+
+      <p>Let's continue with the code differences.</p>
+
+      <h2>Render as You Fetch</h2>
+
+      <p>SolidJS takes things a step further by allowing <strong>parallel data fetching</strong> with the
+        <strong>Solid Router</strong>'s preload function. When navigating from the Home page to an Entity page, Solid
+        starts fetching data <strong>before</strong> the page load completes. This enables an Entity page to load in as
+        little as <strong>400ms</strong>, making transitions seamless and near instant.</p>
+
+      <figure>
+        <div class="space-y-4">
+          <img src="/images/blog/solid-vs-blits-real-world-performance/solid-render-as-you-fetch.png"
+            alt="Performance trace of navigating from the Home page to an Entity page, with API requests starting during the transition and a 470 ms selection"
+            width="1024" height="716" loading="lazy" />
+          <img src="/images/blog/solid-vs-blits-real-world-performance/solid-entity-page.png"
+            alt="The SolidJS TMDB Entity page with movie details, Play and Resume buttons and a Recommendations row"
+            width="1024" height="570" loading="lazy" />
+        </div>
+        <figcaption>Navigation from Home page to Entity page</figcaption>
+      </figure>
+
+      <p>Unfortunately, the Blits app doesn't have an Entity page, so direct comparisons aren't available. Currently,
+        the Blits Router doesn't support <strong>render as you fetch</strong>, meaning pages need to be loaded before
+        requesting data, leading to a slower page transition experience.</p>
+
+      <h2>Developer Experience</h2>
+
+      <p>SolidJS offers a streamlined development process. In just a few hours, I was able to recreate the TMDB page
+        from Blits with less code and reduced complexity. Solid's <strong>reusable components</strong> and <strong>flex
+          layout</strong> make it easy to maintain and scale applications, while familiarity with patterns from React
+        keeps the learning curve low. Let's look at how the code compares:</p>
+
+      <h3>Route Setup</h3>
+
+      <p><strong>Solid</strong></p>
+
+      <pre><code>&lt;Route path="tmdb" component={TMDB} preload={tmdbData} /&gt;</code></pre>
+
+      <p><strong>Blits</strong></p>
+
+      <pre><code>{ path: '/demos/tmdb', component: Tmdb }</code></pre>
+
+      <h3>Data Fetching</h3>
+
+      <p><strong>Solid</strong></p>
+
+      <p>In Solid, data fetching is abstracted into a separate function to keep UI components focused solely on display
+        logic. Here's an example:</p>
+
+      <pre><code>// Called by the router
+export function tmdbData() {
+  const rows: RowItem[] = [];
+  const featured: RowItem = {
+    title: "Popular Movies",
+    // fetchPopular calls TMDB and returns a Promise,
+    // createResource turns promises into Signals
+    items: createResource(() =&gt; fetchPopular("movie"))[0],
+    type: "Poster",
+    height: 328,
+  };
+  rows.push(featured);
+  rows.push({
+    title: "Best Western movies",
+    items: createResource(() =&gt; fetchGenreMovies(["Western"]))[0],
+    type: "Hero",
+    height: 720,
+  });
+  // passed into page as props.data
+  return { featured, rows };
+}</code></pre>
+
+      <p>This approach makes UI components easy to test by allowing you to provide different props for testing
+        purposes. For example, <code>&lt;TMDBPage data={altData} /&gt;</code> can be used to mock out different versions
+        of the page.</p>
+
+      <p><strong>Blits</strong></p>
+
+      <p>Data fetching happens directly within the page component, using asynchronous API calls inside a ready hook.</p>
+
+      <pre><code>hooks: {
+    async ready() {
+      // this.rows is part of the pages state
+      this.rows.push({
+        title: 'Popular Movies',
+        items: await fetchPopular('movie'),
+        type: 'Poster',
+        width: 215,
+        y: 0,
+      });
+      this.rows.push({
+        title: 'Best Western movies',
+        items: await fetchGenreMovies(['Western']),
+        type: 'Hero',
+        width: 1370,
+        y: 358,
+      });
+      // ...
+    }
+}</code></pre>
+
+      <p>Here, Blits loads the page first, then calls the ready hook before fetching data. The fetching and manipulation
+        of data is very similar. However, state for Blits must be inside a component using the state prop. SolidJS
+        supports truly global signals that are decoupled from components.</p>
+
+      <h3>Components</h3>
+
+      <p><strong>Blits</strong></p>
+
+      <p>In Blits, you'll need to write your own logic to handle interactions and reactivity, they recommend you use
+        their reference app or copy paste their sample components.</p>
+
+      <pre><code>&lt;Element :y.transition="{value: $y, duration: 300, easing: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)'}"&gt;
+  &lt;TmdbRow
+    :for="(row, index) in $rows"
+    key="$row.title"
+    title="$row.title"
+    :items="$row.items"
+    :type="$row.type"
+    :width="$row.width"
+    y="$row.y"
+    ref="row"
+  /&gt;
+&lt;/Element&gt;
+
+// need to define input for all key presses
+input: {
+  up() {
+    this.contentY = 0
+    this.duration = 300
+    this.focused = Math.max(this.focused - 1, 0)
+    this.y = (this.focused === 0 ? 550 : 90) - this.rows[this.focused].y
+    this.alpha = this.focused === 0 ? 1 : 0
+  },
+  down() {
+    this.contentY = -60
+    this.duration = 200
+    this.focused = Math.min(this.focused + 1, this.rows.length - 1)
+    this.y = (this.focused === 0 ? 550 : 90) - this.rows[this.focused].y
+    this.alpha = this.focused === 0 ? 1 : 0
+  },
+},</code></pre>
+
+      <p><strong>Solid</strong></p>
+
+      <p>Solid's ecosystem includes useful components like Row and Column that handle focus and keypress interactions
+        automatically. With these, you get access to recently added new features like <code>scroll="center"</code> and
+        <code>centerScroll</code> for positioning a single item at the screen's center. For example with big Hero
+        Posters:</p>
+
+      <pre><code>&lt;Row gap={80} scroll="center" y={50} height={800}&gt;
+  &lt;For each={row.items}&gt;{(item) =&gt; &lt;Hero {...item} /&gt;}&lt;/For&gt;
+&lt;/Row&gt;</code></pre>
+
+      <figure>
+        <img src="/images/blog/solid-vs-blits-real-world-performance/solid-hero-row-centered.png"
+          alt="A large Hero poster for The Wild Robot centered on screen in a scrolling row"
+          width="1024" height="577" loading="lazy" />
+        <figcaption>Hero centered on screen both horizontally and vertically</figcaption>
+      </figure>
+
+      <p>Additionally, you'll want to check out <code>&lt;LazyUp&gt;</code> and <code>&lt;Dynamic&gt;</code>
+        components. Here's an example of their usage in TMDB:</p>
+
+      <pre><code>&lt;LazyUp
+  id="BrowseColumn"
+  component={Column}
+  direction="column"
+  y={500}
+  upCount={3}
+  each={props.data.rows}
+  onSelectedChanged={onSelectedChanged}
+  autofocus={props.data.rows[0].items()}
+  gap={40}
+  transition={{ y: yTransition }}
+  style={styles.Column}
+&gt;
+  {(row) =&gt;
+    row().type === 'Hero' ? (
+      &lt;LazyUp
+        component={Row}
+        direction="row"
+        gap={80}
+        upCount={3}
+        scroll="center"
+        centerScroll
+        each={row().items()}
+        y={50}
+        height={row().height}
+      &gt;
+        {(item) =&gt; &lt;Hero {...item()} /&gt;}
+      &lt;/LazyUp&gt;
+    ) : (
+      &lt;TitleRow
+        row={row()}
+        title={row().title}
+        height={row().height}
+        items={row().items()}
+      /&gt;
+    )
+  }
+&lt;/LazyUp&gt;</code></pre>
+
+      <ul>
+        <li><strong>&lt;LazyUp&gt;</strong>: Lazy-renders items in the Row or Column component, reducing initial render
+          time. Useful if you have a lot of Rows and only need to display 2 or 3.</li>
+        <li>The <code>upCount</code> property specifies how many items (e.g., Rows or Poster) are visible on the screen
+          at load time.</li>
+        <li><strong>&lt;Dynamic&gt;</strong>: Dynamically renders components based on the item type, allowing a single
+          Column to display different Row types, such as Poster or Hero.</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+
+      <p>SolidJS and Blits are both frameworks built on top of the Lightning 3 Renderer, allowing for immediate
+        rendering with WebGL. But for speed, flexibility, and developer-friendly design, <strong>SolidJS</strong> stands
+        out. Its open-source router, parallel data fetching, and reusable components make it a robust choice for
+        quickly building real-world applications.</p>
+
+      <p>For a hands-on experience, check out the live <a
+          href="https://solid-tv.github.io/solid-demo-app/#/tmdb">Solid TMDB demo</a> and the <a
+          href="https://blits-demo.lightningjs.io/#/demos/tmdb">Blits TMDB demo</a> to see the differences
+        firsthand!</p>
+
+      <p>To learn more and get involved:</p>
+
+      <ul>
+        <li><strong>Docs</strong>: <a href="https://solid-tv.github.io/solid/">solid-tv.github.io/solid</a></li>
+        <li><strong>GitHub Repository</strong>: <a href="https://github.com/solid-tv/solid">github.com/solid-tv/solid</a></li>
+        <li><strong>Community Discord</strong>: <a href="https://discord.com/invite/solidjs">SolidJS Discord
+            (#SolidTV)</a></li>
+        <li><strong>Connect with Me</strong>: <a href="https://www.linkedin.com/in/chris-lorenzo/">Chris Lorenzo on
+            LinkedIn</a></li>
+      </ul>
+
+      <p class="text-sm text-zinc-500 mt-12 pt-6 border-t border-gray-200">
+        Originally published in <a
+          href="https://javascript.plainenglish.io/lightning-3-solid-blits-performance-in-the-real-world-c4dd6cb146ba"
+          rel="noopener" target="_blank">JavaScript in Plain English</a> on Medium.
+      </p>
+    </article>
+
+    <section class="mt-12 rounded-xl bg-white p-8 shadow-md">
+      <h3 class="text-2xl font-semibold text-neutral-800">Weighing Blits against SolidTV?</h3>
+      <p class="mt-3 text-zinc-500">
+        If you're on Blits and feeling the slowdown, or choosing a framework for a new TV app, a free consultation will
+        tell you what a move would take and whether it's worth it.
+      </p>
+      <div class="mt-6 flex gap-4 flex-wrap">
+        <a href="/?topic=migration#contact" data-cta="realworld_post_bottom_contact"
+          class="justify-center px-5 py-3 text-white hover:bg-blue-800 bg-blue-600 rounded-lg text-base font-medium">Get
+          a Free Consultation</a>
+        <a href="/lightningjs-alternative/" data-cta="realworld_post_bottom_alternative"
+          class="justify-center px-5 py-3 text-blue-600 rounded-lg border hover:bg-gray-100 border-blue-600 border-solid text-base font-medium">Compare
+          SolidTV and Blits</a>
+      </div>
+    </section>
+  </main>
+
+  <footer
+    class="flex flex-col justify-center border-t border-gray-300 items-center px-6 py-16 max-md:px-5 max-md:max-w-full">
+    <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-900"
+      aria-label="Footer">
+      <a href="https://solid-tv.github.io/solid/" class="hover:text-blue-600">Docs</a>
+      <a href="/blog/" class="hover:text-blue-600">Blog</a>
+      <a href="/apple-tv/" class="hover:text-blue-600">Apple TV</a>
+      <a href="/lightningjs-alternative/" class="hover:text-blue-600">LightningJS Alternative</a>
+      <a href="/tv-app-performance-consulting/" class="hover:text-blue-600">Performance Consulting</a>
+      <a href="/#services" class="hover:text-blue-600">Support &amp; Services</a>
+      <a href="/#contact" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <ul class="flex flex-wrap justify-center items-center gap-y-3 mb-2 text-sm">
+      <li class="mx-2">
+        <span class="sr-only">GitHub</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://github.com/solid-tv/solid">SolidTV</a> |
+        <a rel="noopener" target="_blank" href="https://www.npmjs.com/package/@solidtv/renderer">SolidTV Renderer</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Discord</span><svg viewBox="0 0 24 24" class="-mt-1 h-8 inline transition opacity-60">
+          <path fill="currentColor"
+            d="M12 0C5.3 0 0 5.3 0 12s5.3 12 12 12 12-5.4 12-12S18.6 0 12 0zM9.7 5.9a.05.05 0 0 1 .06.03 8.43 8.43 0 0 1 .41.83 12.2 12.2 0 0 1 3.66 0 9.19 9.19 0 0 1 .4-.83.05.05 0 0 1 .06-.03 13.2 13.2 0 0 1 3.26 1.01.04.04 0 0 1 .02.02c1.8 2.66 2.7 5.66 2.37 9.11a.05.05 0 0 1-.02.04 13.24 13.24 0 0 1-4 2.02.05.05 0 0 1-.06-.02 10.65 10.65 0 0 1-.82-1.33.05.05 0 0 1 .02-.07 8.2 8.2 0 0 0 1.25-.6.05.05 0 0 0 .01-.08 6.47 6.47 0 0 1-.25-.2.05.05 0 0 0-.05 0 9.47 9.47 0 0 1-8.05 0 .05.05 0 0 0-.05 0l-.25.2a.05.05 0 0 0 0 .08 8.75 8.75 0 0 0 1.26.6.05.05 0 0 1 .02.07 9.48 9.48 0 0 1-.82 1.33.05.05 0 0 1-.05.02 13.28 13.28 0 0 1-4-2.02.05.05 0 0 1-.02-.04c-.28-2.99.29-6.01 2.37-9.11a.05.05 0 0 1 .02-.02A13.17 13.17 0 0 1 9.7 5.9zM9.35 11c-.8 0-1.43.72-1.43 1.6 0 .9.64 1.62 1.43 1.62.8 0 1.44-.72 1.44-1.61.02-.88-.63-1.61-1.44-1.61zm5.33 0c-.8 0-1.44.72-1.44 1.6 0 .9.65 1.62 1.44 1.62.8 0 1.43-.72 1.43-1.61.02-.88-.63-1.61-1.43-1.61z">
+          </path>
+        </svg>
+        <a rel="noopener" target="_blank" href="https://discord.com/invite/solidjs">SolidJS Discord (#SolidTV)</a>
+      </li>
+      <li class="mx-2">
+        <span class="sr-only">Youtube</span><svg height="32" viewBox="0 0 32 32" width="32"
+          class="-mt-1 h-8 inline transition opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m31.328 8.271c-.38-1.349-1.432-2.407-2.787-2.781-2.495-.667-12.525-.667-12.525-.667s-10.011-.016-12.532.667c-1.348.375-2.405 1.432-2.781 2.781-.473 2.557-.708 5.145-.697 7.745-.005 2.583.229 5.167.697 7.708.376 1.349 1.433 2.407 2.781 2.787 2.495.667 12.532.667 12.532.667s10.005 0 12.525-.667c1.355-.38 2.407-1.437 2.787-2.787.459-2.541.683-5.125.667-7.708.016-2.6-.203-5.188-.667-7.745zm-18.516 12.532v-9.595l8.349 4.808z" />
+        </svg>
+        <a rel="noopener" target="_blank" href="https://www.youtube.com/@LightningTVSolidJS">Youtube</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-center text-sm w-8/12">Released under the Apache 2.0 license Copyright © 2026 As One Strategy LLC</p>
+  </footer>
+
+  <script>
+    // Report CTA clicks to GA4
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-cta]') : null;
+      if (el && window.gtag) gtag('event', 'cta_click', { cta_name: el.getAttribute('data-cta') });
+    });
+  </script>
+</body>
+
+</html>
