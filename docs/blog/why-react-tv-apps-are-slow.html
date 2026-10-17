@@ -254,7 +254,7 @@
       }
     },
     "datePublished": "2026-10-16",
-    "dateModified": "2026-10-16",
+    "dateModified": "2026-10-17",
     "mainEntityOfPage": "https://solidtv.dev/blog/why-react-tv-apps-are-slow.html",
     "image": "https://solidtv.dev/images/og-card.png",
     "keywords": "React TV app performance, Preact, virtual DOM, HTML rendering pipeline, smart TV Chromium version, SolidJS, WebGL"
@@ -704,9 +704,16 @@ const Poster = (props) =&gt; (
         18).</p>
 
       <p>HTML did win one thing: startup. The hand-written page, a single 15 kB script, had its first screen complete
-        in 1.6 seconds on the older TV. The SolidTV demo app took about 11 seconds, mostly because it loads a 1.2 MB
-        legacy bundle with polyfills for Chrome 38 before any of it runs. That's the demo app's build rather than WebGL,
-        and it's worth fixing, but it's a real cost today.</p>
+        in 1.6 seconds on the older TV. The SolidTV demo app took about 11 seconds. That came from the demo app's legacy
+        build for Chrome 38, not from WebGL: it loaded about 1.1 MB of JavaScript at startup, much of it polyfills
+        replacing things Chrome 38 already has. JSON parsing, for example, ran in JavaScript instead of the browser's
+        native parser.</p>
+
+      <p>A fix is on the way. It trims the polyfills to what Chrome 38 actually lacks, minifies the legacy bundle and
+        changes how the renderer resolves image URLs. The renderer change is merged, and the demo app's build change is
+        in review. On the same TV and the same screen, it brings the settled screen from 11.25 to 5.00 seconds and the
+        frame rate from 37 to 43.5 frames a second. HTML still starts faster, but the gap drops from almost 10 seconds
+        to under 3.5.</p>
 
       <p>These are results for one demo screen on two devices, not a claim about every app or every TV. The HTML page is
         one reasonable implementation, written for this test and not tuned per device, and a leaner design could do
